@@ -15,6 +15,7 @@ DefineClass.SWAT_Vest = {
     LargeMag = 3,
     PistolMag = 3,
     PistolHolster = 1,
+    PocketU = 0,
     InventorySlots = 10
 }
 
@@ -36,6 +37,7 @@ DefineClass.M56_Vest = {
     LargeMag = 0,
     PistolMag = 0,
     PistolHolster = 0,
+    PocketU = 0,
     InventorySlots = 5
 }
 
@@ -57,6 +59,7 @@ DefineClass.Lifchik_Vest = {
     LargeMag = 3,
     PistolMag = 0,
     PistolHolster = 0,
+    PocketU = 0,
     InventorySlots = 7
 }
 
@@ -78,6 +81,7 @@ DefineClass.BritishCombat_Vest = {
     LargeMag = 6,
     PistolMag = 0,
     PistolHolster = 0,
+    PocketU = 0,
     InventorySlots = 8
 }
 
@@ -99,6 +103,7 @@ DefineClass.Blackhawk_Rig = {
     LargeMag = 3,
     PistolMag = 2,
     PistolHolster = 0,
+    PocketU = 0,
     InventorySlots = 5
 }
 
@@ -120,5 +125,6 @@ DefineClass.BlackhawkOmega_Vest = {
     LargeMag = 6,
     PistolMag = 0,
     PistolHolster = 0,
+    PocketU = 0,
     InventorySlots = 8
 }

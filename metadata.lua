@@ -2,7 +2,7 @@ return PlaceObj('ModDef', {
 	'title', "Revised LBE",
 	'id', "ii6mKUf",
 	'author', "Ablomis",
-	'version', 155,
+	'version', 234,
 	'lua_revision', 233360,
 	'saved_with_revision', 340446,
 	'code', {
@@ -16,6 +16,6 @@ return PlaceObj('ModDef', {
 		"Code/UnitInventory.lua",
 		"Code/XTemplateInventory.lua",
 	},
-	'saved', 1693850367,
-	'code_hash', 6884496604557989368,
+	'saved', 1693864537,
+	'code_hash', -6580991224172450442,
 })

@@ -1,7 +1,4 @@
-function BuildLBE(xTileObj,LBE)
-    local column = 1
-    local row = 2
-
+function BuildLBE(xTileObj,LBE, column, row)
     for i = 1, LBE.LargeMag do
         if column == 7 then
             column = 1
@@ -62,6 +59,17 @@ function BuildLBE(xTileObj,LBE)
         BuildPocket(xTileObj, column, row)
         column = column +1
     end
+    for i = 1, LBE.PocketU do
+        if column == 7 then
+            column = 1
+            row = row + 1
+        end
+        TileConfig.Type = "PocketU"
+        TileConfig.Size = "Small"
+        BuildPocket(xTileObj, column, row)
+        column = column +1
+    end
+    return column, row
 end
 
 function BuildPocket(xTileObj, column, row)
@@ -76,9 +84,9 @@ function BuildPocket(xTileObj, column, row)
     end
 end
 
-function Unit:CreateSlotTypes()
-    if not IsMerc(self) then return end
-    
+function CreateSlotTypes(unit)
+    if not IsMerc(unit) then return end
+
     local types = {}
     for i=1,6 do types[i]={} end
     types[1][1] = "LBE"
@@ -88,10 +96,10 @@ function Unit:CreateSlotTypes()
     types[5][1] = "PocketL"
     types[6][1] = "Backpack"
   
-    local LBE = self:GetItemInSlot("Inventory", nil, 1, 1)
+    local LBE = unit:GetItemInSlot("Inventory", nil, 1, 1)
+    local column = 1
+    local row = 2
     if IsKindOf(LBE, "LBE") then
-        local column = 1
-        local row = 2
 
         for i = 1, LBE.LargeMag do
             if column == 7 then
@@ -141,7 +149,76 @@ function Unit:CreateSlotTypes()
             types[column][row] = "PocketL"
             column = column +1
         end
+        for i = 1, LBE.PocketU do
+            if column == 7 then
+                column = 1
+                row = row + 1
+            end
+            types[column][row] = "PocketU"
+            column = column +1
+        end
+    end
+
+    local Backpack = unit:GetItemInSlot("Inventory", nil, 6, 1)
+
+    if IsKindOf(Backpack, "Backpack") then
+        for i = 1, Backpack.LargeMag do
+            if column == 7 then
+                column = 1
+                row = row + 1
+            end
+            types[column][row] = "LargeMag"
+            column = column +1
+        end
+        for i = 1, Backpack.PistolMag do
+            if column == 7 then
+                column = 1
+                row = row + 1
+            end
+            types[column][row] = "PistolMag"
+            column = column +1
+        end
+        for i = 1, Backpack.PistolHolster do
+            if column == 7 then
+                column = 1
+                row = row + 1
+            end
+            types[column][row] = "PistolHolster"
+            column = column +1
+        end
+        for i = 1, Backpack.PocketS do
+            if column == 7 then
+                column = 1
+                row = row + 1
+            end
+            types[column][row] = "PocketS"
+            column = column +1
+        end
+        for i = 1, Backpack.PocketM do
+            if column == 7 then
+                column = 1
+                row = row + 1
+            end
+            types[column][row] = "PocketM"
+            column = column +1
+        end
+        for i = 1, Backpack.PocketL do
+            if column == 7 then
+                column = 1
+                row = row + 1
+            end
+            types[column][row] = "PocketL"
+            column = column +1
+        end
+        for i = 1, Backpack.PocketU do
+            if column == 7 then
+                column = 1
+                row = row + 1
+            end
+            types[column][row] = "PocketU"
+            column = column +1
+        end
     end
   
-    self.inventory_slots["Inventory"].slot_types = types
+    return types
   end

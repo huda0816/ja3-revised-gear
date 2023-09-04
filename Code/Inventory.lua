@@ -1,9 +1,14 @@
 function UnitProperties:GetInventoryMaxSlots()
   local inventorySlots = 6
   local LBE = self:GetItemInSlot("Inventory", nil, 1, 1)
-  if IsMerc(self) and IsKindOf(LBE, "LBE") then
-      self:CreateSlotTypes()
+  local Backpack = self:GetItemInSlot("Inventory", nil, 6, 1)
+  if IsMerc(self) then 
+    if IsKindOf(LBE, "LBE") then
       inventorySlots = inventorySlots + LBE.InventorySlots
+    end
+    if IsKindOf(Backpack, "Backpack") then
+      inventorySlots = inventorySlots + Backpack.InventorySlots
+    end
   end
   return IsMerc(self) and inventorySlots or self.max_dead_slot_tiles 
 end
@@ -100,22 +105,21 @@ function XInventorySlot:Setslot_name(slot_name)
   local context = self:GetContext()
   --print(context:GetItemInSlot("Inventory", nil, 1, 1))
   local LBE = context:GetItemInSlot("Inventory", nil, 1, 1)
+  local Backpack = context:GetItemInSlot("Inventory", nil, 6, 1)
   if not context then
     return
   end
   self.tiles = {}
-  TileConfig.Type = "Small"
+  TileConfig.Type = "PocketU"
   TileConfig.Size = "Small"
   self.slot_name = slot_name
   local slot_data = context:GetSlotData(slot_name)
   local width, height, last_row_width = context:GetSlotDataDim(slot_name)
   
 
---CREATE LBE SLOT----------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------
 
   --CREATE SUPPORT SLOTS----------------------------------------------------------------------------------------------------------
-  if context.unitdatadef_id and (slot_name == "Inventory") then
+  if context.session_id and (slot_name == "Inventory") then
     local row = 1
     local column = 1
     for i = 1, width do self.tiles[i] = {} end
@@ -148,14 +152,18 @@ function XInventorySlot:Setslot_name(slot_name)
     TileConfig.Size = "Small"
     BuildPocket(self, column, row)
     column = column +1
-
     --CREATE LBE----------------------------------------------------------------------------------------------------------
     if LBE then
-      BuildLBE(self, LBE)
+      column, row = BuildLBE(self, LBE, column, row)
+    end
+
+    --CREATE BACKPACK----------------------------------------------------------------------------------------------------------
+    if Backpack then
+      BuildLBE(self, Backpack, column, row)
     end
   else
       for i = 1, width do
-          TileConfig.Type = "Universal"
+          TileConfig.Type = "PocketU"
           TileConfig.Size = "Small"
           self.tiles[i] = {}
           for j = 1, height do
@@ -185,8 +193,9 @@ function XInventoryTile:OnDropEnter(drag_win, pt, drag_source_win)
   local drag_item = InventoryDragItem
   local mouse_text
   local slot = self:GetInventorySlotCtrl()
+  local _, dx, dy = slot:FindTile(pt)
   if slot.slot_name=="Inventory" then
-      local fits, reason = ItemFitsTile(drag_item, self.Type)
+      local fits, reason = ItemFitsTile(drag_item, self.Type, dx)
       if not fits then mouse_text = reason
   end
   else
@@ -227,7 +236,7 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
   local tile = target.tiles[dx][dy]
 
   if target.slot_name == "Inventory" then
-      local fits, reason = ItemFitsTile(item, tile.Type)
+      local fits, reason = ItemFitsTile(item, tile.Type, dx)
       if not fits then return reason end
   end
   local ssx, ssy, sdx = point_unpack(InventoryDragItemPos)
@@ -267,8 +276,6 @@ end
 function Inventory:FindEmptyPosition(slot_name, item, local_changes)
   local slot_data = self:GetSlotData(slot_name)
   
-  local slot_types
-
   local space = {}
   local width, height, last_row_width = self:GetSlotDataDim(slot_name)
   for i = 1, width do
@@ -295,15 +302,14 @@ function Inventory:FindEmptyPosition(slot_name, item, local_changes)
       space[i][height] = true
     end
   end
-  if slot_name == "Inventory" and IsMerc(self) then
-    slot_types = self.inventory_slots["Inventory"].slot_types
-    if not slot_types then
-      self:CreateSlotTypes()
-    end
-    for i = 1, width do
-      for j = 1, height do
-        if not ItemFitsTile(item, slot_types[i][j]) then
-          space[i][j]=true
+  if slot_name == "Inventory" and IsMerc(self) and self.session_id then
+    local slot_types = CreateSlotTypes(self)
+    if slot_types then
+      for i = 1, width do
+        for j = 1, height do
+          if not ItemFitsTile(item, slot_types[i][j]) then
+            space[i][j]=true
+          end
         end
       end
     end
@@ -344,34 +350,18 @@ function Inventory:FindEmptyPosition(slot_name, item, local_changes)
   end
 end
 
-function Inventory:AddItem(slot_name, item, left, top, local_execution)
-  local pos, reason = self:CanAddItem(slot_name, item, left, top)
-  if not pos then
-    return false, reason
+function XInventorySlot:OnDragDrop(target, drag_win, drop_res, pt)
+  local result, result2 = self:DragDrop_MoveItem(pt, target)
+  local sync_err = result == "NetStartCombatAction refused to start"
+  self:ClearDragState(drag_win)
+  if sync_err or result2 == "no change" then
+    InventoryUIRespawn()
   end
-  if reason == "current" then
-    return pos, reason
+  local context = self:GetContext()
+  if context.session_id then
+    local unit = g_Units[context.session_id]
+    CheckItemsInWrongSlots(unit)
   end
-  item.owner = false
-  if reason == "stack items" then
-    local currentitem = self:GetItemInSlot(slot_name, false, left, top)
-    currentitem.Amount = currentitem.Amount + item.Amount
-    self:RemoveItem(slot_name, item)
-    DoneObject(item)
-  else
-    local slot_items = self[slot_name]
-    local idx = #slot_items + 1
-    for i = 1, #slot_items, 2 do
-      local cpos = slot_items[i]
-      if pos <= cpos then
-        idx = i
-        break
-      end
-    end
-    table.insert(slot_items, idx, pos)
-    table.insert(slot_items, idx + 1, item)
-    self[slot_name] = slot_items
-  end
-  return pos, reason
+
 end
 

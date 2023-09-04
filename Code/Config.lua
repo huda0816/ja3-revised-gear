@@ -1,0 +1,3 @@
+RevisedLBEConfig = {
+    LBEDropChance = 5
+}

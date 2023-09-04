@@ -10,14 +10,37 @@ DefineClass.LBE = {
     LargeMag = 3,
     PistolMag = 3,
     PistolHolster = 1,
+    PocketU = 0,
     InventorySlots = 10
 }
 
-function ItemFitsTile(item, type)
-    if  type == "Universal" then return true end
+UndefineClass("Backpack")
+DefineClass.Backpack = {
+    __parents = {
+      "InventoryItem"
+    },
+    Weight = 1,
+    PocketU = 3,
+    PocketS = 0,
+    PocketM = 0,
+    PocketL = 0,
+    LargeMag = 0,
+    PistolMag = 0,
+    PistolHolster = 0,
+    InventorySlots = 3
+}
+
+function ItemFitsTile(item, type, column)
+    if item.LargeItem and column == 6 then return false, "Doesn't fit here" end
+    if  type == "PocketU" then return true end
 
     if IsKindOfClasses(item, "InventoryStack") then
         if type == "PocketL" then return true
+        else return false, "Doesn't fit here" end
+    end
+
+    if IsKindOfClasses(item, "Backpack") then
+        if type == "Backpack" or type == "PocketL" then return true
         else return false, "Doesn't fit here" end
     end
 
@@ -77,5 +100,5 @@ function ItemFitsTile(item, type)
         if type == "LBE" or type == "PocketL" then return true
         else return false, "Doesn't fit here" end
     end
-    return true, "Doesn't fit here"
+    return true
   end
