@@ -28,11 +28,30 @@ PlaceObj('ModItemCode', {
 	'CodeFileName', "Code/LootDrop.lua",
 }),
 PlaceObj('ModItemCode', {
+	'name', "ModOptions",
+	'CodeFileName', "Code/ModOptions.lua",
+}),
+PlaceObj('ModItemCode', {
 	'name', "UnitInventory",
 	'CodeFileName', "Code/UnitInventory.lua",
 }),
 PlaceObj('ModItemCode', {
 	'name', "XTemplateInventory",
 	'CodeFileName', "Code/XTemplateInventory.lua",
+}),
+PlaceObj('ModItemOptionChoice', {
+	'name', "RevisedLBEDropChance",
+	'DisplayName', "LBE Drop Chance",
+	'Help', "Chance for an enemy unit to drop LBE",
+	'DefaultValue', "5",
+	'ChoiceList', {
+		"1",
+		"5",
+		"10",
+		"25",
+		"50",
+		"75",
+		"100",
+	},
 }),
 }

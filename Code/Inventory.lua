@@ -1,18 +1,3 @@
-function UnitProperties:GetInventoryMaxSlots()
-  local inventorySlots = 6
-  local LBE = self:GetItemInSlot("Inventory", nil, 1, 1)
-  local Backpack = self:GetItemInSlot("Inventory", nil, 6, 1)
-  if IsMerc(self) then 
-    if IsKindOf(LBE, "LBE") then
-      inventorySlots = inventorySlots + LBE.InventorySlots
-    end
-    if IsKindOf(Backpack, "Backpack") then
-      inventorySlots = inventorySlots + Backpack.InventorySlots
-    end
-  end
-  return IsMerc(self) and inventorySlots or self.max_dead_slot_tiles 
-end
-
 local tile_size = 90
 local tile_size_rollover = 110
 
@@ -353,15 +338,16 @@ end
 function XInventorySlot:OnDragDrop(target, drag_win, drop_res, pt)
   local result, result2 = self:DragDrop_MoveItem(pt, target)
   local sync_err = result == "NetStartCombatAction refused to start"
+  for _, unit in pairs(g_Units) do
+    if IsMerc(unit) then
+        CheckItemsInWrongSlots(unit)
+      end
+  end
   self:ClearDragState(drag_win)
   if sync_err or result2 == "no change" then
     InventoryUIRespawn()
   end
-  local context = self:GetContext()
-  if context.session_id then
-    local unit = g_Units[context.session_id]
-    CheckItemsInWrongSlots(unit)
-  end
+
 
 end
 

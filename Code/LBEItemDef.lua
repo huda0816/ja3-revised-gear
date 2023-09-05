@@ -31,8 +31,13 @@ DefineClass.Backpack = {
 }
 
 function ItemFitsTile(item, type, column)
-    if item.LargeItem and column == 6 then return false, "Doesn't fit here" end
+    if item.LargeItem and (column == 6 or column ==1) then return false, "Doesn't fit here" end
     if  type == "PocketU" then return true end
+
+    if IsKindOf(item, "Ammo") then
+        if type == "PocketS" or type == "PocketM" or type == "PocketL" or type == "LargeMag" or type == "PistolMag" then return true
+        else return false, "Doesn't fit here" end
+    end
 
     if IsKindOfClasses(item, "InventoryStack") then
         if type == "PocketL" then return true
@@ -49,6 +54,10 @@ function ItemFitsTile(item, type, column)
         else return false, "Doesn't fit here" end
     end
     if IsKindOfClasses(item, "GasMask") then
+        if type == "PocketM" or type == "PocketL" then return true
+        else return false, "Doesn't fit here" end
+    end
+    if IsKindOfClasses(item, "Wirecutter") then
         if type == "PocketM" or type == "PocketL" then return true
         else return false, "Doesn't fit here" end
     end
