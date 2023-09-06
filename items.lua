@@ -1,4 +1,16 @@
 return {
+PlaceObj('ModItemCharacterEffectCompositeDef', {
+	'Id', "Overweight",
+	'object_class', "CharacterEffect",
+	'DisplayName', T(632993590469, --[[ModItemCharacterEffectCompositeDef Overweight DisplayName]] "Overweight"),
+	'Description', T(639383497609, --[[ModItemCharacterEffectCompositeDef Overweight Description]] "Unit carries more than they comfortably can"),
+	'AddEffectText', T(542008365807, --[[ModItemCharacterEffectCompositeDef Overweight AddEffectText]] "Unit is overweight"),
+	'RemoveEffectText', T(400846201294, --[[ModItemCharacterEffectCompositeDef Overweight RemoveEffectText]] "Not overweight anymore"),
+	'type', "Debuff",
+	'Icon', "Mod/ii6mKUf/Icons/overweight.png",
+	'Shown', true,
+	'ShownSatelliteView', true,
+}),
 PlaceObj('ModItemCode', {
 	'name', "BackpackItems",
 	'CodeFileName', "Code/BackpackItems.lua",
@@ -36,8 +48,24 @@ PlaceObj('ModItemCode', {
 	'CodeFileName', "Code/UnitInventory.lua",
 }),
 PlaceObj('ModItemCode', {
+	'name', "Weight",
+	'CodeFileName', "Code/Weight.lua",
+}),
+PlaceObj('ModItemCode', {
+	'name', "WeightCalc",
+	'CodeFileName', "Code/WeightCalc.lua",
+}),
+PlaceObj('ModItemCode', {
 	'name', "XTemplateInventory",
 	'CodeFileName', "Code/XTemplateInventory.lua",
+}),
+PlaceObj('ModItemGameRuleDef', {
+	id = "OverweightAP",
+	msg_reactions = {
+		PlaceObj('MsgReaction', {
+			param_bindings = false,
+		}),
+	},
 }),
 PlaceObj('ModItemOptionChoice', {
 	'name', "RevisedLBEDropChance",

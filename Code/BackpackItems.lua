@@ -8,7 +8,7 @@ DefineClass.Sidor_Backpack = {
 	DisplayName = "Soviet harvesack Sidor",
 	DisplayNamePlural = "Soviet harvesack Sidor",
 	AdditionalHint = "3 large slots",
-    Weight = 1,
+    Weight = 2,
     PocketU = 3,
     PocketS = 0,
     PocketM = 0,
@@ -29,7 +29,7 @@ DefineClass.Vietnam_Backpack = {
 	DisplayName = "US Vietnam backpack",
 	DisplayNamePlural = "US Vietnam backpack",
 	AdditionalHint = "3 large slots",
-    Weight = 1,
+    Weight = 2,
     PocketU = 3,
     PocketS = 0,
     PocketM = 3,
@@ -37,7 +37,7 @@ DefineClass.Vietnam_Backpack = {
     LargeMag = 0,
     PistolMag = 0,
     PistolHolster = 0,
-    InventorySlots = 6
+    InventorySlots = 6,
 }
 
 UndefineClass('Bergen_Backpack')
@@ -50,7 +50,7 @@ DefineClass.Bergen_Backpack = {
 	DisplayName = "US Vietnam backpack",
 	DisplayNamePlural = "US Vietnam backpack",
 	AdditionalHint = "3 large slots",
-    Weight = 1,
+    Weight = 3,
     PocketU = 3,
     PocketS = 0,
     PocketM = 1,

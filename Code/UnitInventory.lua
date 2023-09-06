@@ -18,6 +18,7 @@ function UnitProperties:GetInventoryMaxSlots()
     for _, unit in pairs(g_Units) do
         if IsMerc(unit) then
             CheckItemsInWrongSlots(unit)
+            unit:ApplyWeightEffects()
           end
     end
   end
@@ -25,11 +26,10 @@ function UnitProperties:GetInventoryMaxSlots()
   function CheckItemsInWrongSlots(unit)
     local slot_types = CreateSlotTypes(unit)
     local slot_name = "Inventory"
-    local container = GetDropContainer(unit)
     unit:ForEachItemInSlot(slot_name, function(slot_item, slot_name, left, top)
         if slot_types[left][top] then
             if not ItemFitsTile(slot_item, slot_types[left][top]) then
-                print(unit.session_id, "here")
+                local container = GetDropContainer(unit)
                 unit:RemoveItem(slot_name, slot_item)
                 if not container:AddItem("Inventory", slot_item) then
                   container = PlaceObject("ItemDropContainer")
@@ -40,7 +40,7 @@ function UnitProperties:GetInventoryMaxSlots()
                 end
             end
         else
-            print(unit.session_id, "there")
+            local container = GetDropContainer(unit)
             unit:RemoveItem(slot_name, slot_item)
             if not container:AddItem("Inventory", slot_item) then
               container = PlaceObject("ItemDropContainer")
@@ -50,5 +50,5 @@ function UnitProperties:GetInventoryMaxSlots()
               container:AddItem("Inventory", slot_item)
             end
         end
-      end)
+    end)
   end

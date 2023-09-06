@@ -30,17 +30,44 @@ DefineClass.Backpack = {
     InventorySlots = 3
 }
 
+CustomPDA.locked = false
+Personal_Vicki_CustomTools.locked = false
+
 function ItemFitsTile(item, type, column)
+
+    if  type == "LBE" and not IsKindOf(item, "LBE") then return false, "Doesn't fit here" end
+    if  type == "Backpack" and not IsKindOf(item, "Backpack") then return false, "Doesn't fit here" end
+
     if item.LargeItem and (column == 6 or column ==1) then return false, "Doesn't fit here" end
     if  type == "PocketU" then return true end
 
-    if IsKindOf(item, "Ammo") then
+    if IsKindOfClasses(item, "InventoryStack") then
+        if type == "PocketL" then return true
+        else return false, "Doesn't fit here" end
+    end
+
+    if IsKindOf(item, "CustomPDA") then
+        if type == "PocketS" then return true
+        else return false, "Doesn't fit here" end
+    end
+
+    if IsKindOf(item, "Lockpick") then
         if type == "PocketS" or type == "PocketM" or type == "PocketL" or type == "LargeMag" or type == "PistolMag" then return true
         else return false, "Doesn't fit here" end
     end
 
-    if IsKindOfClasses(item, "InventoryStack") then
-        if type == "PocketL" then return true
+    if IsKindOf(item, "QuestItem") then
+        if type == "PocketS" or type == "PocketM" or type == "PocketL" or type == "LargeMag" or type == "PistolMag" then return true
+        else return false, "Doesn't fit here" end
+    end
+
+    if IsKindOf(item, "MiscItem") then
+        if type == "PocketS" or type == "PocketM" or type == "PocketL" or type == "LargeMag" or type == "PistolMag" then return true
+        else return false, "Doesn't fit here" end
+    end
+
+    if IsKindOf(item, "Ammo") then
+        if type == "PocketS" or type == "PocketM" or type == "PocketL" or type == "LargeMag" or type == "PistolMag" then return true
         else return false, "Doesn't fit here" end
     end
 

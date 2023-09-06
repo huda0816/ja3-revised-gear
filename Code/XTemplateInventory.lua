@@ -307,9 +307,9 @@ PlaceObj("XTemplate", {
                 288565331426,
                 "SECTOR <SectorId(sector)> STASH",
                 sector = dialog.context.container.sector_id or gv_CurrentSectorId
-              }) or T(197418134567, "Squad Supplies"))
+              }) or T(197418134567, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"))
             else
-              self.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or T(197418134567, "Squad Supplies"))
+              self.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or T(197418134567, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"))
             end
             return
           end
@@ -1730,9 +1730,9 @@ PlaceObj("XTemplate", {
                   288565331426,
                   "SECTOR <SectorId(sector)> STASH",
                   sector = context.container.sector_id or gv_CurrentSectorId
-                }) or T(197418134567, "Squad Supplies"))
+                }) or T(197418134567, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"))
               else
-                node.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or T(197418134567, "Squad Supplies"))
+                node.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or T(197418134567, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"))
               end
             end,
             "RespawnOnContext",
@@ -2734,7 +2734,7 @@ PlaceObj("XTemplate", {
                       "Translate",
                       true,
                       "Text",
-                      T(396385158705, "<Nick> EQUIPMENT"),
+                      T(396385158705, "<Nick> EQUIPMENT <GetCurrentWeight()>/<GetMaxWeight()> Kg"),
                       "TextVAlign",
                       "center"
                     }, {
@@ -2830,7 +2830,7 @@ PlaceObj("XTemplate", {
                       "Translate",
                       true,
                       "Text",
-                      T(141372786399, "Squad Supplies"),
+                      T(141372786399, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"),
                       "TextVAlign",
                       "center"
                     }, {
