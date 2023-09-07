@@ -38,9 +38,12 @@ LBERarityTable = {
     {Affiliation = "Legion", id = "Vietnam_Backpack", Rarity = 7},
     {Affiliation = "Legion", id = "M56_Vest", Rarity = 10},
     {Affiliation = "Legion", id = "Lifchik_Vest", Rarity = 5},
+    {Affiliation = "Legion", id = "FrenchCCE_Vest", Rarity = 3},
     {Affiliation = "Legion", id = "BritishCombat_Vest", Rarity = 1},
     {Affiliation = "Army", id = "Sidor_Backpack", Rarity = 10},
-    {Affiliation = "Army", id = "BlackhawkOmega_Vest", Rarity = 5},
+    {Affiliation = "Army", id = "BlackhawkOmega_Vest", Rarity = 3},
     {Affiliation = "Army", id = "Blackhawk_Rig", Rarity = 10},
     {Affiliation = "Army", id = "Bergen_Backpack", Rarity = 5},
+    {Affiliation = "Army", id = "Blackhawk_Backpack", Rarity = 3},
+    {Affiliation = "Army", id = "BlackhawkPhoenix_Backpack", Rarity = 5},
 }

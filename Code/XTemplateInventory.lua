@@ -1730,7 +1730,7 @@ PlaceObj("XTemplate", {
                   288565331426,
                   "SECTOR <SectorId(sector)> STASH",
                   sector = context.container.sector_id or gv_CurrentSectorId
-                }) or T(197418134567, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"))
+                }) or T(197418134567, "Squad Supplies" .. GetSquadBagWeight() .. " Kg"))
               else
                 node.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or T(197418134567, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"))
               end

@@ -60,3 +60,45 @@ DefineClass.Bergen_Backpack = {
     PistolHolster = 0,
     InventorySlots = 6
 }
+
+UndefineClass('Blackhawk_Backpack')
+DefineClass.Blackhawk_Backpack = {
+	__parents = { "Backpack" },
+	__generated_by_class = "ItemInventoryItemCompositeDef",
+
+	object_class = "Backpack",
+	Icon = "Mod/ii6mKUf/Icons/Backpack_Blackhawk.png",
+	DisplayName = "Blackhawk backpack",
+	DisplayNamePlural = "Blackhawk backpack",
+	AdditionalHint = "3 large slots",
+    Weight = 2.5,
+    PocketU = 3,
+    PocketS = 0,
+    PocketM = 4,
+    PocketL = 2,
+    LargeMag = 0,
+    PistolMag = 0,
+    PistolHolster = 0,
+    InventorySlots = 9
+}
+
+UndefineClass('BlackhawkPhoenix_Backpack')
+DefineClass.BlackhawkPhoenix = {
+	__parents = { "Backpack" },
+	__generated_by_class = "ItemInventoryItemCompositeDef",
+
+	object_class = "Backpack",
+	Icon = "Mod/ii6mKUf/Icons/BackpackPhoenix_Blackhawk.png",
+	DisplayName = "Blackhawk backpack",
+	DisplayNamePlural = "Blackhawk backpack",
+	AdditionalHint = "3 large slots",
+    Weight = 1.5,
+    PocketU = 3,
+    PocketS = 0,
+    PocketM = 0,
+    PocketL = 1,
+    LargeMag = 0,
+    PistolMag = 0,
+    PistolHolster = 0,
+    InventorySlots = 4
+}

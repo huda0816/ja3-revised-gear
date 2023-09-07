@@ -8,7 +8,7 @@ function Unit:GetCurrentWeight()
         if s.UniqueId == self.Squad then squad = s end
     end
     
-    local total_weight = {weight=4.0}
+    local total_weight = {weight=0.0}
     self:ForEachItem(function(slot_item, slot_name, left, top, total_weight)
         local item_amount = slot_item.Amount or 1
         local item_weight = slot_item.Weight or 0.1
@@ -43,20 +43,21 @@ end
 
 function GetSquadBagWeight()
     local total_weight = {weight=0.0}
-
-    gv_SquadBag:ForEachItem(function(slot_item, slot_name, left, top, total_weight)
-        local item_amount = slot_item.Amount or 1
-        local item_weight = slot_item.Weight or 0.1
-        if IsKindOf(slot_item, "Ammo") then
-            item_weight = BulletWeight(slot_item)
-        elseif  IsKindOf(slot_item, "Mag") then
-            item_amount = slot_item.ammo.Amount
-            item_weight = BulletWeight(slot_item.ammo)
-        elseif IsKindOf(slot_item, "Parts") then
-            item_weight = 0.02
-        end
-        total_weight.weight = total_weight.weight + item_amount * item_weight
-    end, total_weight)
+    if gv_SquadBag then
+        gv_SquadBag:ForEachItem(function(slot_item, slot_name, left, top, total_weight)
+            local item_amount = slot_item.Amount or 1
+            local item_weight = slot_item.Weight or 0.1
+            if IsKindOf(slot_item, "Ammo") then
+                item_weight = BulletWeight(slot_item)
+            elseif  IsKindOf(slot_item, "Mag") then
+                item_amount = slot_item.ammo.Amount
+                item_weight = BulletWeight(slot_item.ammo)
+            elseif IsKindOf(slot_item, "Parts") then
+                item_weight = 0.02
+            end
+            total_weight.weight = total_weight.weight + item_amount * item_weight
+        end, total_weight)
+    end
     return round(total_weight.weight*10,1)/10.0
 end
 

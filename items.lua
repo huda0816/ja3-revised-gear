@@ -24,6 +24,10 @@ PlaceObj('ModItemCode', {
 	'CodeFileName', "Code/Inventory.lua",
 }),
 PlaceObj('ModItemCode', {
+	'name', "InventoryFix",
+	'CodeFileName', "Code/InventoryFix.lua",
+}),
+PlaceObj('ModItemCode', {
 	'name', "LBEBuilder",
 	'CodeFileName', "Code/LBEBuilder.lua",
 }),
@@ -42,6 +46,10 @@ PlaceObj('ModItemCode', {
 PlaceObj('ModItemCode', {
 	'name', "ModOptions",
 	'CodeFileName', "Code/ModOptions.lua",
+}),
+PlaceObj('ModItemCode', {
+	'name', "RepairFix",
+	'CodeFileName', "Code/RepairFix.lua",
 }),
 PlaceObj('ModItemCode', {
 	'name', "UnitInventory",

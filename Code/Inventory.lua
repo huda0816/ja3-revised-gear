@@ -287,6 +287,7 @@ function Inventory:FindEmptyPosition(slot_name, item, local_changes)
       space[i][height] = true
     end
   end
+  
   if slot_name == "Inventory" and IsMerc(self) and self.session_id then
     local slot_types = CreateSlotTypes(self)
     if slot_types then

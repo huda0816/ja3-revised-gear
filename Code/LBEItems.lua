@@ -128,3 +128,25 @@ DefineClass.BlackhawkOmega_Vest = {
     PocketU = 0,
     InventorySlots = 8
 }
+
+UndefineClass('FrenchCCE_Vest')
+DefineClass.FrenchCCE_Vest = {
+	__parents = { "LBE" },
+	__generated_by_class = "ItemInventoryItemCompositeDef",
+
+	object_class = "LBE",
+	Icon = "Mod/ii6mKUf/Icons/LBE_FrenchCCE_Vest.png",
+	DisplayName = "French CCE Vest",
+	DisplayNamePlural = "French CCE Vest",
+    Description = "Standard French Army CCE vest",
+	AdditionalHint = "N2 large pouches",
+    Weight = 2,
+    PocketS = 0,
+    PocketM = 0,
+    PocketL = 2,
+    LargeMag = 4,
+    PistolMag = 0,
+    PistolHolster = 0,
+    PocketU = 0,
+    InventorySlots = 6
+}
