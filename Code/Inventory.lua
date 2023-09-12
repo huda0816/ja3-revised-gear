@@ -123,12 +123,12 @@ function XInventorySlot:Setslot_name(slot_name)
       column = column +1
     end
 
-    TileConfig.Type = "PocketM"
+    TileConfig.Type = "PocketU"
     TileConfig.Size = "Small"
     BuildPocket(self, column, row)
     column = column +1
 
-    TileConfig.Type = "PocketL"
+    TileConfig.Type = "PocketU"
     TileConfig.Size = "Small"
     BuildPocket(self, column, row)
     column = column +1
@@ -179,8 +179,12 @@ function XInventoryTile:OnDropEnter(drag_win, pt, drag_source_win)
   local mouse_text
   local slot = self:GetInventorySlotCtrl()
   local _, dx, dy = slot:FindTile(pt)
-  if slot.slot_name=="Inventory" then
-      local fits, reason = ItemFitsTile(drag_item, self.Type, dx)
+  
+  local slot_types = CreateSlotTypes(slot:GetContext())
+  local ssx, ssy, sdx = point_unpack(InventoryDragItemPos)
+
+  if (slot.slot_name=="Inventory") and slot_types then
+      local fits, reason = FitTileCheck(drag_item, slot_types, dx, dy, sdx)
       if not fits then mouse_text = reason
   end
   else
@@ -218,18 +222,20 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
   if not dx then
     return "no target tile"
   end
-  local tile = target.tiles[dx][dy]
+  local dx2 = dx
+  --local tile = target.tiles[dx][dy]
 
-  if target.slot_name == "Inventory" then
-      local fits, reason = ItemFitsTile(item, tile.Type, dx)
-      if not fits then return reason end
-  end
   local ssx, ssy, sdx = point_unpack(InventoryDragItemPos)
   if item.LargeItem then
     dx = dx - sdx
     if IsEquipSlot(dest_slot) then
       dx = 1
     end
+  end
+  local slot_types = CreateSlotTypes(self.context)
+  if slot_types and (target.slot_name == "Inventory") then
+    local fits, reason = FitTileCheck(item, slot_types, dx2, dy, sdx)
+    if not fits then return reason end
   end
   local dest_container = target:GetContext()
   local src_container = InventoryStartDragContext
@@ -293,7 +299,7 @@ function Inventory:FindEmptyPosition(slot_name, item, local_changes)
     if slot_types then
       for i = 1, width do
         for j = 1, height do
-          if not ItemFitsTile(item, slot_types[i][j]) then
+          if not  ItemFitsTile(item, slot_types[i][j]) then
             space[i][j]=true
           end
         end

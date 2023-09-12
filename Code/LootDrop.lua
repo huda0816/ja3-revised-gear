@@ -1,6 +1,12 @@
 function OnMsg.UnitDied(unit)
+    local target = tonumber(CurrentModOptions['RevisedLBEDropChance'])
+    local roll = unit:Random(100)
     if unit then
-        if unit:Random(100) < RevisedLBEConfig.LBEDropChance then
+        print(target)
+        print(roll)
+        print(roll < target)
+        if roll < target then
+            print("here")
             local drawItemId = DrawLBE(unit)
             local LBE = PlaceInventoryItem(drawItemId)
             unit:AddItem("InventoryDead", LBE)
@@ -11,6 +17,7 @@ end
 function DrawLBE(unit)
     local affilation = unit.Affiliation
     local drawTable = {}
+    print(drawTable)
     for _, item in pairs(LBERarityTable) do
         if affilation == item.Affiliation then
             table.insert(drawTable, item)
@@ -28,6 +35,7 @@ function DrawLBE(unit)
     for _, drawnItem in pairs(drawTable) do
         rollingSum = rollingSum + drawnItem.Rarity
         if roll<rollingSum then
+            print(drawnItem)
             return drawnItem.id
         end
     end

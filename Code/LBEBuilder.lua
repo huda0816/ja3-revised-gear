@@ -92,8 +92,8 @@ function CreateSlotTypes(unit)
     types[1][1] = "LBE"
     types[2][1] = "PocketS"
     types[3][1] = "PocketS"
-    types[4][1] = "PocketM"
-    types[5][1] = "PocketL"
+    types[4][1] = "PocketU"
+    types[5][1] = "PocketU"
     types[6][1] = "Backpack"
   
     local LBE = unit:GetItemInSlot("Inventory", nil, 1, 1)

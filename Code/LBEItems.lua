@@ -3,6 +3,7 @@ DefineClass.SWAT_Vest = {
 	__parents = { "LBE" },
 	__generated_by_class = "ItemInventoryItemCompositeDef",
 
+    Group = "Default",
 	object_class = "LBE",
 	Icon = "Mod/ii6mKUf/Icons/LBE_SWAT_Vest.png",
 	DisplayName = "SWAT Tactical Vest",
@@ -24,6 +25,7 @@ DefineClass.M56_Vest = {
 	__parents = { "LBE" },
 	__generated_by_class = "ItemInventoryItemCompositeDef",
 
+    Group = "Default",
 	object_class = "LBE",
 	Icon = "Mod/ii6mKUf/Icons/LBE_M56_Vest.png",
 	DisplayName = "M56 Rig",
@@ -46,6 +48,7 @@ DefineClass.Lifchik_Vest = {
 	__parents = { "LBE" },
 	__generated_by_class = "ItemInventoryItemCompositeDef",
 
+    Group = "Default",
 	object_class = "LBE",
 	Icon = "Mod/ii6mKUf/Icons/LBE_Lifchik_Vest.png",
 	DisplayName = "1st Pattern Lifchik",
@@ -68,6 +71,7 @@ DefineClass.BritishCombat_Vest = {
 	__parents = { "LBE" },
 	__generated_by_class = "ItemInventoryItemCompositeDef",
 
+    Group = "Default",
 	object_class = "LBE",
 	Icon = "Mod/ii6mKUf/Icons/LBE_BritishCombat_Vest.png",
 	DisplayName = "British DPM Combat Vest",
@@ -90,6 +94,7 @@ DefineClass.Blackhawk_Rig = {
 	__parents = { "LBE" },
 	__generated_by_class = "ItemInventoryItemCompositeDef",
 
+    Group = "Default",
 	object_class = "LBE",
 	Icon = "Mod/ii6mKUf/Icons/LBE_Blackhawk_Rig.png",
 	DisplayName = "Blackhawk Rig",
@@ -112,6 +117,7 @@ DefineClass.BlackhawkOmega_Vest = {
 	__parents = { "LBE" },
 	__generated_by_class = "ItemInventoryItemCompositeDef",
 
+    Group = "Default",
 	object_class = "LBE",
 	Icon = "Mod/ii6mKUf/Icons/LBE_BlackhawkOmega_Vest.png",
 	DisplayName = "Blackhawk Omega Vest",
@@ -134,6 +140,7 @@ DefineClass.FrenchCCE_Vest = {
 	__parents = { "LBE" },
 	__generated_by_class = "ItemInventoryItemCompositeDef",
 
+    Group = "Default",
 	object_class = "LBE",
 	Icon = "Mod/ii6mKUf/Icons/LBE_FrenchCCE_Vest.png",
 	DisplayName = "French CCE Vest",

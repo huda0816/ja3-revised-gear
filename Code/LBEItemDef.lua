@@ -41,7 +41,15 @@ function ItemFitsTile(item, type, column)
     if  type == "LBE" and not IsKindOf(item, "LBE") then return false, "Doesn't fit here" end
     if  type == "Backpack" and not IsKindOf(item, "Backpack") then return false, "Doesn't fit here" end
 
-    if item.LargeItem and (column == 6 or column ==1) then return false, "Doesn't fit here" end
+    if IsKindOf(item, "Pistol") then
+        if type == "PistolHolster" or type == "PocketL" then return true
+        else return false, "Doesn't fit here" end
+    end
+
+    if IsKindOf(item, "Firearm") then
+        if type == "PocketL" then return true
+        else return false, "Doesn't fit here" end
+    end
 
     if IsKindOf(item, "Ammo") then
         if type == "PocketS" or type == "PocketM" or type == "PocketL" or type == "LargeMag" or type == "PistolMag" then return true
@@ -130,10 +138,7 @@ function ItemFitsTile(item, type, column)
         if type == "PocketM" or type == "PocketL" or type == "LargeMag" then return true
         else return false, "Doesn't fit here" end
     end
-    if IsKindOf(item, "Pistol") then
-        if type == "PistolHolster" or type == "PocketL" then return true
-        else return false, "Doesn't fit here" end
-    end
+
     if IsKindOfClasses(item, "LBE") then
         if type == "LBE" or type == "PocketL" then return true
         else return false, "Doesn't fit here" end
@@ -145,4 +150,26 @@ function ItemFitsTile(item, type, column)
     end
 
     return true
+  end
+
+  function LargeItemFitsTile(item, slot_types, column, row, sdx)
+    if sdx == 0 then
+        if column == 6 then return false end
+        if not( ItemFitsTile(item, slot_types[column][row]) and ItemFitsTile(item, slot_types[column+1][row])) then
+            return false,"Doesn't fit here"
+        else return true end
+    elseif sdx == 1 then
+        if column == 1 then return false end
+        if not( ItemFitsTile(item, slot_types[column][row]) and ItemFitsTile(item, slot_types[column-1][row])) then
+            return false,"Doesn't fit here"
+        else return true end
+    else return false,"Doesn't fit here" end
+  end
+
+  function FitTileCheck(item, slot_types, column, row, sdx)
+    if item.LargeItem then
+        return LargeItemFitsTile(item, slot_types, column, row, sdx)
+    else
+        return ItemFitsTile(item, slot_types[column][row])
+    end
   end

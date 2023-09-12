@@ -307,9 +307,9 @@ PlaceObj("XTemplate", {
                 288565331426,
                 "SECTOR <SectorId(sector)> STASH",
                 sector = dialog.context.container.sector_id or gv_CurrentSectorId
-              }) or T(197418134567, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"))
+              }) or T(197418134567, "Squad Supplies " .. gv_SquadBag:GetSquadBagWeight() .. " Kg"))
             else
-              self.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or T(197418134567, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"))
+              self.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or T(197418134567, "Squad Supplies " .. gv_SquadBag:GetSquadBagWeight(gv_SquadBag) .. " Kg"))
             end
             return
           end
@@ -1730,9 +1730,9 @@ PlaceObj("XTemplate", {
                   288565331426,
                   "SECTOR <SectorId(sector)> STASH",
                   sector = context.container.sector_id or gv_CurrentSectorId
-                }) or T(197418134567, "Squad Supplies" .. GetSquadBagWeight() .. " Kg"))
+                }) or T(197418134567, "Squad Supplies" .. gv_SquadBag:GetSquadBagWeight() .. " Kg"))
               else
-                node.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or T(197418134567, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"))
+                node.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or T(197418134567, "Squad Supplies " .. gv_SquadBag:GetSquadBagWeight() .. " Kg"))
               end
             end,
             "RespawnOnContext",
@@ -2830,7 +2830,7 @@ PlaceObj("XTemplate", {
                       "Translate",
                       true,
                       "Text",
-                      T(141372786399, "Squad Supplies " .. GetSquadBagWeight() .. " Kg"),
+                      T(141372786399, "Squad Supplies <GetSquadBagWeight()> Kg"),
                       "TextVAlign",
                       "center"
                     }, {
