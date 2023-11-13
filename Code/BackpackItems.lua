@@ -88,7 +88,7 @@ DefineClass.BlackhawkPhoenix = {
 	__generated_by_class = "ItemInventoryItemCompositeDef",
 
 	object_class = "Backpack",
-	Icon = "Mod/ii6mKUf/Icons/BackpackPhoenix_Blackhawk.png",
+	Icon = "Mod/ii6mKUf/Icons/Backpack_BlackhawkPhoenix.png",
 	DisplayName = "Blackhawk backpack",
 	DisplayNamePlural = "Blackhawk backpack",
 	AdditionalHint = "3 large slots",

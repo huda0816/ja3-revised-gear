@@ -51,7 +51,7 @@ function SetItemWeight()
     FlakArmor_CeramicPlates.Weight = 9.5
     FlakArmor_WeavePadding.Weight = 8.5
     FlakLeggings.Weight = 5
-    FlakLeggings_WeavePadding.Weigth = 6.5
+    FlakLeggings_WeavePadding.Weight = 6.5
     FlakVest.Weight = 5
     FlakVest_CeramicPlates.Weight = 7.5
     FlakVest_WeavePadding.Weight = 6.5

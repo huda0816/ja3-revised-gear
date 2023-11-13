@@ -153,6 +153,7 @@ function ItemFitsTile(item, type, column)
   end
 
   function LargeItemFitsTile(item, slot_types, column, row, sdx)
+    print(sdx)
     if sdx == 0 then
         if column == 6 then return false end
         if not( ItemFitsTile(item, slot_types[column][row]) and ItemFitsTile(item, slot_types[column+1][row])) then

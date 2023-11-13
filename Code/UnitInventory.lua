@@ -18,7 +18,7 @@ function UnitProperties:GetInventoryMaxSlots()
     for _, unit in pairs(g_Units) do
         if IsMerc(unit) then
             CheckItemsInWrongSlots(unit)
-            unit:ApplyWeightEffects()
+            ApplyWeightEffects(unit)
             InventoryUIRespawn()
           end
     end

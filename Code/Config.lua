@@ -1,3 +1,4 @@
 RevisedLBEConfig = {
-    LBEDropChance = 10
+    LBEDropChance = 10,
+    SquadBagHasWeight = true
 }

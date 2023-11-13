@@ -180,12 +180,14 @@ function XInventoryTile:OnDropEnter(drag_win, pt, drag_source_win)
   local slot = self:GetInventorySlotCtrl()
   local _, dx, dy = slot:FindTile(pt)
   
-  local slot_types = CreateSlotTypes(slot:GetContext())
   local ssx, ssy, sdx = point_unpack(InventoryDragItemPos)
 
-  if (slot.slot_name=="Inventory") and slot_types then
-      local fits, reason = FitTileCheck(drag_item, slot_types, dx, dy, sdx)
-      if not fits then mouse_text = reason
+  if slot.slot_name=="Inventory" and slot.context.session_id  then
+      local slot_types = CreateSlotTypes(slot:GetContext())
+      if slot_types then
+        local fits, reason = FitTileCheck(drag_item, slot_types, dx, dy, sdx)
+        if not fits then mouse_text = reason
+      end 
   end
   else
       mouse_text = InventoryGetMoveIsInvalidReason(slot.context, InventoryStartDragContext)
@@ -232,10 +234,12 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
       dx = 1
     end
   end
-  local slot_types = CreateSlotTypes(self.context)
-  if slot_types and (target.slot_name == "Inventory") then
-    local fits, reason = FitTileCheck(item, slot_types, dx2, dy, sdx)
-    if not fits then return reason end
+  if target.slot_name == "Inventory" and target.context.session_id then
+    local slot_types = CreateSlotTypes(target.context)
+    if slot_types then
+      local fits, reason = FitTileCheck(item, slot_types, dx2, dy, sdx)
+      if not fits then return reason end
+    end
   end
   local dest_container = target:GetContext()
   local src_container = InventoryStartDragContext

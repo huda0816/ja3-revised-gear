@@ -7,6 +7,7 @@ function Unit:GetMaxWeight()
 end
 
 function Unit:GetCurrentWeight()
+    if not GetPlayerMercSquads() or not self.Squad then return 0 end
     local squad
     for i, s in ipairs(GetPlayerMercSquads()) do
         if s.UniqueId == self.Squad then squad = s end
@@ -30,6 +31,7 @@ function Unit:GetCurrentWeight()
 end
 
 function UnitData:GetCurrentWeight()
+    if not GetPlayerMercSquads() or not self.Squad then return 0 end
     local squad
     for i, s in ipairs(GetPlayerMercSquads()) do
         if s.UniqueId == self.Squad then squad = s end
@@ -49,14 +51,13 @@ function UnitData:GetCurrentWeight()
     return round((total_weight.weight + (gv_SquadBag:GetSquadBagWeight()/ #squad.units))*10, 1)/10.0
 end
 
-function Unit:ApplyWeightEffects()
-    local current_weight = self:GetCurrentWeight()
-    local max_weight = self.GetMaxtWeight()
-
+function ApplyWeightEffects(unit)
+    local current_weight = unit:GetCurrentWeight()
+    local max_weight = unit:GetMaxWeight()
     if current_weight>max_weight then
-        self:AddStatusEffect("Overweight")
+        unit:AddStatusEffect("Overweight")
     else 
-        self:RemoveStatusEffect("Overweight")
+        unit:RemoveStatusEffect("Overweight")
     end
      InventoryUIRespawn()
 end
@@ -70,6 +71,7 @@ end
 
 function SquadBag:GetSquadBagWeight()
     local total_weight = {weight=0.0}
+    if not RevisedLBEConfig.SquadBagHasWeight or not self then return 0 end
     self:ForEachItem(function(slot_item, slot_name, left, top, total_weight)
         local item_amount = slot_item.Amount or 1
         local item_weight = slot_item.Weight or 0.1
