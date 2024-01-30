@@ -168,7 +168,7 @@ function ItemFitsTile(item, type, column)
   end
 
   function FitTileCheck(item, slot_types, column, row, sdx)
-    if item.LargeItem then
+    if item:IsLargeItem() then
         return LargeItemFitsTile(item, slot_types, column, row, sdx)
     else
         return ItemFitsTile(item, slot_types[column][row])
