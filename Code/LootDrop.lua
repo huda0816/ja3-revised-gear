@@ -30,7 +30,6 @@ function DrawLBE(unit)
     for _, drawnItem in pairs(drawTable) do
         rollingSum = rollingSum + drawnItem.Rarity
         if roll<rollingSum then
-            print(drawnItem)
             return drawnItem.id
         end
     end

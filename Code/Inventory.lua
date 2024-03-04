@@ -1,344 +1,464 @@
-local tile_size = 90
-local tile_size_rollover = 110
+function REV_GetEquippedItemContainer(unit, item, pos, slotName)
+	local slotX, slotY = point_unpack(pos)
 
-TileConfig = {
-	Type = "Small",
-	Size = "Small",
-}
+	local allSlots, allTypes = GetInventorySlots(unit)
 
-local REV_Original_XInventoryTileInit = XInventoryTile.Init
+	local slotName = allTypes[slotX][slotY]
 
-function XInventoryTile:Init()
-	local k = 1
-	local emptyImage = "UI/Inventory/T_Backpack_Slot_Small_Empty.tga"
-	local hoverImage = "UI/Inventory/T_Backpack_Slot_Small_Hover.tga"
-	local imageBase = "UI/Inventory/T_Backpack_Slot_Small.tga"
-	if TileConfig.Size == "Large" then
-		k = 2
-		emptyImage = "UI/Inventory/T_Backpack_Slot_Large_Empty.tga"
-		hoverImage = "UI/Inventory/T_Backpack_Slot_Large_Hover.tga"
-		imageBase = "UI/Inventory/T_Backpack_Slot_Large.tga"
+	local slotRows = {}
+
+	for i, row in ipairs(allTypes[1]) do
+		if row == slotName then
+			table.insert(slotRows, i)
+		end
 	end
-	if TileConfig.Type == "LargeMag" then
-		emptyImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_Mag.png"
-		hoverImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_Mag.png"
-		imageBase = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_Mag.png"
-	elseif TileConfig.Type == "LBE" then
-		emptyImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_LBE.png"
-		hoverImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_LBE.png"
-		imageBase = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_LBE.png"
-	elseif TileConfig.Type == "PistolMag" then
-		emptyImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_MagPistol.png"
-		hoverImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_MagPistol.png"
-		imageBase = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_MagPistol.png"
-	elseif TileConfig.Type == "PistolHolster" then
-		emptyImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PistolHolster.png"
-		hoverImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PistolHolster.png"
-		imageBase = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PistolHolster.png"
-	elseif TileConfig.Type == "PocketS" then
-		emptyImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PocketS.png"
-		hoverImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PocketS.png"
-		imageBase = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PocketS.png"
-	elseif TileConfig.Type == "PocketM" then
-		emptyImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PocketM.png"
-		hoverImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PocketM.png"
-		imageBase = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PocketM.png"
-	elseif TileConfig.Type == "PocketL" then
-		emptyImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PocketL.png"
-		hoverImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PocketL.png"
-		imageBase = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_PocketL.png"
-	elseif TileConfig.Type == "Backpack" then
-		emptyImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_Backpack.png"
-		hoverImage = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_Backpack.png"
-		imageBase = "Mod/ii6mKUf/Images/T_Backpack_Slot_Small_Backpack.png"
-	end
-	local image = XImage:new({
-		MinWidth = tile_size * k,
-		MaxWidth = tile_size * k,
-		MinHeight = tile_size * k,
-		MaxHeight = tile_size * k,
-		Id = "idBackImage",
-		Image = emptyImage, -- curstom
-		ImageColor = 4291018156
-	}, self)
-	if self.slot_image then
-		local imgslot = XImage:new({
-			MinWidth = tile_size * k,
-			MaxWidth = tile_size * k,
-			MinHeight = tile_size * k,
-			MaxHeight = tile_size * k,
-			Dock = "box",
-			Id = "idEqSlotImage",
-			ImageFit = "width"
-		}, self)
-		imgslot:SetImage(self.slot_image)
-		image:SetImage(imageBase) -- curstom
-		image:SetImageColor(RGB(255, 255, 255))
-	end
-	local rollover_image = XImage:new({
-		MinWidth = tile_size_rollover * k,
-		MaxWidth = tile_size_rollover * k,
-		MinHeight = tile_size_rollover * k,
-		MaxHeight = tile_size_rollover * k,
-		Id = "idRollover",
-		Image = hoverImage, -- curstom
-		ImageColor = 0xFFc3bdac,
-		Visible = false
-	}, self)
-	rollover_image:SetVisible(false)
+
+	local container = unit:GetItemInSlot(slotName)
+
+	return container, slotName, slotRows
 end
 
-function XInventorySlot:Setslot_name(slot_name)
-	local context = self:GetContext()
+function REV_GetItemInEquipSlot(unit, slotName)
+	local item = unit:GetItemInSlot(slotName)
 
-	if not context then
-		return
+	return item
+end
+
+function REV_GetInventorySlotItems(unit, InventorySlotName)
+	local items = {}
+
+	unit:ForEachItemInSlot("Inventory", function(item, slotName, left, top)
+		if item.inventorySlot == InventorySlotName then
+			table.insert(items, item)
+		end
+	end)
+
+	return items
+end
+
+function REV_GetContainerItems(unit, container)
+	local items = {}
+
+	unit:ForEachItemInSlot("Inventory", function(item, slotName, left, top)
+		if item.container == container.id then
+			table.insert(items, item)
+		end
+	end)
+
+	return items
+end
+
+function REV_GetContainerRows(unit, slotName)
+	local _, allTypes = GetInventorySlots(unit)
+
+	local slotRows = {}
+
+	for i, row in ipairs(allTypes[1]) do
+		if row == slotName then
+			table.insert(slotRows, i)
+		end
 	end
 
-	local LBE = context:GetItemInSlot("Inventory", nil, 1, 1)
-	local Backpack = context:GetItemInSlot("Inventory", nil, 6, 1)
-	if not context then
-		return
-	end
-	self.tiles = {}
-	TileConfig.Type = "PocketU"
-	TileConfig.Size = "Small"
-	self.slot_name = slot_name
-	local slot_data = context:GetSlotData(slot_name)
-	local width, height, last_row_width = context:GetSlotDataDim(slot_name)
+	return slotRows
+end
 
+function OnMsg.ItemAdded(obj, item, slot, pos)
+	if IsEquipSlot(slot) and item:IsKindOfClasses("Backpack", "LBE", "Holster") then
+		local inventoryEquipSlots = g_InventoryEquipSlots
 
+		-- local prevOwner = item.PrevOwner and item.PrevOwner ~= item.owner and gv_UnitData[item.PrevOwner]
 
-	--CREATE SUPPORT SLOTS----------------------------------------------------------------------------------------------------------
-	if context.session_id and (slot_name == "Inventory") then
-		local row = 1
-		local column = 1
-		for i = 1, width do self.tiles[i] = {} end
-		--CREATE LBE SLOT----------------------------------------------------------------------------------------------------------
-		TileConfig.Type = "LBE"
-		TileConfig.Size = "Small"
-		BuildPocket(self, column, row)
-		column = column + 1
+		local currentRow = 0
 
+		for i, slotObj in ipairs(inventoryEquipSlots) do
+			local itemInSlot = REV_GetItemInEquipSlot(obj, slotObj.id)
 
-		--CREATE DEFAULT POCKETS----------------------------------------------------------------------------------------------------------
-		for i = 1, 2 do
-			TileConfig.Type = "PocketS"
-			TileConfig.Size = "Small"
-			BuildPocket(self, column, row)
-			column = column + 1
-		end
+			local slotRows = REV_GetContainerRows(obj, slotObj.id)
 
-		TileConfig.Type = "PocketU"
-		TileConfig.Size = "Small"
-		BuildPocket(self, column, row)
-		column = column + 1
+			if #slotRows > 0 or itemInSlot or slotObj.baseSlot or slotObj.fallBack then
+				local itemsInSlot = itemInSlot and itemInSlot.items or REV_GetInventorySlotItems(obj, slotObj.id)
 
-		TileConfig.Type = "PocketU"
-		TileConfig.Size = "Small"
-		BuildPocket(self, column, row)
-		column = column + 1
+				for i, invItem in ipairs(itemsInSlot) do
+					local x, y = point_unpack(invItem.lastSlotPos)
 
-		TileConfig.Type = "Backpack"
-		TileConfig.Size = "Small"
-		BuildPocket(self, column, row)
-		column = column + 1
-		--CREATE LBE----------------------------------------------------------------------------------------------------------
-		if LBE then
-			column, row = BuildLBE(self, LBE, column, row)
-		end
-
-		--CREATE BACKPACK----------------------------------------------------------------------------------------------------------
-		if Backpack then
-			BuildLBE(self, Backpack, column, row)
-		end
-	else
-		for i = 1, width do
-			TileConfig.Type = "PocketU"
-			TileConfig.Size = "Small"
-			self.tiles[i] = {}
-			for j = 1, height do
-				if j ~= height or i <= last_row_width then -- check for last row that can be not full size
-					local tile = self:SpawnTile(slot_name, i, j)
-					if tile then
-						tile:SetContext(context)
-						tile:SetGridX(i)
-						tile:SetGridY(j)
-						tile.idBackImage:SetTransparency(self.image_transparency)
-						if slot_data.enabled == false then
-							tile:SetEnabled(false)
-						end
-						self.tiles[i][j] = tile
+					-- if prevOwner and slotObj.id == slot then
+					-- 	prevOwner:RemoveItem("Inventory", invItem)
+					if slotObj.id ~= slot then
+						invItem.removedWithContainer = true
+						obj:RemoveItem("Inventory", invItem)
+						invItem.removedWithContainer = nil
 					end
-				end
-			end
-		end
-	end
-	-- create items
-	self.item_windows = {}
-	self.rollover_windows = {}
-	--InventoryDragItem = false
-	self:InitialSpawnItems()
-end
 
-local REV_Original_XInventoryTileOnDropEnter = XInventoryTile.OnDropEnter
-
-function XInventoryTile:OnDropEnter(drag_win, pt, drag_source_win)
-	InventoryOnDragEnterStash()
-	local drag_item = InventoryDragItem
-	local mouse_text
-	local slot = self:GetInventorySlotCtrl()
-	local _, dx, dy = slot:FindTile(pt)
-
-	local ssx, ssy, sdx = point_unpack(InventoryDragItemPos)
-
-	if slot.slot_name == "Inventory" and slot.context.session_id then
-		local slot_types = CreateSlotTypes(slot:GetContext())
-		if slot_types then
-			local fits, reason = FitTileCheck(drag_item, slot_types, dx, dy, sdx)
-			if not fits then
-				mouse_text = Untranslated(reason)
-			else
-				mouse_text = Untranslated("Drop item")
-			end
-		end
-		-- TODO: adding AP costs
-		InventoryShowMouseText(true, mouse_text)
-		HighlightDropSlot(self, true, pt, drag_win)
-		HighlightAPCost(InventoryDragItem, true, self)
-	else
-		REV_Original_XInventoryTileOnDropEnter(self, drag_win, pt, drag_source_win)
-	end
-end
-
-local REV_Original_XInventorySlotDragDropMoveItem = XInventorySlot.DragDrop_MoveItem
-
-function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
-	if not InventoryDragItem then
-		return "no item being dragged"
-	end
-
-	if not target then
-		return "not valid target"
-	end
-
-	if target.slot_name == "Inventory" and target.context.session_id then
-		local _, dx, dy = target:FindTile(pt)
-		if not dx then
-			return "no target tile"
-		end
-
-		local ssx, ssy, sdx = point_unpack(InventoryDragItemPos)
-		local item = InventoryDragItem
-
-		local slot_types = CreateSlotTypes(target.context)
-		if slot_types then
-			local fits, reason = FitTileCheck(item, slot_types, dx, dy, sdx)
-			if not fits then return reason end
-		end
-	end
-
-	return REV_Original_XInventorySlotDragDropMoveItem(self, pt, target, check_only)
-end
-
-function Inventory:FindEmptyPosition(slot_name, item, local_changes)
-	local slot_data = self:GetSlotData(slot_name)
-	local space = {}
-	--local rects = {}
-	local width, height, last_row_width = self:GetSlotDataDim(slot_name)
-	for i = 1, width do
-		space[i] = {}
-	end
-	local free_space = self:GetMaxTilesInSlot(slot_name)
-	local fe = local_changes and local_changes.force_empty
-
-	self:ForEachItemInSlot(slot_name, function(slot_item, slot_name, left, top, space)
-		local item_width = slot_item:GetUIWidth()
-		local item_height = slot_item:GetUIHeight()
-		for i = left, left + item_width - 1 do
-			for j = top, top + item_height - 1 do
-				if not fe or not fe[xxhash(i, j)] then
-					space[i][j] = true
-				else
-					free_space = free_space + 1
-				end
-			end
-		end
-		free_space = free_space - item_width * item_height
-		--rects[#rects+1] = sizebox(left, top, item_width, item_height)
-	end, space)
-
-	-- custom code starts here
-
-	if slot_name == "Inventory" and IsMerc(self) and self.session_id then
-		local slot_types = CreateSlotTypes(self)
-		if slot_types then
-			for i = 1, width do
-				for j = 1, height do
-					if not ItemFitsTile(item, slot_types[i][j]) then
-						space[i][j] = true
-					end
+					obj:AddItem("Inventory", invItem, x, y + slotRows[1] - 1, true)
 				end
 			end
 		end
 	end
 
-	-- custom code ends here
+
+	if slot == "Inventory" then
+		local container, slotName, slotRows = REV_GetEquippedItemContainer(obj, item, pos, slot)
+
+		local x, y = point_unpack(pos)
+
+		local slotPos = point_pack(x, y - slotRows[1] + 1)
+
+		item.lastSlot = slot
+		item.lastSlotPos = slotPos
+		item.inventorySlot = slotName
+		item.container = container and container.id
 
 
-	local iwidth = item:GetUIWidth()
-	local iheight = item:GetUIHeight()
+		if container then
+			container.items = container.items or {}
 
-	if free_space < iwidth * iheight then
-		return
-	end
-
-	local x, y = 1, 1
-	local raw_width = width
-	while x <= raw_width and y <= height and (x + iwidth - 1) <= raw_width and (y + iheight - 1) <= height do
-		local full = false
-		for i = x, x + iwidth - 1 do
-			for j = y, y + iheight - 1 do
-				if not space[i] or space[i][j] or (local_changes and local_changes[xxhash(i, j)]) then
-					full = true
-					break
-				end
-			end
-			if full then
-				break
-			end
-		end
-		if not full then
-			return x, y
-		end
-		x = x + 1
-		if x > raw_width or (x + iwidth - 1) > raw_width then
-			x = 1
-			y = y + 1
-			if y == height then
-				raw_width = last_row_width
-			end
+			table.insert(container.items, item)
 		end
 	end
 end
 
-function XInventorySlot:OnDragDrop(target, drag_win, drop_res, pt)
-	local result, result2 = self:DragDrop_MoveItem(pt, target)
-	local sync_err = result == "NetStartCombatAction refused to start"
-	assert(not result or sync_err, result, result2)
+function OnMsg.ItemRemoved(obj, item, slot, pos)
+	item.PrevOwner = item.owner
 
-	-- custom code starts here
+	if IsEquipSlot(slot) and item:IsKindOfClasses("Backpack", "LBE", "Holster") then
+		local inventoryEquipSlots = g_InventoryEquipSlots
 
-	for _, unit in pairs(g_Units) do
-		if IsMerc(unit) then
-			CheckItemsInWrongSlots(unit)
+		-- remove items
+
+		local removedItemItems = item.items
+
+		for i, rItem in ipairs(removedItemItems) do
+			rItem.removedWithContainer = true
+			obj:RemoveItem("Inventory", rItem)
+			rItem.removedWithContainer = nil
+		end
+
+		for i, slotObj in ipairs(inventoryEquipSlots) do
+			local itemInSlot = REV_GetItemInEquipSlot(obj, slotObj.id)
+
+			if itemInSlot or slotObj.baseSlot then
+				local itemsInSlot = itemInSlot and itemInSlot.items or REV_GetInventorySlotItems(obj, slotObj.id)
+
+				local slotRows = REV_GetContainerRows(obj, slotObj.id)
+
+				for i, invItem in ipairs(itemsInSlot) do
+					local x, y = point_unpack(invItem.lastSlotPos)
+
+					invItem.removedWithContainer = true
+					obj:RemoveItem("Inventory", invItem)
+					invItem.removedWithContainer = nil
+
+					obj:AddItem("Inventory", invItem, x, y + slotRows[1] - 1, true)
+				end
+			end
 		end
 	end
 
-	-- custom code ends here
+	if slot == "Inventory" and not item.removedWithContainer then
+		local container = item.container and g_ItemIdToItem[item.container]
 
-	self:ClearDragState(drag_win)
-	if sync_err or result2 == "no change" then
+		if container then
+			container.items = container.items or {}
+
+			table.remove_value(container.items, item)
+		end
+
+		item.lastSlot = nil
+		item.lastSlotPos = nil
+		item.inventorySlot = nil
+		item.container = nil
+	end
+end
+
+function OnMsg.InventoryChange(obj)
+	if IsMerc(obj) then
+		CheckItemsInWrongSlots(obj)
+		ApplyWeightEffects(obj)
 		InventoryUIRespawn()
+	end
+	-- end
+end
+
+function REV_DropItems(unit, items)
+	local container = GetDropContainer(unit)
+
+	for i, item in ipairs(items) do
+		unit:RemoveItem("Inventory", item)
+		if not container:AddItem("Inventory", item) then
+			container = PlaceObject("ItemDropContainer")
+			local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
+			container:SetPos(drop_pos or unit:GetPos())
+			container:SetAngle(container:Random(21600))
+			container:AddItem("Inventory", item)
+		end
+	end
+end
+
+-- function REV_GetPreviousInventoryItems(unit, item, prevSlot)
+-- 	local allSlots, allTypes = GetInventorySlots(unit, { [prevSlot] = item })
+
+-- 	local items = {}
+
+-- 	for i, column in ipairs(allSlots) do
+-- 		for j = 1, #column do
+-- 			if allTypes[i][j] == prevSlot then
+-- 				local itemInSlot = unit:GetItemInSlot("Inventory", nil, i, j)
+
+-- 				if itemInSlot then
+-- 					table.insert(items, itemInSlot)
+-- 				end
+-- 			end
+-- 		end
+-- 	end
+
+-- 	return items
+-- end
+
+function CheckItemsInWrongSlots(unit)
+	local slot_types, containerTypes = GetInventorySlots(unit)
+	local slot_name = "Inventory"
+	unit:ForEachItemInSlot(slot_name, function(slot_item, slot_name, left, top)
+		if slot_types[left][top] then
+			if not ItemFitsTile(slot_item, slot_types[left][top], unit, left, top, true) then
+				local slot_x, slot_y = unit:FindEmptyPosition(slot_name, slot_item)
+				if slot_x then
+					unit:RemoveItem(slot_name, slot_item)
+					unit:AddItem(slot_name, slot_item, slot_x, slot_y)
+				else
+					local container = GetDropContainer(unit)
+					unit:RemoveItem(slot_name, slot_item)
+					if not container:AddItem("Inventory", slot_item) then
+						container = PlaceObject("ItemDropContainer")
+						local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
+						container:SetPos(drop_pos or unit:GetPos())
+						container:SetAngle(container:Random(21600))
+						container:AddItem("Inventory", slot_item)
+					end
+				end
+			end
+		else
+			local slot_x, slot_y = unit:FindEmptyPosition(slot_name, slot_item)
+			if slot_x then
+				unit:RemoveItem(slot_name, slot_item)
+				unit:AddItem(slot_name, slot_item, slot_x, slot_y)
+			else
+				local container = GetDropContainer(unit)
+				unit:RemoveItem(slot_name, slot_item)
+				print("Item removed from invalid slot", slot_item)
+				if not container:AddItem("Inventory", slot_item) then
+					container = PlaceObject("ItemDropContainer")
+					local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
+					container:SetPos(drop_pos or unit:GetPos())
+					container:SetAngle(container:Random(21600))
+					container:AddItem("Inventory", slot_item)
+				end
+			end
+		end
+	end)
+end
+
+function REV_GetTileBackgroundColor(context)
+	if context == "LBE" then
+		return RGB(20, 30, 40)
+	elseif context == "Backpack" then
+		return RGB(30, 40, 50)
+	else
+		return RGB(88, 92, 68)
+	end
+end
+
+function REV_GetItemInventorySlotNumber(item)
+	local slotTypes = g_SlotTypes
+
+	local total = 0
+
+	for i, slotType in ipairs(slotTypes) do
+		total = total + (item[slotType.id] or 0)
+	end
+
+	return total
+end
+
+function REV_IsItemFirstRow(item)
+	local unit = item.owner and gv_UnitData[item.owner]
+
+	if not unit then
+		return
+	end
+
+	local _, slotY = unit:GetItemPos(item)
+
+	if not slotY or slotY == 1 then
+		return false
+	end
+
+	local startRow = 1
+
+	local slots = g_InventoryEquipSlots
+
+	for i, slot in ipairs(slots) do
+		local equippedItem = slot.baseSlot and false or unit:GetItemInSlot(slot.id)
+
+		local totalSlots = equippedItem and REV_GetItemInventorySlotNumber(equippedItem) or
+			slot.fallBack and #slot.fallBack or 0
+
+		if totalSlots > 0 then
+			local rowCount = totalSlots / 6 + (totalSlots % 6 == 0 and 0 or 1)
+
+			startRow = startRow + rowCount
+
+			if slotY == startRow then
+				return true
+			end
+		end
+	end
+end
+
+function REV_GetItemSlotContext(unit, item)
+	local slotX, slotY = unit:GetItemPos(item)
+
+	if not slotX or not slotY then
+		return
+	end
+
+	local _, slot_contextTypes = GetInventorySlots(unit)
+
+	return slot_contextTypes[slotX][slotY]
+end
+
+function REV_GetItemSlotType(item)
+	local unit = item.owner and gv_UnitData[item.owner]
+
+	if not unit then
+		return
+	end
+
+	local slot = unit:GetItemSlot(item)
+
+	if slot ~= "Inventory" then
+		return slot
+	end
+
+	local slotX, slotY = unit:GetItemPos(item)
+
+	local slot_types = GetInventorySlots(unit)
+
+	local tile = slot_types[slotX][slotY]
+
+	return tile
+end
+
+function REV_GetHandheldType(item)
+	local unit = item.owner and gv_UnitData[item.owner]
+
+	if not unit then
+		return
+	end
+
+	local handheldItems, slots = unit:GetHandheldItems()
+
+	for i, hhItem in ipairs(handheldItems) do
+		if hhItem.id == item.id then
+			return slots[i]
+		end
+	end
+end
+
+function REV_GetMaxStackInSlot(item)
+	local slotType = REV_GetHandheldType(item) or REV_GetItemSlotType(item) or "PocketU"
+
+	local amount = REV_GetSlotTypeSizeForItem(slotType, item)
+
+	return amount
+end
+
+function REV_GetSlotTypeSizeForItem(slotType, item)
+	if IsEquipSlot(slotType) then
+		return 1
+	end
+
+	if slotType == "PocketU" then
+		return g_Classes[item.class].MaxStacks or 1
+	end
+
+	if slotType == "Disabled" then
+		return 0
+	end
+
+	return item[slotType .. "_amount"] or 0
+end
+
+function ItemFitsTile(item, type, unit, slotX, slotY, wholeStack)
+	if type == "Disabled" then return false, "" end
+
+	if IsKindOf(item, "PersonalStorage") and item.items and #item.items > 0 then
+		return false, "Cannot add items with items in it"
+	end
+
+	if not type then
+		print(item.class)
+		return false, "No type"
+	end
+
+	local maxStack = REV_GetSlotTypeSizeForItem(type, item)
+
+	if maxStack < 1 then
+		return false, "Doesn't fit here"
+	end
+
+	local itemInSlot = unit:GetItemInSlot("Inventory", nil, slotX, slotY)
+
+	if itemInSlot and itemInSlot.class ~= item.class then
+		return false, "Different item"
+	end
+
+	local amount = 0
+
+	if itemInSlot and itemInSlot.id ~= item.id then
+		local amount = itemInSlot.Amount == nil and 1 or itemInSlot.Amount
+
+		if amount >= maxStack then
+			return false, "Stack is full"
+		end
+	end
+
+	if wholeStack and (amount + (item.Amount == nil and 1 or item.Amount)) > maxStack then
+		return false, "Not enough space"
+	end
+
+	return true
+end
+
+function LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeStack)
+	if sdx == 0 then
+		if column == 6 then return false end
+		if slot_types[column][row] ~= slot_types[column + 1][row] then
+			return false, "Cannot be split between two different slots"
+		end
+		if not (ItemFitsTile(item, slot_types[column][row], unit, column, row, wholeStack) or ItemFitsTile(item, slot_types[column + 1][row], unit, column, row, wholeStack)) then
+			return false, "Doesn't fit here"
+		else
+			return true
+		end
+	elseif sdx == 1 then
+		if column == 1 then return false end
+		if slot_types[column][row] ~= slot_types[column - 1][row] then
+			return false, "Cannot be split between two different slots"
+		end
+		if not (ItemFitsTile(item, slot_types[column][row], unit, column, row, wholeStack) or ItemFitsTile(item, slot_types[column - 1][row], unit, column, row, wholeStack)) then
+			return false, "Doesn't fit here"
+		else
+			return true
+		end
+	else
+		return false, "Doesn't fit here"
+	end
+end
+
+function FitTileCheck(item, slot_types, column, row, sdx, unit, wholeStack)
+	if item:IsLargeItem() then
+		return LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeStack)
+	else
+		return ItemFitsTile(item, slot_types[column][row], unit, column, row, wholeStack)
 	end
 end

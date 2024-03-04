@@ -8,10 +8,10 @@ function OnMsg.DataLoaded()
 				if gv_SatelliteView then
 					self.idCenterHeading:SetText(mode == "loot" and
 					T { 288565331426, "SECTOR <SectorId(sector)> STASH", sector = dialog.context.container.sector_id or gv_CurrentSectorId } or
-					T(1974181345670816, "Squad Supplies " .. gv_SquadBag:GetSquadBagWeight(gv_SquadBag) .. " Kg"))
+					T(1974181345670816, "Squad Supplies " .. GetSquadBagWeightInKg() .. " Kg"))
 				else
 					self.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or
-					T(1974181345670816, "Squad Supplies " .. gv_SquadBag:GetSquadBagWeight(gv_SquadBag) .. " Kg"))
+					T(1974181345670816, "Squad Supplies " .. GetSquadBagWeightInKg() .. " Kg"))
 				end
 				return
 			end
@@ -48,10 +48,10 @@ function OnMsg.DataLoaded()
 			if gv_SatelliteView then
 				node.idCenterHeading:SetText(mode == "loot" and
 				T { 288565331426, "SECTOR <SectorId(sector)> STASH", sector = context.container.sector_id or gv_CurrentSectorId } or
-				T(1974181345670816, "Squad Supplies" .. gv_SquadBag:GetSquadBagWeight() .. " Kg"))
+				T(1974181345670816, "Squad Supplies " .. GetSquadBagWeightInKg() .. " Kg"))
 			else
 				node.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or
-				T(1974181345670816, "Squad Supplies" .. gv_SquadBag:GetSquadBagWeight() .. " Kg"))
+				T(1974181345670816, "Squad Supplies " .. GetSquadBagWeightInKg() .. " Kg"))
 			end
 		end
 	end
@@ -62,14 +62,14 @@ function OnMsg.DataLoaded()
 	if idName and idName[3] and idName[3].element then
 		idName[3].element.OnLayoutComplete = function (self)
 			local unit = self.context
-			self:SetText(T(3269654860290817, "<Nick> EQUIPMENT <GetCurrentWeight()>/<GetMaxWeight()> Kg", unit))
+			self:SetText(T(3269654860290817, "<Nick> EQUIPMENT <GetCurrentWeightInKg()>/<GetMaxWeightInKg()> Kg", unit))
 		end
 	end
 
 	if idName and idName[4] and idName[4].element then
 		idName[4].element.OnLayoutComplete = function (self)
 			local bag = self.context
-			self:SetText(T(7675803685470817, "Squad Supplies <GetSquadBagWeight()> Kg", bag))
+			self:SetText(T(7675803685470817, "Squad Supplies <GetSquadBagWeightInKg()> Kg", bag))
 		end
 	end
 end
