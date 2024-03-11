@@ -69,7 +69,7 @@ function OnMsg.ModsReloaded()
 				return CombatActions.ThrowGrenadeA.GetUIState(self, units, args)
 			end,
 			Icon = "UI/Icons/Hud/throw_grenade",
-			IdDefault = "ThrowGrenade".. value .. "default",
+			IdDefault = "ThrowGrenade" .. value .. "default",
 			IsAimableAttack = false,
 			KeybindingFromAction = "actionRedirectThrowGrenade",
 			MultiSelectBehavior = "first",
@@ -101,7 +101,7 @@ local REV_Original_GetThrowableKnife = Unit.GetThrowableKnife
 function Unit:GetThrowableKnife()
 	local l_get_throwable_knife = REV_Original_GetThrowableKnife(self)
 
-	if not l_get_throwable_knife then
+	if not l_get_throwable_knife and IsMerc(self) then
 		local inventory = self["Inventory"]
 		for _, item in pairs(inventory) do
 			if IsKindOf(item, "MeleeWeapon") and item.CanThrow and REV_GetItemSlotContext(self, item) ~= "Backpack" then
@@ -115,6 +115,11 @@ function Unit:GetThrowableKnife()
 end
 
 function GetThrowGrenadeAttackWeapons(unit, number)
+	if not IsMerc(unit) then
+		local weapon = unit:GetItemInSlot("Handheld A", "Grenade", 1, 1)
+		return weapon
+	end
+
 	local inventory = unit["Inventory"]
 
 	local grenades = {}
@@ -151,6 +156,10 @@ local REV_OriginalUnitEnumUIActions = Unit.EnumUIActions
 
 function Unit:EnumUIActions()
 	local actions = REV_OriginalUnitEnumUIActions(self)
+
+	if not IsMerc(self) then
+		return actions
+	end
 
 	local grenadeThrowActions = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" }
 
@@ -198,8 +207,13 @@ function Unit:EnumUIActions()
 	return actions
 end
 
+local REV_OriginalGetUnitEquippedMedicine = GetUnitEquippedMedicine
 
 function GetUnitEquippedMedicine(unit)
+	if not IsMerc(unit) then
+		return REV_OriginalGetUnitEquippedMedicine(unit)
+	end
+
 	local item
 	unit:ForEachItem("Medicine", function(itm)
 		if itm.Condition > 0 and REV_GetItemSlotContext(unit, itm) ~= "Backpack" then
@@ -212,21 +226,36 @@ function GetUnitEquippedMedicine(unit)
 end
 
 function REV_GetUnitQuickSlotItem(unit, item_id)
+	if not IsMerc(unit) then
+		local get_unit_quick_slot_item = nil
+
+		local filter = function(o)
+			if o.Condition > 0 and (not l_get_unit_quick_slot_item or o.Condition < l_get_unit_quick_slot_item.Condition) then
+				l_get_unit_quick_slot_item = o
+			end
+		end
+
+		unit:ForEachItemInSlot("Handheld A", item_id, filter)
+		unit:ForEachItemInSlot("Handheld B", item_id, filter)
+		unit:ForEachItemInSlot("Inventory", item_id, filter)
+
+		return get_unit_quick_slot_item
+	end
+
 	local l_get_unit_quick_slot_item = nil
-	
+
 	local filter = function(o)
 		if o.Condition > 0 and (not l_get_unit_quick_slot_item or o.Condition < l_get_unit_quick_slot_item.Condition) and REV_GetItemSlotContext(unit, o) ~= "Backpack" then
 			l_get_unit_quick_slot_item = o
 		end
 	end
-	
+
 	unit:ForEachItemInSlot("Handheld A", item_id, filter)
 	unit:ForEachItemInSlot("Handheld B", item_id, filter)
 	unit:ForEachItemInSlot("Inventory", item_id, filter)
-	
+
 	return l_get_unit_quick_slot_item
 end
-
 
 function GetUnitLockpick(unit)
 	local tool = REV_GetUnitQuickSlotItem(unit, "LockpickBase")

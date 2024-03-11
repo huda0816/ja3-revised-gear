@@ -43,7 +43,7 @@ function Inventory:FindEmptyPosition(slot_name, item, local_changes)
 		if slot_types then
 			for i = 1, width do
 				for j = 1, height do
-					local fits = ItemFitsTile(item, slot_types[i][j], self, i, j, true)
+					local fits, reason = ItemFitsTile(item, slot_types[i][j], self, i, j, true)
 
 					if not fits then
 						space[i][j] = true
@@ -151,4 +151,42 @@ function InvContextMenuEquippable(context)
 		"MiscItem", "TrapDetonator", "ValuablesStack", "Grenade", "QuickSlotItem")
 
 	return equippable or not not_equippable
+end
+
+function UnloadWeapon(item, squadBag)
+	local ammo = item.ammo
+	item.ammo = false
+	local owner = item.owner and (g_Units[item.owner] or gv_UnitData[item.owner]) or false
+	if ammo and ammo.Amount > 0 then
+		UnitAddAndStackItem(ammo, squadBag, owner)
+	end
+	if IsKindOf(item, "Firearm") then
+		item:OnUnloadWeapon()
+	end
+end
+
+function UnitAddAndStackItem(ammo, squadBag, owner)
+	if not owner and squadBag then
+		squadBag:AddAndStackItem(ammo, squadBag, owner)
+		return
+	end
+
+	MergeStackIntoContainer(owner, "Inventory", ammo)
+
+	if ammo.Amount > 0 then
+		if not owner:AddItem("Inventory", ammo) then
+			if squadBag and (not InventoryIsCombatMode(owner) or IsKindOf(owner, "UnitData")) then
+				squadBag:AddAndStackItem(ammo)
+			else
+				local container = PlaceObject("ItemDropContainer")
+				local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
+				container:SetPos(drop_pos or owner:GetPos())
+				container:SetAngle(container:Random(21600))
+				container:AddItem("Inventory", ammo)
+			end
+		end
+		ObjModified(ammo)
+	else
+		DoneObject(ammo)
+	end
 end

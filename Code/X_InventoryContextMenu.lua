@@ -30,15 +30,31 @@ end
 
 function REV_UnloadItems(context)
 	local container = context.container
+	local putcontainer
 
-	for i, item in ipairs(context.item.items) do
+	if IsKindOf(container, "SectorStash") then
+		putcontainer = container
+	elseif not container and IsKindOf(context.context, "UnitData") then
+		local squad = context.context.Squad
+		squad = squad and gv_Squads[squad]
+		local sectorId = squad.CurrentSector
+		putcontainer = GetSectorInventory(sectorId)
+	end
+
+	g_StoredItemIdToItem = g_StoredItemIdToItem or {}
+
+	for i, itemId in ipairs(context.item.items) do
+		local item = g_ItemIdToItem[itemId] or g_StoredItemIdToItem[itemId]
+
 		if IsEquipSlot(context.slot_wnd.slot_name) then
 			item.removedWithContainer = true
 			context.unit:RemoveItem("Inventory", item)
 			item.removedWithContainer = nil
 		end
 
-		if not container or not container:AddItem("Inventory", item) then
+		if putcontainer then
+			putcontainer:AddItem("Inventory", item)
+		elseif not container or not container:AddItem("Inventory", item) then
 			container = PlaceObject("ItemDropContainer")
 			local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
 			container:SetPos(drop_pos or context.unit:GetPos())
@@ -50,6 +66,20 @@ function REV_UnloadItems(context)
 		item.lastSlotPos = nil
 		item.inventorySlot = nil
 		item.container = nil
+
+		if g_StoredItemIdToItem[itemId] then
+			g_StoredItemIdToItem[item.id] = nil
+		end
+
+		if not g_ItemIdToItem[item.id] then
+			g_ItemIdToItem[item.id] = item
+		else
+			local oldItem = g_ItemIdToItem[item.id]
+
+			if oldItem.class ~= item.class then
+				item:Setid(GenerateItemId(), true)
+			end
+		end
 	end
 
 	context.item.items = {}

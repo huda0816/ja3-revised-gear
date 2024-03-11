@@ -126,6 +126,7 @@ end
 local REV_Original_XInventorySlotDragDropMoveItem = XInventorySlot.DragDrop_MoveItem
 
 function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
+
 	if not InventoryDragItem then
 		return "no item being dragged"
 	end
@@ -135,6 +136,7 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 	end
 
 	if table.find({ "Inventory", "Handheld A", "Handheld B" }, target.slot_name) and target.context.session_id then
+
 		local dest_slot = target.slot_name
 		local _, dx, dy = target:FindTile(pt)
 
@@ -229,11 +231,14 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 			dest_slot = dest_slot,
 			dest_x = dx,
 			dest_y = dy,
+			sync_call = false,
 			check_only = check_only,
 			exec_locally = false,
 			alternative_swap_pos = use_alternative_swap_pos
 		}
+
 		local r1, r2, sync_unit = MoveItem(args)
+
 		if r1 or not check_only then
 			PlayFXOnMoveItemResult(r1, item, dest_slot, sync_unit)
 		end

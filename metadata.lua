@@ -1,8 +1,8 @@
 return PlaceObj('ModDef', {
-	'title', "Revised Tactical Gear",
-	'description', '[b]WHY[/b]Vanilla inventory system feels a bit bland without tactical gear. And htis mod solves this.\n\n[b]HOW[/b]This mod adds Load Bearing Equipment to the JA3 game that includes tactical vests, chest rigs and backpacks. Currently there are 8 items with unique properties and images.\n\n[b]HOW[/b]\n[list]\n	[*]Each unit starts with a number of default slots\n	[*]Each unit can carry an LBE gear and a backpack that provide addtional slots\n	[*]Each LBE item has a different configuration of slots\n	[*]Different slots can carry different items\n    [*]Enemies drop LBE gear nad backpacks\n	[*]If an Item appears in "illegal" slot (i.e. you have an item in backpack and remove the backpack) the item will be dropped to the ground\n	[*]If an Item "disappeared" fromyour inventory - it should be in sector stash \n	[*]ALL ITEMS HAVE WEIGHT\n	[*]Squad bag weight is distributed equally among mercs\n	[*]If your merc is overweight they begin moving slowly\n[/list]\n\n[b]EQUIPMENT[/b]\n[list]\n	[*]Rigs: Lifchik (Soviet, afghan era, Blackhawk rig, M56 rig (Vietnam era)\n	[*]Vests: British Combat Vest, Blackhawk Omega vest, French CCE Vest\n	[*]Backpacks: Sidor (Soviet, Afghan era), US Vietnam era backpack, Bergen Backpack, Blackhawk Patrol Pack, Blackhawk Phoenix Pack\n[/list]\n\nRECOMMENDED MODS: Mags mod that adds magazines\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=3023941769\n\nKNOWN ISSUES:\n1. Sometimes sector stach is not refreshed when an item is dropped. Solution: close and re-open sector stash\n2. To drop a weapon in a double slot - your mouse coursor should be either on 5th slot or on 2nd slot\n\nUses this mod as a dependency: steam://openurl/https://steamcommunity.com/sharedfiles/filedetails/?id=3034349618',
-	'image', "Mod/ii6mKUf/LBE.png",
-	'last_changes', "blackhawk pohoenixz icon",
+	'title', "Revised Tactical Gear II (Beta)",
+	'description', "This is a reworked and enhanced rerelease of Ablomis' Revised Tactical Gear mod. \n\nThis mod adds more inventory slots to the game (Backpack, LBE, Leg items, Face items, NVG slot)\n\nRevised Mags II Mod is a dependency of this mod. \n\nIt is currently in beta which means that:\n\nthere are bugs \nit is not save-game compatible\nit is not compatible with a lot of popular mods\n\nI am looking forward to your bug reports. You can send your savegames to huda0816 in the JA3 modding Discord. Please do not send reports if you are using any other mods (besides Revised Mags II mod) as I won't have time to investigate compatibility issues at the moment.\n\nInfo for mod creators: I would recommend to wait until you start to make your mod compatible to this one as there could still be major changes.\n\nMore Infos and videos will be added soon.\n\nCopyright:\nLBE and some holster images are from AdobeStock\nBackpacks, the goggle and the rest of the holsters are created with ChatGPT and Bing image creation",
+	'image', "Mod/ii6mKUf/Images/JA3Revised-LBE.png",
+	'last_changes', "Fixed bug which occured if slots were already occupied by a different item when adding a new slot item",
 	'dependencies', {
 		PlaceObj('ModDependency', {
 			'id', "URkxyfE",
@@ -10,8 +10,9 @@ return PlaceObj('ModDef', {
 		}),
 	},
 	'id', "ii6mKUf",
-	'author', "Ablomis",
-	'version', 1874,
+	'author', "permanent666",
+	'version_minor', 2,
+	'version', 11,
 	'lua_revision', 233360,
 	'saved_with_revision', 350233,
 	'code', {
@@ -62,9 +63,8 @@ return PlaceObj('ModDef', {
 		RevisedSquadBagHasWeight = true,
 	},
 	'has_data', true,
-	'saved', 1709595668,
-	'code_hash', 7254809455713923067,
-	'screenshot1', "Mod/ii6mKUf/Images/20230903201757_1.jpg",
+	'saved', 1710187366,
+	'code_hash', -7642359806022581051,
 	'affected_resources', {
 		PlaceObj('ModResourcePreset', {
 			'Class', "CharacterEffectCompositeDef",
@@ -162,5 +162,6 @@ return PlaceObj('ModDef', {
 			'ClassDisplayName', "Text style",
 		}),
 	},
-	'steam_id', "3031084856",
+	'steam_id', "3178380968",
+	'TagWeapons&Items', true,
 })

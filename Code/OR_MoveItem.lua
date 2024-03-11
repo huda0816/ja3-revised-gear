@@ -1,5 +1,11 @@
+local REV_Original_GetAPCostAndUnit = GetAPCostAndUnit
+
 function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_container, dest_container_slot_name,
 						  item_at_dest, is_reload)
+	if is_reload then
+		return REV_Original_GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_container,
+			dest_container_slot_name, item_at_dest, is_reload)
+	end
 	if not is_reload and not dest_container:CheckClass(item, dest_container_slot_name) then
 		return 0, GetInventoryUnit()
 	end
@@ -17,8 +23,10 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 	local is_src_dead          = is_src_unit and src_container:IsDead()
 	local is_dest_dead         = is_dest_unit and dest_container:IsDead()
 	-- custom code
-	local src_context          = is_src_unit and item and REV_GetItemSlotContext(src_container, item)
-	local dest_context         = is_dest_unit and item and REV_GetItemSlotContext(dest_container, item_at_dest)
+	local src_context          = is_src_unit and item and IsMerc(is_src_unit) and
+	REV_GetItemSlotContext(src_container, item)
+	local dest_context         = is_dest_unit and item and IsMerc(is_src_unit) and
+	REV_GetItemSlotContext(dest_container, item_at_dest)
 	local is_src_Backpack      = src_context == "Backpack"
 	local is_dest_Backpack     = dest_context == "Backpack"
 	local is_src_LBE           = src_context == "LBE"
@@ -30,7 +38,7 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 	local is_refill, is_combine
 	is_refill                  = IsMedicineRefill(item, item_at_dest)
 	is_combine                 = not (is_dest_dead or IsKindOf(dest_container, "ItemContainer")) and
-	InventoryIsCombineTarget(item, item_at_dest)
+		InventoryIsCombineTarget(item, item_at_dest)
 
 	if is_src_Backpack and not is_dest_Backpack then
 		-- from backpack to container
@@ -50,6 +58,7 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 		unit = GetInventoryUnit()
 		action_name = T(273687388621, "Put in squad supplies")
 	end
+
 	if are_diff_containers and not between_bag_and_unit then
 		if (not is_src_unit or is_src_dead) and is_dest_unit and not is_dest_dead then
 			--loot/dead unit/container => unit inv?
@@ -58,12 +67,12 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 			action_name = FormatGiveActionText(T(265622314229, "Put in backpack"), dest_container)
 		elseif is_src_unit and is_dest_unit and not is_src_dead and not is_dest_dead then
 			--unit => other unit?
-			if not IsKindOf(item, "SquadBagItem") then -- squadbagitems are for free
-				ap = ap + costs.GiveItem
-				unit = src_container
-				action_name = FormatGiveActionText(T { 386181237071, "Give to <merc>", merc = dest_container.Nick },
-					dest_container)
-			end
+			-- if not IsKindOf(item, "SquadBagItem") then -- squadbagitems are NOT for free
+			ap = ap + costs.GiveItem
+			unit = src_container
+			action_name = FormatGiveActionText(T { 386181237071, "Give to <merc>", merc = dest_container.Nick },
+				dest_container)
+			-- end
 		end
 	end
 	if is_refill then
@@ -79,7 +88,7 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 		end
 		local inv_unit = GetInventoryUnit()
 		unit = IsKindOf(dest_unit, "Unit") and not dest_unit:IsDead() and dest_unit or
-		inv_unit                                                                          --user can be reloading in container, hence dest_unit can be a container
+			inv_unit --user can be reloading in container, hence dest_unit can be a container
 		local action = CombatActions["Reload"]
 		local pos = dest_container:GetItemPackedPos(item_at_dest)
 		ap = ap + action:GetAPCost(unit, { weapon = item_at_dest.class, pos = pos }) or 0
@@ -122,5 +131,6 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 	end
 
 	unit = unit or GetInventoryUnit()
+
 	return ap, unit, action_name
 end

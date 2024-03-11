@@ -27,7 +27,7 @@ function Unit:GetCurrentWeight()
         end
         total_weight.weight = total_weight.weight + item_amount * item_weight
     end, total_weight)
-    return round((total_weight.weight + (gv_SquadBag:GetSquadBagWeight()/ #squad.units)), 1)
+    return round((total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight()/ #squad.units)) or 0), 1)
 end
 
 function Unit:GetCurrentWeightInKg()
@@ -64,7 +64,7 @@ function UnitData:GetCurrentWeight()
         end
         total_weight.weight = total_weight.weight + item_amount * item_weight
     end, total_weight)
-    return round((total_weight.weight + (gv_SquadBag:GetSquadBagWeight()/ #squad.units)), 1)
+    return round((total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight()/ #squad.units)) or 0), 1)
 end
 
 function ApplyWeightEffects(unit)

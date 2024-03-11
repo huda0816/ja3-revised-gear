@@ -17,15 +17,11 @@ function OnMsg.DataLoaded()
 
 	PlaceObj('BobbyRayShopSubCategory', {
 		Category = "Other",
-		DisplayName = T(3722768203550818, --[[BobbyRayShopSubCategory Ammo UtilityAmmo DisplayName]] "Backpacks"),
+		DisplayName = T(3722768203550818, --[[BobbyRayShopSubCategory Ammo UtilityAmmo DisplayName]] "Leg Items"),
 		SortKey = 110,
 		group = "Other",
 		id = "Holster",
 	})
-end
-
-function FirearmBase:Init()
-	self.items = {}
 end
 
 UndefineClass("PersonalStorage")
@@ -48,7 +44,9 @@ DefineClass.PersonalStorage = {
 			modifiable = true,
 		},
 		{
-			id = "Items"
+			id = "items",
+			name = "Items",
+			editor = "table",
 		}
 	}
 }
@@ -120,31 +118,42 @@ function PersonalStorage:GetRolloverHint()
 		hint[#hint + 1] = T { 3785082730500816, "Stored Items:" }
 	end
 
-	for i, item in ipairs(items) do
+	g_StoredItemIdToItem = g_StoredItemIdToItem or {}
+
+	for i, itemId in ipairs(items) do
+
+		local item = g_ItemIdToItem[itemId] or g_StoredItemIdToItem[itemId]
 		hint[#hint + 1] = T { 3785082730500817, "<bullet_point> " }  .. item.DisplayName
 	end
 
 	return table.concat(hint, "\n")
 end
 
+function PersonalStorage:Init()
+	self.items = {}
+end
 
--- AppendClass.InventoryItemProperties = {
--- 	lastSlotPos = false,
--- 	lastSlot = false,
--- 	inventorySlot = false,
--- 	container = false,
--- 	properties = {
--- 		{
--- 			id = "lastSlotPos",
--- 		},
--- 		{
--- 			id = "lastSlot",
--- 		},
--- 		{
--- 			id = "inventorySlot",
--- 		},
--- 		{
--- 			id = "container",
--- 		}
--- 	}
--- }
+AppendClass.InventoryItemProperties = {
+	properties = {
+		{
+			id = "lastSlotPos",
+			name = "Last Slot Position",
+			editor = "text",
+		},
+		{
+			id = "lastSlot",
+			name = "Last Slot",
+			editor = "text",
+		},
+		{
+			id = "inventorySlot",
+			name = "Inventory Slot",
+			editor = "text",
+		},
+		{
+			id = "container",
+			name = "Container",
+			editor = "number",
+		}
+	}
+}

@@ -1,3 +1,5 @@
+GameVar("g_StoredItemIdToItem", {})
+
 function REV_GetEquippedItemContainer(unit, item, pos, slotName)
 	local slotX, slotY = point_unpack(pos)
 
@@ -29,7 +31,7 @@ function REV_GetInventorySlotItems(unit, InventorySlotName)
 
 	unit:ForEachItemInSlot("Inventory", function(item, slotName, left, top)
 		if item.inventorySlot == InventorySlotName then
-			table.insert(items, item)
+			table.insert(items, item.id)
 		end
 	end)
 
@@ -62,15 +64,27 @@ function REV_GetContainerRows(unit, slotName)
 	return slotRows
 end
 
+-- function OnMsg.SquadBagAddItem(item, amount)
+
+-- 	print("SquadBagAddItem", item.class, amount)
+
+-- 	item.MaxStacks = nil
+-- end
+
 function OnMsg.ItemAdded(obj, item, slot, pos)
+
+	-- print("ItemAdded", item.class)
+
 	if IsEquipSlot(slot) and item:IsKindOfClasses("Backpack", "LBE", "Holster") then
 		local inventoryEquipSlots = g_InventoryEquipSlots
 
-		-- local prevOwner = item.PrevOwner and item.PrevOwner ~= item.owner and gv_UnitData[item.PrevOwner]
-
 		local currentRow = 0
 
-		for i, slotObj in ipairs(inventoryEquipSlots) do
+		g_StoredItemIdToItem = g_StoredItemIdToItem or {}
+
+		for i = #inventoryEquipSlots, 1, -1 do
+			local slotObj = inventoryEquipSlots[i]
+
 			local itemInSlot = REV_GetItemInEquipSlot(obj, slotObj.id)
 
 			local slotRows = REV_GetContainerRows(obj, slotObj.id)
@@ -78,11 +92,10 @@ function OnMsg.ItemAdded(obj, item, slot, pos)
 			if #slotRows > 0 or itemInSlot or slotObj.baseSlot or slotObj.fallBack then
 				local itemsInSlot = itemInSlot and itemInSlot.items or REV_GetInventorySlotItems(obj, slotObj.id)
 
-				for i, invItem in ipairs(itemsInSlot) do
+				for i, invItemId in ipairs(itemsInSlot) do
+					local invItem = g_ItemIdToItem[invItemId] or g_StoredItemIdToItem[invItemId]
 					local x, y = point_unpack(invItem.lastSlotPos)
 
-					-- if prevOwner and slotObj.id == slot then
-					-- 	prevOwner:RemoveItem("Inventory", invItem)
 					if slotObj.id ~= slot then
 						invItem.removedWithContainer = true
 						obj:RemoveItem("Inventory", invItem)
@@ -90,9 +103,21 @@ function OnMsg.ItemAdded(obj, item, slot, pos)
 					end
 
 					obj:AddItem("Inventory", invItem, x, y + slotRows[1] - 1, true)
+
+					if not g_ItemIdToItem[invItem.id] then
+						g_ItemIdToItem[invItem.id] = invItem
+					else
+						local oldItem = g_ItemIdToItem[invItem.id]
+
+						if oldItem.class ~= invItem.class then
+							invItem:Setid(GenerateItemId(), true)
+						end
+					end
 				end
 			end
 		end
+
+		-- CheckItemsInWrongSlots(obj)
 	end
 
 
@@ -108,17 +133,25 @@ function OnMsg.ItemAdded(obj, item, slot, pos)
 		item.inventorySlot = slotName
 		item.container = container and container.id
 
-
 		if container then
 			container.items = container.items or {}
 
-			table.insert(container.items, item)
+			table.insert(container.items, item.id)
 		end
+
+		CheckItemsInWrongSlots(obj)
 	end
 end
 
 function OnMsg.ItemRemoved(obj, item, slot, pos)
+
+	-- print("ItemRemoved", item.class)
+
 	item.PrevOwner = item.owner
+
+	if item.MaxStacks then
+		item.MaxStacks = g_Classes[item.class].MaxStacks or 1
+	end
 
 	if IsEquipSlot(slot) and item:IsKindOfClasses("Backpack", "LBE", "Holster") then
 		local inventoryEquipSlots = g_InventoryEquipSlots
@@ -127,7 +160,11 @@ function OnMsg.ItemRemoved(obj, item, slot, pos)
 
 		local removedItemItems = item.items
 
-		for i, rItem in ipairs(removedItemItems) do
+		g_StoredItemIdToItem = g_StoredItemIdToItem or {}
+
+		for i, rItemId in ipairs(removedItemItems) do
+			g_StoredItemIdToItem[rItemId] = g_ItemIdToItem[rItemId]
+			local rItem = g_ItemIdToItem[rItemId]
 			rItem.removedWithContainer = true
 			obj:RemoveItem("Inventory", rItem)
 			rItem.removedWithContainer = nil
@@ -136,12 +173,13 @@ function OnMsg.ItemRemoved(obj, item, slot, pos)
 		for i, slotObj in ipairs(inventoryEquipSlots) do
 			local itemInSlot = REV_GetItemInEquipSlot(obj, slotObj.id)
 
-			if itemInSlot or slotObj.baseSlot then
+			if (itemInSlot or slotObj.baseSlot) and slotObj.id ~= slot then
 				local itemsInSlot = itemInSlot and itemInSlot.items or REV_GetInventorySlotItems(obj, slotObj.id)
 
 				local slotRows = REV_GetContainerRows(obj, slotObj.id)
 
-				for i, invItem in ipairs(itemsInSlot) do
+				for i, invItemId in ipairs(itemsInSlot) do
+					local invItem = g_ItemIdToItem[invItemId] or g_StoredItemIdToItem[invItemId]
 					local x, y = point_unpack(invItem.lastSlotPos)
 
 					invItem.removedWithContainer = true
@@ -152,6 +190,8 @@ function OnMsg.ItemRemoved(obj, item, slot, pos)
 				end
 			end
 		end
+
+		-- CheckItemsInWrongSlots(obj)
 	end
 
 	if slot == "Inventory" and not item.removedWithContainer then
@@ -160,7 +200,11 @@ function OnMsg.ItemRemoved(obj, item, slot, pos)
 		if container then
 			container.items = container.items or {}
 
-			table.remove_value(container.items, item)
+			table.remove_value(container.items, item.id)
+
+			if g_StoredItemIdToItem[item.id] then
+				g_StoredItemIdToItem[item.id] = nil
+			end
 		end
 
 		item.lastSlot = nil
@@ -172,7 +216,6 @@ end
 
 function OnMsg.InventoryChange(obj)
 	if IsMerc(obj) then
-		CheckItemsInWrongSlots(obj)
 		ApplyWeightEffects(obj)
 		InventoryUIRespawn()
 	end
@@ -244,7 +287,6 @@ function CheckItemsInWrongSlots(unit)
 			else
 				local container = GetDropContainer(unit)
 				unit:RemoveItem(slot_name, slot_item)
-				print("Item removed from invalid slot", slot_item)
 				if not container:AddItem("Inventory", slot_item) then
 					container = PlaceObject("ItemDropContainer")
 					local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
@@ -391,12 +433,15 @@ end
 function ItemFitsTile(item, type, unit, slotX, slotY, wholeStack)
 	if type == "Disabled" then return false, "" end
 
+	if not IsMerc(unit) or not unit.Squad then
+		return true
+	end
+
 	if IsKindOf(item, "PersonalStorage") and item.items and #item.items > 0 then
 		return false, "Cannot add items with items in it"
 	end
 
 	if not type then
-		print(item.class)
 		return false, "No type"
 	end
 
@@ -409,7 +454,7 @@ function ItemFitsTile(item, type, unit, slotX, slotY, wholeStack)
 	local itemInSlot = unit:GetItemInSlot("Inventory", nil, slotX, slotY)
 
 	if itemInSlot and itemInSlot.class ~= item.class then
-		return false, "Different item"
+		return false, "Different item: " .. itemInSlot.class
 	end
 
 	local amount = 0

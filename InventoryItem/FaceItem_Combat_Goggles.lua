@@ -6,7 +6,7 @@ DefineClass.FaceItem_Combat_Goggles = {
 
 	object_class = "FaceItem",
 	ScrapParts = 2,
-	Icon = "Mod/ii6mKUf/Icons/goggles.png",
+	Icon = "Mod/ii6mKUf/Items/FaceItems/Face_combat_goggles.png",
 	ItemType = "Armor",
 	DisplayName = T(133813476634, --[[ModItemInventoryItemCompositeDef FaceItem_Combat_Goggles DisplayName]] "Combat Goggles"),
 	DisplayNamePlural = T(711946176668, --[[ModItemInventoryItemCompositeDef FaceItem_Combat_Goggles DisplayNamePlural]] "Combat Goggles"),
