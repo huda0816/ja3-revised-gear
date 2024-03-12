@@ -184,7 +184,7 @@ return {
 				'PocketS', 1,
 				'RifleMag', 4,
 				'KnifeSheath', 1,
-				'Carabiner', 2,
+				'Carabiner', 1,
 			}),
 			PlaceObj('ModItemInventoryItemCompositeDef', {
 				'Group', "Equipment - LBE",

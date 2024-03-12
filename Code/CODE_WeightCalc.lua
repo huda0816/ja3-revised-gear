@@ -13,10 +13,26 @@ function Unit:GetMaxWeight()
 	return self.Strength * 500
 end
 
+function Unit:GetCurrentWeightInKg()
+	return round(self:GetCurrentWeight() / 1000, 1)
+end
+
+function Unit:GetMaxWeightInKg()
+	return round(self:GetMaxWeight() / 1000, 1)
+end
+
+function UnitData:GetMaxWeightInKg()
+	return round(self:GetMaxWeight() / 1000, 1)
+end
+
+function UnitData:GetCurrentWeightInKg()
+	return round(self:GetCurrentWeight() / 1000, 1)
+end
+
 function Unit:GetCurrentWeight()
-	if not GetPlayerMercSquads() or not self.Squad then return 0 end
+	if not REV_GetPlayerMercSquads() or not self.Squad then return 0 end
 	local squad
-	for i, s in ipairs(GetPlayerMercSquads()) do
+	for i, s in ipairs(REV_GetPlayerMercSquads()) do
 		if s.UniqueId == self.Squad then squad = s end
 	end
 	local total_weight = { weight = 0.0 }
@@ -37,26 +53,10 @@ function Unit:GetCurrentWeight()
 	return round((total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight() / #squad.units)) or 0), 1)
 end
 
-function Unit:GetCurrentWeightInKg()
-	return round(self:GetCurrentWeight() / 1000, 1)
-end
-
-function Unit:GetMaxWeightInKg()
-	return round(self:GetMaxWeight() / 1000, 1)
-end
-
-function UnitData:GetMaxWeightInKg()
-	return round(self:GetMaxWeight() / 1000, 1)
-end
-
-function UnitData:GetCurrentWeightInKg()
-	return round(self:GetCurrentWeight() / 1000, 1)
-end
-
 function UnitData:GetCurrentWeight()
-	if not GetPlayerMercSquads() or not self.Squad then return 0 end
+	if not REV_GetPlayerMercSquads() or not self.Squad then return 0 end
 	local squad
-	for i, s in ipairs(GetPlayerMercSquads()) do
+	for i, s in ipairs(REV_GetPlayerMercSquads()) do
 		if s.UniqueId == self.Squad then squad = s end
 	end
 	local total_weight = { weight = 0.0 }
@@ -75,6 +75,7 @@ function UnitData:GetCurrentWeight()
 end
 
 function REV_ApplyWeightEffects(unit)
+	if not REV_IsMerc(unit) then return end
 	local current_weight = unit:GetCurrentWeight()
 	local max_weight = unit:GetMaxWeight()
 	if current_weight > max_weight then

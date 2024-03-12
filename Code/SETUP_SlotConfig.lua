@@ -61,6 +61,11 @@ GlowStick.PocketML_amount = 4
 GlowStick.PocketM_amount = 3
 GlowStick.PocketS_amount = 2
 
+FlareStick.PocketL_amount = 6
+FlareStick.PocketML_amount = 4
+FlareStick.PocketM_amount = 3
+FlareStick.PocketS_amount = 2
+
 HE_Grenade.PocketL_amount = 4
 HE_Grenade.PocketML_amount = 2
 HE_Grenade.PocketM_amount = 1

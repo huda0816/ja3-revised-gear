@@ -24,6 +24,6 @@ DefineClass.LBE_Modern_Army_Rig = {
 	PocketS = 1,
 	RifleMag = 4,
 	KnifeSheath = 1,
-	Carabiner = 2,
+	Carabiner = 1,
 }
 

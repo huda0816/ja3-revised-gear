@@ -116,7 +116,7 @@ function REV_BuildPocket(xTileObj, column, row, objType, startRow)
 end
 
 function REV_GetInventorySlots(unit, fakeItems)
-	if not IsMerc(unit) then return end
+	if not REV_IsMerc(unit) then return end
 	local contextTypes = {}
 	local types = {}
 	for i = 1, 6 do types[i] = {} end

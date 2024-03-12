@@ -2,14 +2,17 @@ GameVar("g_StoredItemIdToItem", {})
 
 function OnMsg.ItemAdded(obj, item, slot, pos)
 	REV_OnItemAdded(obj, item, slot, pos)
+
+	if REV_IsMerc(obj) then
+		REV_ApplyWeightEffects(obj)
+		InventoryUIRespawn()
+	end
 end
 
 function OnMsg.ItemRemoved(obj, item, slot, pos)
 	REV_OnItemRemoved(obj, item, slot, pos)
-end
 
-function OnMsg.InventoryChange(obj)
-	if IsMerc(obj) then
+	if REV_IsMerc(obj) then
 		REV_ApplyWeightEffects(obj)
 		InventoryUIRespawn()
 	end
@@ -380,7 +383,7 @@ end
 function REV_ItemFitsTile(item, type, unit, slotX, slotY, wholeStack)
 	if type == "Disabled" then return false, "" end
 
-	if not IsMerc(unit) or not unit.Squad then
+	if not REV_IsMerc(unit) or not unit.Squad then
 		return true
 	end
 
@@ -623,4 +626,46 @@ function REV_UnloadItems(context)
 	context.item.items = {}
 
 	InventoryUIRespawn()
+end
+
+function REV_IsMerc(o)
+	local id
+	if IsKindOf(o, "Unit") then
+		id = o.unitdatadef_id
+	elseif IsKindOf(o, "UnitData") then
+		id = o.class
+	end
+
+	if RevisedLBEConfig.MilitiaUsesLBE then
+		if gv_UnitData[id] and gv_UnitData[id].Squad then
+			local squad = gv_Squads[gv_UnitData[id].Squad]
+			if squad.militia and (squad.Side == "player1" or squad.Side == "player2") then
+				return true
+			end
+		end
+	end
+
+	if IsKindOf(o, "UnitDataCompositeDef") then
+		return o.IsMercenary
+	end
+	return id and UnitDataDefs[id].IsMercenary
+end
+
+function REV_GetPlayerMercSquads()
+	local squads = RevisedLBEConfig.MilitiaUsesLBE and g_PlayerAndMilitiaSquads or g_PlayerSquads or empty_table
+
+	if not RevisedLBEConfig.MilitiaUsesLBE then
+		return squads
+	end
+
+	local playerSquads = {}
+
+	for i, squad in ipairs(squads) do
+		if squad.Side == "player1" or squad.Side == "player2" then
+			table.insert(playerSquads, squad)
+		end
+	end
+
+	return playerSquads
+
 end

@@ -12,7 +12,7 @@ return PlaceObj('ModDef', {
 	'id', "ii6mKUf",
 	'author', "permanent666",
 	'version_minor', 4,
-	'version', 61,
+	'version', 72,
 	'lua_revision', 233360,
 	'saved_with_revision', 350233,
 	'code', {
@@ -60,8 +60,8 @@ return PlaceObj('ModDef', {
 		RevisedSquadBagHasWeight = true,
 	},
 	'has_data', true,
-	'saved', 1710280983,
-	'code_hash', 5057377775486687770,
+	'saved', 1710285985,
+	'code_hash', -4200416832984952976,
 	'affected_resources', {
 		PlaceObj('ModResourcePreset', {
 			'Class', "InventoryItemCompositeDef",

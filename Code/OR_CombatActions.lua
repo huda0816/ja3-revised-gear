@@ -101,7 +101,7 @@ local REV_Original_GetThrowableKnife = Unit.GetThrowableKnife
 function Unit:GetThrowableKnife()
 	local l_get_throwable_knife = REV_Original_GetThrowableKnife(self)
 
-	if not l_get_throwable_knife and IsMerc(self) then
+	if not l_get_throwable_knife and REV_IsMerc(self) then
 		local inventory = self["Inventory"]
 		for _, item in pairs(inventory) do
 			if IsKindOf(item, "MeleeWeapon") and item.CanThrow and REV_GetItemSlotContext(self, item) ~= "Backpack" then
@@ -115,7 +115,7 @@ function Unit:GetThrowableKnife()
 end
 
 function GetThrowGrenadeAttackWeapons(unit, number)
-	if not IsMerc(unit) then
+	if not REV_IsMerc(unit) then
 		local weapon = unit:GetItemInSlot("Handheld A", "Grenade", 1, 1)
 		return weapon
 	end
@@ -157,7 +157,7 @@ local REV_OriginalUnitEnumUIActions = Unit.EnumUIActions
 function Unit:EnumUIActions()
 	local actions = REV_OriginalUnitEnumUIActions(self)
 
-	if not IsMerc(self) then
+	if not REV_IsMerc(self) then
 		return actions
 	end
 
@@ -210,7 +210,7 @@ end
 local REV_OriginalGetUnitEquippedMedicine = GetUnitEquippedMedicine
 
 function GetUnitEquippedMedicine(unit)
-	if not IsMerc(unit) then
+	if not REV_IsMerc(unit) then
 		return REV_OriginalGetUnitEquippedMedicine(unit)
 	end
 
@@ -226,7 +226,7 @@ function GetUnitEquippedMedicine(unit)
 end
 
 function REV_GetUnitQuickSlotItem(unit, item_id)
-	if not IsMerc(unit) then
+	if not REV_IsMerc(unit) then
 		local get_unit_quick_slot_item = nil
 
 		local filter = function(o)

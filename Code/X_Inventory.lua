@@ -118,7 +118,7 @@ function OnMsg.DataLoaded()
 				slot.element.UniformRowHeight = false
 
 				table.insert(slot.ancestors[1], slot.indices[1], PlaceObj('XTemplateWindow', {
-					'__condition', function(parent, context) return context.session_id and
+					'__condition', function(parent, context) return context.session_id and REV_IsMerc(context) and
 					next(REV_GetEquippedSlots(context, true)) end,
 					'Id', "idInventoryLegend",
 					"Margins",

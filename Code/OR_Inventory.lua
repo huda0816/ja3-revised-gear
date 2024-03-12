@@ -27,7 +27,7 @@ function Inventory:FindEmptyPosition(slot_name, item, local_changes)
 
 	-- custom code starts here
 
-	if slot_name == "Inventory" and IsMerc(self) and self.session_id then
+	if slot_name == "Inventory" and REV_IsMerc(self) and self.session_id then
 		local slot_types = REV_GetInventorySlots(self)
 		if slot_types then
 			for i = 1, width do
@@ -84,7 +84,7 @@ end
 local REV_Original_GetSlotDataDim = Inventory.GetSlotDataDim
 
 function Inventory:GetSlotDataDim(slot_name)
-	if not IsMerc(self) or not self.session_id or slot_name ~= "Inventory" then
+	if not REV_IsMerc(self) or not self.session_id or slot_name ~= "Inventory" then
 		return REV_Original_GetSlotDataDim(self, slot_name)
 	end
 

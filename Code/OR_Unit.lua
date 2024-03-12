@@ -107,7 +107,7 @@ function UnitProperties:EquipStartingGear(items)
 
 	-- place the rest in Inventory slot
 	for i, item in ipairs(items) do
-		-- if IsMerc(self) then
+		-- if REV_IsMerc(self) then
 		-- 	print(item.class, self.class)
 		-- end
 		if not equipped[i] and not IsKindOf(item, "Ammo") and not IsKindOf(item, "Meds") then
