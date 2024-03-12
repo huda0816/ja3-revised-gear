@@ -1,9 +1,24 @@
 GameVar("g_StoredItemIdToItem", {})
 
+function OnMsg.ItemAdded(obj, item, slot, pos)
+	REV_OnItemAdded(obj, item, slot, pos)
+end
+
+function OnMsg.ItemRemoved(obj, item, slot, pos)
+	REV_OnItemRemoved(obj, item, slot, pos)
+end
+
+function OnMsg.InventoryChange(obj)
+	if IsMerc(obj) then
+		REV_ApplyWeightEffects(obj)
+		InventoryUIRespawn()
+	end
+end
+
 function REV_GetEquippedItemContainer(unit, item, pos, slotName)
 	local slotX, slotY = point_unpack(pos)
 
-	local allSlots, allTypes = GetInventorySlots(unit)
+	local allSlots, allTypes = REV_GetInventorySlots(unit)
 
 	local slotName = allTypes[slotX][slotY]
 
@@ -38,20 +53,8 @@ function REV_GetInventorySlotItems(unit, InventorySlotName)
 	return items
 end
 
-function REV_GetContainerItems(unit, container)
-	local items = {}
-
-	unit:ForEachItemInSlot("Inventory", function(item, slotName, left, top)
-		if item.container == container.id then
-			table.insert(items, item)
-		end
-	end)
-
-	return items
-end
-
 function REV_GetContainerRows(unit, slotName)
-	local _, allTypes = GetInventorySlots(unit)
+	local _, allTypes = REV_GetInventorySlots(unit)
 
 	local slotRows = {}
 
@@ -64,15 +67,7 @@ function REV_GetContainerRows(unit, slotName)
 	return slotRows
 end
 
--- function OnMsg.SquadBagAddItem(item, amount)
-
--- 	print("SquadBagAddItem", item.class, amount)
-
--- 	item.MaxStacks = nil
--- end
-
-function OnMsg.ItemAdded(obj, item, slot, pos)
-
+function REV_OnItemAdded(obj, item, slot, pos)
 	-- print("ItemAdded", item.class)
 
 	if IsEquipSlot(slot) and item:IsKindOfClasses("Backpack", "LBE", "Holster") then
@@ -104,7 +99,7 @@ function OnMsg.ItemAdded(obj, item, slot, pos)
 						invItem.removedWithContainer = nil
 					end
 
-					table.insert(itemsToAdd, {invItem, x, y, slotRows[1] - 1})
+					table.insert(itemsToAdd, { invItem, x, y, slotRows[1] - 1 })
 
 					-- obj:AddItem("Inventory", invItem, x, y + slotRows[1] - 1, true)
 
@@ -126,8 +121,6 @@ function OnMsg.ItemAdded(obj, item, slot, pos)
 
 			obj:AddItem("Inventory", invItem, x, y + slotRows, true)
 		end
-
-		-- CheckItemsInWrongSlots(obj)
 	end
 
 
@@ -149,12 +142,11 @@ function OnMsg.ItemAdded(obj, item, slot, pos)
 			table.insert(container.items, item.id)
 		end
 
-		CheckItemsInWrongSlots(obj)
+		REV_CheckItemsInWrongSlots(obj)
 	end
 end
 
-function OnMsg.ItemRemoved(obj, item, slot, pos)
-
+function REV_OnItemRemoved(obj, item, slot, pos)
 	-- print("ItemRemoved", item.class)
 
 	item.PrevOwner = item.owner
@@ -200,8 +192,6 @@ function OnMsg.ItemRemoved(obj, item, slot, pos)
 				end
 			end
 		end
-
-		-- CheckItemsInWrongSlots(obj)
 	end
 
 	if slot == "Inventory" and not item.removedWithContainer then
@@ -224,55 +214,12 @@ function OnMsg.ItemRemoved(obj, item, slot, pos)
 	end
 end
 
-function OnMsg.InventoryChange(obj)
-	if IsMerc(obj) then
-		ApplyWeightEffects(obj)
-		InventoryUIRespawn()
-	end
-	-- end
-end
-
-function REV_DropItems(unit, items)
-	local container = GetDropContainer(unit)
-
-	for i, item in ipairs(items) do
-		unit:RemoveItem("Inventory", item)
-		if not container:AddItem("Inventory", item) then
-			container = PlaceObject("ItemDropContainer")
-			local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
-			container:SetPos(drop_pos or unit:GetPos())
-			container:SetAngle(container:Random(21600))
-			container:AddItem("Inventory", item)
-		end
-	end
-end
-
--- function REV_GetPreviousInventoryItems(unit, item, prevSlot)
--- 	local allSlots, allTypes = GetInventorySlots(unit, { [prevSlot] = item })
-
--- 	local items = {}
-
--- 	for i, column in ipairs(allSlots) do
--- 		for j = 1, #column do
--- 			if allTypes[i][j] == prevSlot then
--- 				local itemInSlot = unit:GetItemInSlot("Inventory", nil, i, j)
-
--- 				if itemInSlot then
--- 					table.insert(items, itemInSlot)
--- 				end
--- 			end
--- 		end
--- 	end
-
--- 	return items
--- end
-
-function CheckItemsInWrongSlots(unit)
-	local slot_types, containerTypes = GetInventorySlots(unit)
+function REV_CheckItemsInWrongSlots(unit)
+	local slot_types, containerTypes = REV_GetInventorySlots(unit)
 	local slot_name = "Inventory"
 	unit:ForEachItemInSlot(slot_name, function(slot_item, slot_name, left, top)
 		if slot_types[left][top] then
-			if not ItemFitsTile(slot_item, slot_types[left][top], unit, left, top, true) then
+			if not REV_ItemFitsTile(slot_item, slot_types[left][top], unit, left, top, true) then
 				local slot_x, slot_y = unit:FindEmptyPosition(slot_name, slot_item)
 				if slot_x then
 					unit:RemoveItem(slot_name, slot_item)
@@ -307,16 +254,6 @@ function CheckItemsInWrongSlots(unit)
 			end
 		end
 	end)
-end
-
-function REV_GetTileBackgroundColor(context)
-	if context == "LBE" then
-		return RGB(20, 30, 40)
-	elseif context == "Backpack" then
-		return RGB(30, 40, 50)
-	else
-		return RGB(88, 92, 68)
-	end
 end
 
 function REV_GetItemInventorySlotNumber(item)
@@ -373,7 +310,7 @@ function REV_GetItemSlotContext(unit, item)
 		return
 	end
 
-	local _, slot_contextTypes = GetInventorySlots(unit)
+	local _, slot_contextTypes = REV_GetInventorySlots(unit)
 
 	return slot_contextTypes[slotX][slotY]
 end
@@ -393,7 +330,7 @@ function REV_GetItemSlotType(item)
 
 	local slotX, slotY = unit:GetItemPos(item)
 
-	local slot_types = GetInventorySlots(unit)
+	local slot_types = REV_GetInventorySlots(unit)
 
 	local tile = slot_types[slotX][slotY]
 
@@ -440,7 +377,7 @@ function REV_GetSlotTypeSizeForItem(slotType, item)
 	return item[slotType .. "_amount"] or 0
 end
 
-function ItemFitsTile(item, type, unit, slotX, slotY, wholeStack)
+function REV_ItemFitsTile(item, type, unit, slotX, slotY, wholeStack)
 	if type == "Disabled" then return false, "" end
 
 	if not IsMerc(unit) or not unit.Squad then
@@ -484,13 +421,13 @@ function ItemFitsTile(item, type, unit, slotX, slotY, wholeStack)
 	return true
 end
 
-function LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeStack)
+function REV_LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeStack)
 	if sdx == 0 then
 		if column == 6 then return false end
 		if slot_types[column][row] ~= slot_types[column + 1][row] then
 			return false, "Cannot be split between two different slots"
 		end
-		if not (ItemFitsTile(item, slot_types[column][row], unit, column, row, wholeStack) or ItemFitsTile(item, slot_types[column + 1][row], unit, column, row, wholeStack)) then
+		if not (REV_ItemFitsTile(item, slot_types[column][row], unit, column, row, wholeStack) or REV_ItemFitsTile(item, slot_types[column + 1][row], unit, column, row, wholeStack)) then
 			return false, "Doesn't fit here"
 		else
 			return true
@@ -500,7 +437,7 @@ function LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeStack)
 		if slot_types[column][row] ~= slot_types[column - 1][row] then
 			return false, "Cannot be split between two different slots"
 		end
-		if not (ItemFitsTile(item, slot_types[column][row], unit, column, row, wholeStack) or ItemFitsTile(item, slot_types[column - 1][row], unit, column, row, wholeStack)) then
+		if not (REV_ItemFitsTile(item, slot_types[column][row], unit, column, row, wholeStack) or REV_ItemFitsTile(item, slot_types[column - 1][row], unit, column, row, wholeStack)) then
 			return false, "Doesn't fit here"
 		else
 			return true
@@ -510,10 +447,180 @@ function LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeStack)
 	end
 end
 
-function FitTileCheck(item, slot_types, column, row, sdx, unit, wholeStack)
+function REV_FitTileCheck(item, slot_types, column, row, sdx, unit, wholeStack)
 	if item:IsLargeItem() then
-		return LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeStack)
+		return REV_LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeStack)
 	else
-		return ItemFitsTile(item, slot_types[column][row], unit, column, row, wholeStack)
+		return REV_ItemFitsTile(item, slot_types[column][row], unit, column, row, wholeStack)
 	end
+end
+
+function REV_AppendToTable(t1, t2)
+	for i = 1, #t2 do
+		t1[#t1 + 1] = t2[i]
+	end
+	return t1
+end
+
+function REV_BuildSlotTypeProperties()
+	local properties = {}
+
+	for i, slotType in ipairs(g_REV_SlotTypes) do
+		if slotType.id ~= "PocketU" then
+			local property = {
+				category = "LBE",
+				template = true,
+				id = slotType.id .. '_amount',
+				name = slotType.displayName,
+				editor = "number",
+				default = 0,
+				min = 0,
+				max = 10000,
+				help = slotType.description
+			}
+
+			table.insert(properties, property)
+		end
+	end
+
+	return properties
+end
+
+function REV_GetEquipSlotColor(slotId)
+	slotId = slotId or "Inventory"
+	for i, equipSlot in ipairs(g_REV_InventoryEquipSlots) do
+		if equipSlot.id == slotId then
+			return equipSlot.color
+		end
+	end
+end
+
+function REV_GetEquippedSlots(unit, includeBaseInventory)
+	local slots = {}
+	for i, slot in ipairs(g_REV_InventoryEquipSlots) do
+		if slot.fallBack then
+			if includeBaseInventory then
+				table.insert(slots, slot)
+			end
+		else
+			local item = unit:GetItemInSlot(slot.id)
+			if item then
+				table.insert(slots, slot)
+			end
+		end
+	end
+	return slots
+end
+
+function REV_GetAvailableSlotTypes(type)
+	local types = {}
+	for i, slotType in ipairs(g_REV_SlotTypes) do
+		if slotType.available and table.find(slotType.available, type) then
+			table.insert(types, slotType)
+		end
+	end
+
+	return types
+end
+
+function REV_GetSlotTypeById(id)
+	for i, slotType in ipairs(g_REV_SlotTypes) do
+		if slotType.id == id then
+			return slotType
+		end
+	end
+end
+
+function REV_GenerateSlotDefs(type, properties)
+	local defs = {}
+	for i, slotType in ipairs(g_REV_SlotTypes) do
+		if slotType.available and table.find(slotType.available, type) then
+			local def = {
+				category = "Setup",
+				id = slotType.id,
+				name = slotType.displayName,
+				help = slotType.description,
+				editor = "number",
+				default = 0,
+				template = true,
+				min = 0,
+				max = 100,
+				slider = true,
+				modifiable = true,
+			}
+
+			table.insert(defs, def)
+		end
+	end
+
+	if properties then
+		for i, property in ipairs(properties) do
+			table.insert(defs, property)
+		end
+	end
+
+	return defs
+end
+
+function REV_IsUnloadEnabled(context)
+	return context.item.items and #context.item.items > 0 and true or false
+end
+
+function REV_UnloadItems(context)
+	local container = context.container
+	local putcontainer
+
+	if IsKindOf(container, "SectorStash") then
+		putcontainer = container
+	elseif not container and IsKindOf(context.context, "UnitData") then
+		local squad = context.context.Squad
+		squad = squad and gv_Squads[squad]
+		local sectorId = squad.CurrentSector
+		putcontainer = GetSectorInventory(sectorId)
+	end
+
+	g_StoredItemIdToItem = g_StoredItemIdToItem or {}
+
+	for i, itemId in ipairs(context.item.items) do
+		local item = g_ItemIdToItem[itemId] or g_StoredItemIdToItem[itemId]
+
+		if IsEquipSlot(context.slot_wnd.slot_name) then
+			item.removedWithContainer = true
+			context.unit:RemoveItem("Inventory", item)
+			item.removedWithContainer = nil
+		end
+
+		if putcontainer then
+			putcontainer:AddItem("Inventory", item)
+		elseif not container or not container:AddItem("Inventory", item) then
+			container = PlaceObject("ItemDropContainer")
+			local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
+			container:SetPos(drop_pos or context.unit:GetPos())
+			container:SetAngle(container:Random(21600))
+			container:AddItem("Inventory", item)
+		end
+
+		item.lastSlot = nil
+		item.lastSlotPos = nil
+		item.inventorySlot = nil
+		item.container = nil
+
+		if g_StoredItemIdToItem[itemId] then
+			g_StoredItemIdToItem[item.id] = nil
+		end
+
+		if not g_ItemIdToItem[item.id] then
+			g_ItemIdToItem[item.id] = item
+		else
+			local oldItem = g_ItemIdToItem[item.id]
+
+			if oldItem.class ~= item.class then
+				item:Setid(GenerateItemId(), true)
+			end
+		end
+	end
+
+	context.item.items = {}
+
+	InventoryUIRespawn()
 end

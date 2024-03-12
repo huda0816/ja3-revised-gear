@@ -1,4 +1,92 @@
 function OnMsg.DataLoaded()
+	local onDialogModeChange = REV_CustomSettingsUtils.XTemplate_FindElementsByProp(
+		XTemplates.Inventory, 'name', 'OnDialogModeChange(self, mode, dialog)')
+
+	if onDialogModeChange and onDialogModeChange.element then
+		onDialogModeChange.element.func = function(self, mode, dialog)
+			if dialog == self then
+				if gv_SatelliteView then
+					self.idCenterHeading:SetText(mode == "loot" and
+						T { 288565331426, "SECTOR <SectorId(sector)> STASH", sector = dialog.context.container.sector_id or gv_CurrentSectorId } or
+						T(1974181345670816, "Squad Supplies " .. REV_GetSquadBagWeightInKg() .. " Kg"))
+				else
+					self.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or
+						T(1974181345670816, "Squad Supplies " .. REV_GetSquadBagWeightInKg() .. " Kg"))
+				end
+				return
+			end
+
+			if mode ~= "inventory" and dialog ~= self then
+				Msg("CloseInventorySubDialog", "inventory")
+				PlayFX("InventoryClose")
+				self:OnEscape()
+				self:Close()
+			end
+		end
+	end
+
+	local idCenter = REV_CustomSettingsUtils.XTemplate_FindElementsByProp(
+		XTemplates.Inventory, 'Id', "idCenter")
+
+	if idCenter and idCenter.element then
+		idCenter.element.OnContextUpdate = function(self, context, ...)
+			if self.RespawnOnContext then
+				if self.window_state == "open" then
+					self:RespawnContent()
+				end
+			else
+				local respawn_value = self:RespawnExpression(context)
+				if rawget(self, "respawn_value") ~= respawn_value then
+					self.respawn_value = respawn_value
+					if self.window_state == "open" then
+						self:RespawnContent()
+					end
+				end
+			end
+			local node = self:ResolveId("node")
+			local mode = GetDialog(self).Mode
+			if gv_SatelliteView then
+				node.idCenterHeading:SetText(mode == "loot" and
+					T { 288565331426, "SECTOR <SectorId(sector)> STASH", sector = context.container.sector_id or gv_CurrentSectorId } or
+					T(1974181345670816, "Squad Supplies " .. REV_GetSquadBagWeightInKg() .. " Kg"))
+			else
+				node.idCenterHeading:SetText(mode == "loot" and T(899428826682, "Loot") or
+					T(1974181345670816, "Squad Supplies " .. REV_GetSquadBagWeightInKg() .. " Kg"))
+			end
+		end
+	end
+
+	local idName = REV_CustomSettingsUtils.XTemplate_FindElementsByProp(
+		XTemplates.Inventory, 'Id', "idName", "all")
+
+	if idName and idName[3] and idName[3].element then
+		idName[3].element.OnLayoutComplete = function(self)
+			local unit = self.context
+			self:SetText(T(3269654860290817, "<Nick> EQUIPMENT <GetCurrentWeightInKg()>/<GetMaxWeightInKg()> Kg", unit))
+		end
+	end
+
+	if idName and idName[4] and idName[4].element then
+		idName[4].element.OnLayoutComplete = function(self)
+			local bag = self.context
+			self:SetText(T(7675803685470817, "Squad Supplies <GetSquadBagWeightInKg()> Kg", bag))
+		end
+	end
+
+
+
+
+	local inventorySlot = REV_CustomSettingsUtils.XTemplate_FindElementsByProp(
+		XTemplates.Inventory, 'Id', 'idInventorySlot', 'all')
+
+	if inventorySlot then
+		for i, slot in ipairs(inventorySlot) do
+			if slot and slot.ancestors and slot.ancestors[1].Id == "idSquadBag" then
+				slot.element.enabled = false
+				slot.element.handleMouse = false
+			end
+		end
+	end
 
 	local selectAll = REV_CustomSettingsUtils.XTemplate_FindElementsByProp(XTemplates.Inventory, "ActionId", "SelectAll")
 
@@ -22,7 +110,6 @@ function OnMsg.DataLoaded()
 
 	if inventorySlot then
 		for i, slot in ipairs(inventorySlot) do
-
 			if slot and slot.ancestors then
 				slot.ancestors[1].Margins = slot.ancestors[1].Margins or box(0, 16, 0, 0)
 			end
@@ -31,7 +118,8 @@ function OnMsg.DataLoaded()
 				slot.element.UniformRowHeight = false
 
 				table.insert(slot.ancestors[1], slot.indices[1], PlaceObj('XTemplateWindow', {
-					'__condition', function(parent, context) return context.session_id and next(REV_GetEquippedSlots(context, true)) end,
+					'__condition', function(parent, context) return context.session_id and
+					next(REV_GetEquippedSlots(context, true)) end,
 					'Id', "idInventoryLegend",
 					"Margins",
 					box(26, 4, 0, 16),
@@ -138,7 +226,7 @@ function OnMsg.DataLoaded()
 								dlg.slots[self] = nil
 							end,
 							}),
-						}),	
+						}),
 						PlaceObj('XTemplateWindow', {
 							'__class', "EquipInventorySlot",
 							'Id', "idNVG",
@@ -161,7 +249,7 @@ function OnMsg.DataLoaded()
 								dlg.slots[self] = nil
 							end,
 							}),
-						})					
+						})
 					}),
 					PlaceObj('XTemplateWindow', {
 						'comment', "armor",

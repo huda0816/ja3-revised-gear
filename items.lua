@@ -1,5 +1,9 @@
 return {
 	PlaceObj('ModItemCode', {
+		'name', "CODE_WeightCalc",
+		'CodeFileName', "Code/CODE_WeightCalc.lua",
+	}),
+	PlaceObj('ModItemCode', {
 		'name', "CODE_Inventory",
 		'CodeFileName', "Code/CODE_Inventory.lua",
 	}),
@@ -428,10 +432,6 @@ return {
 			id = "REVLBELegendText",
 		}),
 		PlaceObj('ModItemCode', {
-			'name', "X_InventoryWeight",
-			'CodeFileName', "Code/X_InventoryWeight.lua",
-		}),
-		PlaceObj('ModItemCode', {
 			'name', "X_InventoryContextMenu",
 			'CodeFileName', "Code/X_InventoryContextMenu.lua",
 		}),
@@ -450,10 +450,6 @@ return {
 		PlaceObj('ModItemCode', {
 			'name', "OR_Unit",
 			'CodeFileName', "Code/OR_Unit.lua",
-		}),
-		PlaceObj('ModItemCode', {
-			'name', "OR_SquadBag",
-			'CodeFileName', "Code/OR_SquadBag.lua",
 		}),
 		PlaceObj('ModItemCode', {
 			'name', "OR_Mercenary",
@@ -530,7 +526,7 @@ return {
 		}),
 		}),
 	PlaceObj('ModItemFolder', {
-		'name', "Weight",
+		'name', "Character Effects",
 	}, {
 		PlaceObj('ModItemCharacterEffectCompositeDef', {
 			'Id', "Overweight",
@@ -543,10 +539,6 @@ return {
 			'Icon', "Mod/ii6mKUf/Icons/overweight.png",
 			'Shown', true,
 			'ShownSatelliteView', true,
-		}),
-		PlaceObj('ModItemCode', {
-			'name', "CODE_WeightCalc",
-			'CodeFileName', "Code/CODE_WeightCalc.lua",
 		}),
 		}),
 }

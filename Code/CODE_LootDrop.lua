@@ -3,14 +3,14 @@ function OnMsg.UnitDied(unit)
     local roll = unit:Random(100)
     if unit then
         if roll < target then
-            local drawItemId = DrawLBE(unit)
+            local drawItemId = REV_DrawLBE(unit)
             local LBE = PlaceInventoryItem(drawItemId)
             unit:AddItem("InventoryDead", LBE)
         end
     end
 end
 
-function DrawLBE(unit)
+function REV_DrawLBE(unit)
     local affilation = unit.Affiliation
     local drawTable = {}
     for _, item in pairs(LBERarityTable) do

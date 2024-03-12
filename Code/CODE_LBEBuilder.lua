@@ -1,4 +1,4 @@
-function BuildInventory(xTileObj, unit)
+function REV_BuildInventory(xTileObj, unit)
 	local inventories = g_REV_InventoryEquipSlots;
 
 	local width = unit:GetSlotDataDim("Inventory")
@@ -17,13 +17,13 @@ function BuildInventory(xTileObj, unit)
 		local slotObject = inventory.baseSlot and false or unit:GetItemInSlot(inventory.id)
 
 		if slotObject then
-			column, row = BuildInventorySlot(xTileObj, inventory, slotObject, column, row, i, startRow)
+			column, row = REV_BuildInventorySlot(xTileObj, inventory, slotObject, column, row, i, startRow)
 		elseif inventory.fallBack then
-			column, row = BuildFallback(xTileObj, inventory, column, row, i, startRow)
+			column, row = REV_BuildFallback(xTileObj, inventory, column, row, i, startRow)
 		end
 
 		if slotObject or inventory.fallBack then
-			column, row = fillEmptySpace(xTileObj, inventory, column, row, row == startRow)
+			column, row = REV_FillEmptySpace(xTileObj, inventory, column, row, row == startRow)
 		end
 
 	end
@@ -33,7 +33,7 @@ function BuildInventory(xTileObj, unit)
 	xTileObj:InitialSpawnItems()
 end
 
-function BuildInventorySlot(xTileObj, equipSlot, equipItem, column, row, index, startRow)
+function REV_BuildInventorySlot(xTileObj, equipSlot, equipItem, column, row, index, startRow)
 	-- local startRow = index > 1 and row + 1 or false
 
 	-- column = 7
@@ -48,17 +48,17 @@ function BuildInventorySlot(xTileObj, equipSlot, equipItem, column, row, index, 
 			end
 			TileConfig.Type = slotType.id
 			TileConfig.Size = "Small"
-			BuildPocket(xTileObj, column, row, equipSlot.id, row == startRow)
+			REV_BuildPocket(xTileObj, column, row, equipSlot.id, row == startRow)
 			column = column + 1
 		end
 	end
 
 	return column, row
 
-	-- return fillEmptySpace(xTileObj, equipSlot, column, row, row == startRow)
+	-- return REV_FillEmptySpace(xTileObj, equipSlot, column, row, row == startRow)
 end
 
-function BuildFallback(xTileObj, equipSlot, column, row, index, startRow)
+function REV_BuildFallback(xTileObj, equipSlot, column, row, index, startRow)
 	-- local startRow = index > 1 and row + 1 or false
 
 	-- column = 7
@@ -72,22 +72,22 @@ function BuildFallback(xTileObj, equipSlot, column, row, index, startRow)
 			end
 			TileConfig.Type = slot
 			TileConfig.Size = "Small"
-			BuildPocket(xTileObj, column, row, equipSlot.id, row == startRow)
+			REV_BuildPocket(xTileObj, column, row, equipSlot.id, row == startRow)
 			column = column + 1
 		end
 	end
 
 	return column, row
 
-	-- return fillEmptySpace(xTileObj, equipSlot, column, row, row == startRow)
+	-- return REV_FillEmptySpace(xTileObj, equipSlot, column, row, row == startRow)
 end
 
-function fillEmptySpace(xTileObj, equipSlot, column, row, startRow)
+function REV_FillEmptySpace(xTileObj, equipSlot, column, row, startRow)
 	if column < 7 then
 		for i = 1, 7 - column do
 			TileConfig.Type = "Disabled"
 			TileConfig.Size = "Small"
-			BuildPocket(xTileObj, column, row, "Disabled", startRow)
+			REV_BuildPocket(xTileObj, column, row, "Disabled", startRow)
 			column = column + 1
 		end
 	end
@@ -95,7 +95,7 @@ function fillEmptySpace(xTileObj, equipSlot, column, row, startRow)
 	return column, row
 end
 
-function BuildPocket(xTileObj, column, row, objType, startRow)
+function REV_BuildPocket(xTileObj, column, row, objType, startRow)
 	local tile = xTileObj:SpawnTile("Inventory", column, row)
 	if tile then
 		tile:SetBackground(REV_GetEquipSlotColor(objType))
@@ -115,7 +115,7 @@ function BuildPocket(xTileObj, column, row, objType, startRow)
 	end
 end
 
-function GetInventorySlots(unit, fakeItems)
+function REV_GetInventorySlots(unit, fakeItems)
 	if not IsMerc(unit) then return end
 	local contextTypes = {}
 	local types = {}

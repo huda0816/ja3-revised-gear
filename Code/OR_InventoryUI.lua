@@ -81,7 +81,7 @@ function XInventorySlot:Setslot_name(slot_name)
 	end
 
 	if context.session_id and (slot_name == "Inventory") then
-		BuildInventory(self, context)
+		REV_BuildInventory(self, context)
 	else
 		TileConfig.Type = "PocketU"
 		TileConfig.Size = "Small"
@@ -104,9 +104,9 @@ function XInventoryTile:OnDropEnter(drag_win, pt, drag_source_win)
 		if not dx then
 			mouse_text = Untranslated("Item does not fit here")
 		else
-			local slot_types = GetInventorySlots(slot:GetContext())
+			local slot_types = REV_GetInventorySlots(slot:GetContext())
 			if slot_types then
-				local fits, reason = FitTileCheck(drag_item, slot_types, dx, dy, sdx, slot.context)
+				local fits, reason = REV_FitTileCheck(drag_item, slot_types, dx, dy, sdx, slot.context)
 				if not fits then
 					mouse_text = Untranslated(reason)
 				else
@@ -156,10 +156,10 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 			local max = g_Classes[item.class].MaxStacks
 
 			if not IsEquipSlot(target.slot_name) then
-				local slot_types = GetInventorySlots(target.context)
+				local slot_types = REV_GetInventorySlots(target.context)
 
 				if slot_types then
-					local fits, reason = FitTileCheck(item, slot_types, dx, dy, sdx, target.context)
+					local fits, reason = REV_FitTileCheck(item, slot_types, dx, dy, sdx, target.context)
 					if not fits then
 						return reason
 					else
