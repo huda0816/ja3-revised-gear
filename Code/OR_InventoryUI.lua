@@ -14,7 +14,7 @@ function XInventoryTile:Init()
 	local hoverImage = "UI/Inventory/T_Backpack_Slot_Small_Hover.tga"
 	local imageBase = "UI/Inventory/T_Backpack_Slot_Small.tga"
 
-	local slotTypes = g_SlotTypes
+	local slotTypes = g_REV_SlotTypes
 
 	if TileConfig.Size == "Large" then
 		k = 2
@@ -280,7 +280,7 @@ function XInventorySlot:SpawnItemUI(item, left, top)
 		end
 	end
 
-	local slotTypes = g_SlotTypes
+	local slotTypes = g_REV_SlotTypes
 
 	local currentSlotTypeIndex = image.Type and table.find(slotTypes, "id", image.Type)
 

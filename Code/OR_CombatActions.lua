@@ -1,4 +1,4 @@
-itemCombatSkillsList = appendToTable(itemCombatSkillsList, {
+itemCombatSkillsList = REV_AppendToTable(itemCombatSkillsList, {
 	"ThrowGrenadeE",
 	"ThrowGrenadeF",
 	"ThrowGrenadeG",

@@ -1,12 +1,14 @@
-AppendClass.InventoryItem = {
-	properties = REV_BuildSlotTypeProperties()
-}
-
 Pistol.PocketL_amount = 1
 Pistol.PistolHolster_amount = 1
 
 Knife.KnifeSheath_amount = 1
 Knife.PocketL_amount = 3
+
+Knife_Sharpened.KnifeSheath_amount = 1
+Knife_Sharpened.PocketL_amount = 3
+
+Knife_Balanced.KnifeSheath_amount = 1
+Knife_Balanced.PocketL_amount = 3
 
 -- ToDO small SMG Holster
 MP5K.PocketL_amount = 1

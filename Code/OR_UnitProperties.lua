@@ -2,7 +2,7 @@ local REV_Original_UnitPropertiesGetInventoryMaxSlots = UnitProperties.GetInvent
 
 function UnitProperties:GetInventoryMaxSlots()
 	if IsMerc(self) then
-		local slots = g_InventoryEquipSlots
+		local slots = g_REV_InventoryEquipSlots
 
 		local inventorySlots = 0
 
