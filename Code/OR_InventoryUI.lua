@@ -55,7 +55,7 @@ function XInventoryTile:Init()
 			ImageFit = "height"
 		}, self)
 		imgslot:SetImage(self.slot_image)
-		image:SetImage(imageBase) -- curstom
+		image:SetImage(imageBase) -- custom
 		image:SetImageColor(RGB(255, 255, 255))
 	end
 	local rollover_image = XImage:new({
@@ -64,7 +64,7 @@ function XInventoryTile:Init()
 		MinHeight = tile_size_rollover * k,
 		MaxHeight = tile_size_rollover * k,
 		Id = "idRollover",
-		Image = hoverImage, -- curstom
+		Image = hoverImage, -- custom
 		ImageColor = 0xFFc3bdac,
 		Visible = false
 	}, self)
@@ -80,7 +80,7 @@ function XInventorySlot:Setslot_name(slot_name)
 		return
 	end
 
-	if context.session_id and (slot_name == "Inventory") then
+	if context.session_id and slot_name == "Inventory" and REV_IsMerc(context) then
 		REV_BuildInventory(self, context)
 	else
 		TileConfig.Type = "PocketU"

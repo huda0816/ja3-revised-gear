@@ -30,11 +30,8 @@ function UnitData:GetCurrentWeightInKg()
 end
 
 function Unit:GetCurrentWeight()
-	if not REV_GetPlayerMercSquads() or not self.Squad then return 0 end
-	local squad
-	for i, s in ipairs(REV_GetPlayerMercSquads()) do
-		if s.UniqueId == self.Squad then squad = s end
-	end
+	local squad = gv_Squads[self.Squad]
+	if not squad then return 0 end
 	local total_weight = { weight = 0.0 }
 	self:ForEachItem(function(slot_item, slot_name, left, top, total_weight)
 		local item_amount = slot_item.Amount or 1
@@ -54,11 +51,8 @@ function Unit:GetCurrentWeight()
 end
 
 function UnitData:GetCurrentWeight()
-	if not REV_GetPlayerMercSquads() or not self.Squad then return 0 end
-	local squad
-	for i, s in ipairs(REV_GetPlayerMercSquads()) do
-		if s.UniqueId == self.Squad then squad = s end
-	end
+	local squad = gv_Squads[self.Squad]
+	if not squad then return 0 end
 	local total_weight = { weight = 0.0 }
 	self:ForEachItem(function(slot_item, slot_name, left, top, total_weight)
 		local item_amount = slot_item.Amount or 1

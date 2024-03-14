@@ -29,6 +29,9 @@ function OnMsg.DataLoaded()
 		XTemplates.Inventory, 'Id', "idCenter")
 
 	if idCenter and idCenter.element then
+
+		local OriginalOnContextUpdate = idCenter.element.OnContextUpdate
+
 		idCenter.element.OnContextUpdate = function(self, context, ...)
 			if self.RespawnOnContext then
 				if self.window_state == "open" then
@@ -62,6 +65,9 @@ function OnMsg.DataLoaded()
 	if idName and idName[3] and idName[3].element then
 		idName[3].element.OnLayoutComplete = function(self)
 			local unit = self.context
+			if not REV_IsMerc(unit) then
+				return
+			end
 			self:SetText(T(3269654860290817, "<Nick> EQUIPMENT <GetCurrentWeightInKg()>/<GetMaxWeightInKg()> Kg", unit))
 		end
 	end

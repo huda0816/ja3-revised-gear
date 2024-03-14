@@ -369,7 +369,7 @@ function REV_GetSlotTypeSizeForItem(slotType, item)
 		return 1
 	end
 
-	if slotType == "PocketU" then
+	if slotType == "PocketU" or not slotType then
 		return g_Classes[item.class].MaxStacks or 1
 	end
 
@@ -637,8 +637,8 @@ function REV_IsMerc(o)
 	end
 
 	if RevisedLBEConfig.MilitiaUsesLBE then
-		if gv_UnitData[id] and gv_UnitData[id].Squad then
-			local squad = gv_Squads[gv_UnitData[id].Squad]
+		if gv_UnitData[o.session_id] and gv_UnitData[o.session_id].Squad then
+			local squad = gv_Squads[gv_UnitData[o.session_id].Squad]
 			if squad.militia and (squad.Side == "player1" or squad.Side == "player2") then
 				return true
 			end
@@ -649,23 +649,4 @@ function REV_IsMerc(o)
 		return o.IsMercenary
 	end
 	return id and UnitDataDefs[id].IsMercenary
-end
-
-function REV_GetPlayerMercSquads()
-	local squads = RevisedLBEConfig.MilitiaUsesLBE and g_PlayerAndMilitiaSquads or g_PlayerSquads or empty_table
-
-	if not RevisedLBEConfig.MilitiaUsesLBE then
-		return squads
-	end
-
-	local playerSquads = {}
-
-	for i, squad in ipairs(squads) do
-		if squad.Side == "player1" or squad.Side == "player2" then
-			table.insert(playerSquads, squad)
-		end
-	end
-
-	return playerSquads
-
 end

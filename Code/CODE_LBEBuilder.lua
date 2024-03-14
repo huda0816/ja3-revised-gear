@@ -1,4 +1,5 @@
 function REV_BuildInventory(xTileObj, unit)
+
 	local inventories = g_REV_InventoryEquipSlots;
 
 	local width = unit:GetSlotDataDim("Inventory")

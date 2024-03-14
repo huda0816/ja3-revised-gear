@@ -8,7 +8,7 @@ RevisedLBEConfig = {
 	LBEDropChance = 10,
 	SquadBagHasWeight = true,
 	TannedGoogleSightModifier = 105,
-	MilitiaUsesLBE = false
+	MilitiaUsesLBE = true
 }
 
 g_REV_SlotTypes = {

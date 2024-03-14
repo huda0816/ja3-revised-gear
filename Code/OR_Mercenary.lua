@@ -48,3 +48,16 @@ function AddItemsToInventory(inventoryObj, items, bLog)
 	ObjModified(inventoryObj)
 	return pos, reason
 end
+
+function UnitInventory:AddItem(slot_name, item, left, top, local_execution)
+	local pos, reason = Inventory.AddItem(self, slot_name, item, left, top)
+	if not pos then return pos, reason end
+	
+	item.owner = REV_IsMerc(self) and self.session_id or false -- Dont bloat save with non-merc owners.
+	if not local_execution then
+		Msg("ItemAdded", self, item, slot_name, pos)
+	end
+	item:OnAdd(self, slot_name, pos, item)
+
+	return pos, reason
+end
