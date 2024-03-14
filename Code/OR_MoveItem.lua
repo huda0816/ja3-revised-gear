@@ -23,9 +23,9 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 	local is_src_dead          = is_src_unit and src_container:IsDead()
 	local is_dest_dead         = is_dest_unit and dest_container:IsDead()
 	-- custom code
-	local src_context          = is_src_unit and item and IsMerc(is_src_unit) and
+	local src_context          = is_src_unit and item and REV_IsMerc(src_container) and
 	REV_GetItemSlotContext(src_container, item)
-	local dest_context         = is_dest_unit and item and IsMerc(is_src_unit) and
+	local dest_context         = is_dest_unit and item and REV_IsMerc(dest_container) and
 	REV_GetItemSlotContext(dest_container, item_at_dest)
 	local is_src_Backpack      = src_context == "Backpack"
 	local is_dest_Backpack     = dest_context == "Backpack"

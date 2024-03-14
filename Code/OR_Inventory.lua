@@ -1,14 +1,3 @@
--- local REV_OriginalInventoryItemInit = InventoryItem.Init
-
--- function InventoryItem:Init()
--- 	REV_OriginalInventoryItemInit(self)
--- 	self.lastSlotPos = false
--- 	self.lastSlot = false
--- 	self.inventorySlot = false
--- 	self.container = false
--- end
-
-
 function Inventory:FindEmptyPosition(slot_name, item, local_changes)
 	local slot_data = self:GetSlotData(slot_name)
 	local space = {}
@@ -38,12 +27,12 @@ function Inventory:FindEmptyPosition(slot_name, item, local_changes)
 
 	-- custom code starts here
 
-	if slot_name == "Inventory" and IsMerc(self) and self.session_id then
-		local slot_types = GetInventorySlots(self)
+	if slot_name == "Inventory" and REV_IsMerc(self) and self.session_id then
+		local slot_types = REV_GetInventorySlots(self)
 		if slot_types then
 			for i = 1, width do
 				for j = 1, height do
-					local fits, reason = ItemFitsTile(item, slot_types[i][j], self, i, j, true)
+					local fits, reason = REV_ItemFitsTile(item, slot_types[i][j], self, i, j, true)
 
 					if not fits then
 						space[i][j] = true
@@ -95,7 +84,7 @@ end
 local REV_Original_GetSlotDataDim = Inventory.GetSlotDataDim
 
 function Inventory:GetSlotDataDim(slot_name)
-	if not IsMerc(self) or not self.session_id or slot_name ~= "Inventory" then
+	if not REV_IsMerc(self) or not self.session_id or slot_name ~= "Inventory" then
 		return REV_Original_GetSlotDataDim(self, slot_name)
 	end
 

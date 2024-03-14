@@ -14,7 +14,7 @@ function XInventoryTile:Init()
 	local hoverImage = "UI/Inventory/T_Backpack_Slot_Small_Hover.tga"
 	local imageBase = "UI/Inventory/T_Backpack_Slot_Small.tga"
 
-	local slotTypes = g_SlotTypes
+	local slotTypes = g_REV_SlotTypes
 
 	if TileConfig.Size == "Large" then
 		k = 2
@@ -55,7 +55,7 @@ function XInventoryTile:Init()
 			ImageFit = "height"
 		}, self)
 		imgslot:SetImage(self.slot_image)
-		image:SetImage(imageBase) -- curstom
+		image:SetImage(imageBase) -- custom
 		image:SetImageColor(RGB(255, 255, 255))
 	end
 	local rollover_image = XImage:new({
@@ -64,7 +64,7 @@ function XInventoryTile:Init()
 		MinHeight = tile_size_rollover * k,
 		MaxHeight = tile_size_rollover * k,
 		Id = "idRollover",
-		Image = hoverImage, -- curstom
+		Image = hoverImage, -- custom
 		ImageColor = 0xFFc3bdac,
 		Visible = false
 	}, self)
@@ -80,8 +80,8 @@ function XInventorySlot:Setslot_name(slot_name)
 		return
 	end
 
-	if context.session_id and (slot_name == "Inventory") then
-		BuildInventory(self, context)
+	if context.session_id and slot_name == "Inventory" and REV_IsMerc(context) then
+		REV_BuildInventory(self, context)
 	else
 		TileConfig.Type = "PocketU"
 		TileConfig.Size = "Small"
@@ -104,9 +104,9 @@ function XInventoryTile:OnDropEnter(drag_win, pt, drag_source_win)
 		if not dx then
 			mouse_text = Untranslated("Item does not fit here")
 		else
-			local slot_types = GetInventorySlots(slot:GetContext())
+			local slot_types = REV_GetInventorySlots(slot:GetContext())
 			if slot_types then
-				local fits, reason = FitTileCheck(drag_item, slot_types, dx, dy, sdx, slot.context)
+				local fits, reason = REV_FitTileCheck(drag_item, slot_types, dx, dy, sdx, slot.context)
 				if not fits then
 					mouse_text = Untranslated(reason)
 				else
@@ -156,10 +156,10 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 			local max = g_Classes[item.class].MaxStacks
 
 			if not IsEquipSlot(target.slot_name) then
-				local slot_types = GetInventorySlots(target.context)
+				local slot_types = REV_GetInventorySlots(target.context)
 
 				if slot_types then
-					local fits, reason = FitTileCheck(item, slot_types, dx, dy, sdx, target.context)
+					local fits, reason = REV_FitTileCheck(item, slot_types, dx, dy, sdx, target.context)
 					if not fits then
 						return reason
 					else
@@ -280,7 +280,7 @@ function XInventorySlot:SpawnItemUI(item, left, top)
 		end
 	end
 
-	local slotTypes = g_SlotTypes
+	local slotTypes = g_REV_SlotTypes
 
 	local currentSlotTypeIndex = image.Type and table.find(slotTypes, "id", image.Type)
 
