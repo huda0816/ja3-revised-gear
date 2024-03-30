@@ -426,7 +426,7 @@ end
 
 function REV_LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeStack)
 	if sdx == 0 then
-		if column == 6 then return false end
+		if column == 6 then return false, "Doesn't fit here" end
 		if slot_types[column][row] ~= slot_types[column + 1][row] then
 			return false, "Cannot be split between two different slots"
 		end
@@ -436,7 +436,7 @@ function REV_LargeItemFitsTile(item, slot_types, column, row, sdx, unit, wholeSt
 			return true
 		end
 	elseif sdx == 1 then
-		if column == 1 then return false end
+		if column == 1 then return false, "Doesn't fit here" end
 		if slot_types[column][row] ~= slot_types[column - 1][row] then
 			return false, "Cannot be split between two different slots"
 		end

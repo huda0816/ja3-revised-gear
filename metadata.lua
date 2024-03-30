@@ -1,8 +1,8 @@
 return PlaceObj('ModDef', {
 	'title', "Revised Tactical Gear II (Beta)",
-	'description', "This is a reworked and enhanced rerelease of Ablomis' Revised Tactical Gear mod. \n\nThis mod adds more inventory slots to the game (Backpack, LBE, Leg items, Face items, NVG slot)\n\nRevised Mags II Mod is a dependency of this mod. \n\nIt is currently in beta which means that:\n\nthere are bugs \nit is not save-game compatible\nit is not compatible with a lot of popular mods\n\nI am looking forward to your bug reports. You can send your savegames to huda0816 in the JA3 modding Discord. Please do not send reports if you are using any other mods (besides Revised Mags II mod) as I won't have time to investigate compatibility issues at the moment.\n\nInfo for mod creators: I would recommend to wait until you start to make your mod compatible to this one as there could still be major changes.\n\nMore Infos and videos will be added soon.\n\nCopyright:\nLBE and some holster images are from AdobeStock\nBackpacks, the goggle and the rest of the holsters are created with ChatGPT and Bing image creation",
+	'description', "This is a reworked and enhanced rerelease of Ablomis' Revised Tactical Gear mod. \n\nThis mod adds more inventory slots to the game (Backpack, LBE, Leg items, Face items, NVG slot)\n\nImportant: Restart the game after activating the mod.\n\nRevised Mags II Mod is a dependency of this mod. \n\nIt is currently in beta which means that:\n\nthere are bugs \nit is not save-game compatible\nit is not compatible with a lot of popular mods\n\nI am looking forward to your bug reports. You can send your savegames to huda0816 in the JA3 modding Discord. Please do not send reports if you are using any other mods (besides Revised Mags II and Revised Components mod) as I won't have time to investigate compatibility issues at the moment.\n\nInfo for mod creators: I would recommend to wait until you start to make your mod compatible to this one as there could still be major changes.\n\nMore Infos and videos will be added soon.\n\nCopyright:\nLBE and some holster images are from AdobeStock\nBackpacks, the goggle and the rest of the holsters are created with ChatGPT and Bing image creation",
 	'image', "Mod/ii6mKUf/Images/JA3Revised-title.png",
-	'last_changes', "Some smaller bugfixes and militia mod compatibility",
+	'last_changes', "Fixed bug which made it impossible to add items to empty slots",
 	'dependencies', {
 		PlaceObj('ModDependency', {
 			'id', "URkxyfE",
@@ -11,8 +11,8 @@ return PlaceObj('ModDef', {
 	},
 	'id', "ii6mKUf",
 	'author', "permanent666",
-	'version_minor', 5,
-	'version', 87,
+	'version_minor', 8,
+	'version', 103,
 	'lua_revision', 233360,
 	'saved_with_revision', 350233,
 	'code', {
@@ -60,8 +60,8 @@ return PlaceObj('ModDef', {
 		RevisedSquadBagHasWeight = true,
 	},
 	'has_data', true,
-	'saved', 1710373607,
-	'code_hash', 3369536467818409217,
+	'saved', 1711546016,
+	'code_hash', 5257822362667772554,
 	'affected_resources', {
 		PlaceObj('ModResourcePreset', {
 			'Class', "InventoryItemCompositeDef",

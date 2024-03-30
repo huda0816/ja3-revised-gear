@@ -149,6 +149,11 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 
 		local under_item = dest_container:GetItemInSlot(target.slot_name, nil, dx, dy)
 
+		-- Revised Components compatibility
+		if IsKindOf(under_item, "Firearm") and IsKindOf(InventoryDragItem, "WeaponComponentItem") then
+			return REV_Original_XInventorySlotDragDropMoveItem(self, pt, target, check_only)
+		end
+
 		local ssx, ssy, sdx = point_unpack(InventoryDragItemPos)
 		local item = InventoryDragItem
 
@@ -169,6 +174,10 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 					end
 				end
 			else
+				if under_item then
+					under_item.MaxStacks = 1
+				end
+
 				if under_item and under_item.Amount and under_item.Amount > 0 and under_item.class == item.class and (item.Amount or 1) > 1 then
 					return "Stack is full", "no change"
 				end
