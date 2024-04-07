@@ -18,6 +18,11 @@ function OnMsg.ItemRemoved(obj, item, slot, pos)
 	end
 end
 
+function REV_SortSectorInventory(items)
+	--TODO: Make a sort function
+	return items
+end
+
 function REV_GetEquippedItemContainer(unit, item, pos, slotName)
 	local slotX, slotY = point_unpack(pos)
 
@@ -94,6 +99,10 @@ function REV_OnItemAdded(obj, item, slot, pos)
 
 				for i, invItemId in ipairs(itemsInSlot) do
 					local invItem = g_ItemIdToItem[invItemId] or g_StoredItemIdToItem[invItemId]
+
+					if not invItem then
+						goto continue
+					end
 					local x, y = point_unpack(invItem.lastSlotPos)
 
 					if slotObj.id ~= slot then
@@ -115,6 +124,8 @@ function REV_OnItemAdded(obj, item, slot, pos)
 							invItem:Setid(GenerateItemId(), true)
 						end
 					end
+
+					::continue::
 				end
 			end
 		end
@@ -143,6 +154,8 @@ function REV_OnItemAdded(obj, item, slot, pos)
 			container.items = container.items or {}
 
 			table.insert(container.items, item.id)
+
+			container:SetProperty("SubIcon", "Mod/ii6mKUf/Icons/notempty.png")
 		end
 
 		REV_CheckItemsInWrongSlots(obj)
@@ -168,11 +181,18 @@ function REV_OnItemRemoved(obj, item, slot, pos)
 		g_StoredItemIdToItem = g_StoredItemIdToItem or {}
 
 		for i, rItemId in ipairs(removedItemItems) do
-			g_StoredItemIdToItem[rItemId] = g_ItemIdToItem[rItemId]
 			local rItem = g_ItemIdToItem[rItemId]
+
+			if not rItem then
+				goto continue
+			end
+			g_StoredItemIdToItem[rItemId] = g_ItemIdToItem[rItemId]
+
 			rItem.removedWithContainer = true
 			obj:RemoveItem("Inventory", rItem)
 			rItem.removedWithContainer = nil
+
+			::continue::
 		end
 
 		for i, slotObj in ipairs(inventoryEquipSlots) do
@@ -207,6 +227,10 @@ function REV_OnItemRemoved(obj, item, slot, pos)
 
 			if g_StoredItemIdToItem[item.id] then
 				g_StoredItemIdToItem[item.id] = nil
+			end
+
+			if not next(container.items) then
+				container:SetProperty("SubIcon", nil)
 			end
 		end
 
@@ -306,8 +330,12 @@ function REV_IsItemFirstRow(item)
 	end
 end
 
-function REV_GetItemSlotContext(unit, item)
+function REV_GetItemSlotContext(unit, item, dest_x, dest_y)
 	local slotX, slotY = unit:GetItemPos(item)
+
+	slotX = dest_x or slotX
+
+	slotY = dest_y or slotY
 
 	if not slotX or not slotY then
 		return
@@ -587,6 +615,10 @@ function REV_UnloadItems(context)
 	for i, itemId in ipairs(context.item.items) do
 		local item = g_ItemIdToItem[itemId] or g_StoredItemIdToItem[itemId]
 
+		if not item then
+			goto continue
+		end
+
 		if IsEquipSlot(context.slot_wnd.slot_name) then
 			item.removedWithContainer = true
 			context.unit:RemoveItem("Inventory", item)
@@ -621,9 +653,13 @@ function REV_UnloadItems(context)
 				item:Setid(GenerateItemId(), true)
 			end
 		end
+
+		::continue::
 	end
 
 	context.item.items = {}
+
+	context.item:SetProperty("SubIcon", nil)
 
 	InventoryUIRespawn()
 end

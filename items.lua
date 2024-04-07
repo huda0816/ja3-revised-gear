@@ -424,6 +424,14 @@ return {
 	PlaceObj('ModItemFolder', {
 		'name', "XTemplateMods",
 	}, {
+		PlaceObj('ModItemCode', {
+			'name', "X_Inventory_full",
+			'CodeFileName', "Code/X_Inventory_full.lua",
+		}),
+		PlaceObj('ModItemCode', {
+			'name', "X_SquadsAndMercs",
+			'CodeFileName', "Code/X_SquadsAndMercs.lua",
+		}),
 		PlaceObj('ModItemTextStyle', {
 			RolloverTextColor = 4293320394,
 			TextColor = 4293320394,
@@ -541,4 +549,7 @@ return {
 			'ShownSatelliteView', true,
 		}),
 		}),
+	PlaceObj('ModItemFolder', {
+		'name', "New folder",
+	}),
 }

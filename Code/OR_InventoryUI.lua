@@ -40,6 +40,7 @@ function XInventoryTile:Init()
 		MaxWidth = tile_size * k,
 		MinHeight = tile_size * k,
 		MaxHeight = tile_size * k,
+		ScaleModifier = point(1040, 1040),
 		Id = "idBackImage",
 		Image = emptyImage, -- curstom
 		ImageColor = 4291018156
@@ -110,7 +111,14 @@ function XInventoryTile:OnDropEnter(drag_win, pt, drag_source_win)
 				if not fits then
 					mouse_text = Untranslated(reason)
 				else
-					mouse_text = Untranslated("Drop item")
+					local is_combat = InventoryIsCombatMode()
+					if is_combat then
+						local ap_cost, unit, action_name = GetAPCostAndUnit(drag_item, InventoryStartDragContext,
+							InventoryStartDragSlotName, slot:GetContext(), slot.slot_name, false, false, dx, dy)
+						mouse_text = InventoryFormatAPMouseText(unit, ap_cost, action_name or "")
+					else
+						mouse_text = Untranslated("Drop item")
+					end
 				end
 			end
 		end
@@ -126,7 +134,6 @@ end
 local REV_Original_XInventorySlotDragDropMoveItem = XInventorySlot.DragDrop_MoveItem
 
 function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
-
 	if not InventoryDragItem then
 		return "no item being dragged"
 	end
@@ -136,7 +143,6 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 	end
 
 	if table.find({ "Inventory", "Handheld A", "Handheld B" }, target.slot_name) and target.context.session_id then
-
 		local dest_slot = target.slot_name
 		local _, dx, dy = target:FindTile(pt)
 
@@ -158,43 +164,19 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 		local item = InventoryDragItem
 
 		if not IsReload(item, under_item) and not IsMedicineRefill(item, under_item) and not InventoryIsCombineTarget(item, under_item) then
-			local max = g_Classes[item.class].MaxStacks
-
-			if not IsEquipSlot(target.slot_name) then
-				local slot_types = REV_GetInventorySlots(target.context)
-
-				if slot_types then
-					local fits, reason = REV_FitTileCheck(item, slot_types, dx, dy, sdx, target.context)
-					if not fits then
-						return reason
-					else
-						local slotType = slot_types[dx][dy]
-
-						max = REV_GetSlotTypeSizeForItem(slotType, item) or max
-					end
-				end
-			else
-				if under_item then
-					under_item.MaxStacks = 1
-				end
-
-				if under_item and under_item.Amount and under_item.Amount > 0 and under_item.class == item.class and (item.Amount or 1) > 1 then
-					return "Stack is full", "no change"
-				end
-
-				max = 1
-			end
-
-			if item:IsLargeItem() then
-				dx = dx - sdx
-				if IsEquipSlot(dest_slot) then
-					dx = 1
-				end
-			end
-
 			local apCosts = InventoryIsCombatMode(target.context) and
-				GetAPCostAndUnit(item, src_container, self.slot_name, dest_container, target.slot_name) or 0
+				GetAPCostAndUnit(item, src_container, self.slot_name, dest_container, target.slot_name, nil, nil, dx, dy) or
+				0
 
+			-- Return if apCost bigger than unit AP
+
+			if src_container.session_id then
+				if not src_container:UIHasAP(apCosts) then
+					return "not enough AP"
+				end
+			end
+
+			local swap = false
 			-- Check if a swap is possible
 			if (not src_container.session_id or src_container:UIHasAP(apCosts)) and
 				under_item and
@@ -214,18 +196,55 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 
 				if sourceInDestMaxStacks < sourceAmount or destInSourceMaxStacks < destAmount then
 					return "cannot swap"
+				else
+					swap = true
 				end
 			end
 
-			-- Create a new stack with 0 amout to trigger the stack merge
-			if not under_item and (not src_container.session_id or src_container:UIHasAP(apCosts)) and (g_Classes[item.class].MaxStacks or 0) > 1 then
-				local pos, reason = dest_container:AddItem(target.slot_name, PlaceInventoryItem(item.class), dx, dy)
+			if not swap then
+				local max = g_Classes[item.class].MaxStacks
 
-				under_item = dest_container:GetItemInSlot(target.slot_name, nil, dx, dy)
+				if not IsEquipSlot(target.slot_name) then
+					local slot_types = REV_GetInventorySlots(target.context)
 
-				under_item.Amount = 0
+					if slot_types then
+						local fits, reason = REV_FitTileCheck(item, slot_types, dx, dy, sdx, target.context)
+						if not fits then
+							return reason
+						else
+							local slotType = slot_types[dx][dy]
 
-				under_item.MaxStacks = max
+							max = REV_GetSlotTypeSizeForItem(slotType, item) or max
+						end
+					end
+				else
+					if under_item then
+						under_item.MaxStacks = 1
+					end
+
+					if under_item and under_item.Amount and under_item.Amount > 0 and under_item.class == item.class and (item.Amount or 1) > 1 then
+						return "Stack is full", "no change"
+					end
+
+					max = 1
+				end
+
+				if item:IsLargeItem() then
+					dx = dx - sdx
+					if IsEquipSlot(dest_slot) then
+						dx = 1
+					end
+				end
+
+				if not under_item and (not src_container.session_id or src_container:UIHasAP(apCosts)) and (g_Classes[item.class].MaxStacks or 0) > 1 then
+					local pos, reason = dest_container:AddItem(target.slot_name, PlaceInventoryItem(item.class), dx, dy)
+
+					under_item = dest_container:GetItemInSlot(target.slot_name, nil, dx, dy)
+
+					under_item.Amount = 0
+
+					under_item.MaxStacks = max
+				end
 			end
 		end
 
@@ -271,6 +290,7 @@ function XInventorySlot:SpawnItemUI(item, left, top)
 	end
 	local item_wnd = XTemplateSpawn("XInventoryItem", self, item)
 	item_wnd.idItemPad:SetTransparency(self.image_transparency)
+	item_wnd.idItemPad:SetScaleModifier(point(1020, 1020))
 	item_wnd:SetPosition(left, top)
 	if image.tileContext then
 		item_wnd.idItemPad:SetBackground(REV_GetEquipSlotColor(image.tileContext))
@@ -326,7 +346,7 @@ function XInventoryItem:Init()
 	tileImage:SetImage("UI/Inventory/padlock")
 
 	if self.parent and self.parent.slot_name == "Inventory" and REV_IsItemFirstRow(item) then
-		self:SetMargins(box(0, 20, 0, 0))
+		self:SetMargins(box(0, 10, 0, 0))
 	end
 end
 
@@ -359,4 +379,54 @@ function BrowseInventorySlot:GetPrevEquipItem(item, B_slot_first)
 	else
 		return REV_Original_BrowseInventorySlotGetPrevEquipItem(self, item, B_slot_first)
 	end
+end
+
+
+local InventoryUIRespawn_shield
+function InventoryUIRespawn()
+	if InventoryUIRespawn_shield then return end
+	DelayedCall(0, _InventoryUIRespawn)
+end
+
+function _InventoryUIRespawn()
+	if IsValidThread(g_squad_bag_sort_thread) then
+		Sleep(1)
+		InventoryUIRespawn() --run after squad bag sort if concurent
+		return
+	end
+	InventoryUIRespawn_shield = true
+	local dlg = GetMercInventoryDlg()
+	if dlg then
+		local drag_item = InventoryDragItem
+		if drag_item then
+			CancelDrag(dlg)
+		end
+		
+		local saveScroll = dlg.idScrollbar.Scroll
+		local saveScrollCenter = dlg.idScrollbarCenter.Scroll
+		local saveScrollLeft = dlg.idScrollbarLeft.Scroll
+		local context = dlg:GetContext()
+		dlg.idUnitInfo:RespawnContent()
+		dlg.idPartyContainer.idParty:RespawnContent()
+		dlg.idRight:RespawnContent()
+		dlg.idCenter:RespawnContent()
+		dlg.idLeft:RespawnContent()
+		
+		dlg.idRight:OnContextUpdate(context)	
+		dlg.idCenter:OnContextUpdate(context)
+		dlg.idLeft:OnContextUpdate(context)
+		
+		dlg.idCenter:RespawnContent()
+		dlg:OnContextUpdate(context)
+		dlg.idScrollbar:ScrollTo(saveScroll)
+		dlg.idScrollbarCenter:ScrollTo(saveScrollCenter)
+		dlg.idScrollbarLeft:ScrollTo(saveScrollLeft)
+		Msg("RespawnedInventory")
+		
+		if drag_item then
+			Sleep(0) --rebuild ui
+			RestartDrag(dlg, drag_item)
+		end
+	end
+	InventoryUIRespawn_shield = nil
 end

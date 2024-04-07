@@ -1,6 +1,9 @@
 Pistol.PocketL_amount = 1
 Pistol.PistolHolster_amount = 1
 
+Revolver.PocketL_amount = 1
+Revolver.PistolHolster_amount = 1
+
 Knife.KnifeSheath_amount = 1
 Knife.PocketL_amount = 3
 

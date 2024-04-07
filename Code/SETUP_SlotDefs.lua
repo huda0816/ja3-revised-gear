@@ -31,6 +31,10 @@ function IsEquipSlot(slot_name)
 	return equip_slots[slot_name]
 end
 
+function REV_GetEquipSlots()
+	return table.keys(equip_slots)
+end
+
 local equip_slot_images = {
 	["Head"]  = "UI/Icons/Items/background_helmet",	
 	["Legs"]  = "UI/Icons/Items/background_pants", 

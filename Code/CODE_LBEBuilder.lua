@@ -109,9 +109,10 @@ function REV_BuildPocket(xTileObj, column, row, objType, startRow)
 		xTileObj.tiles[column][row] = tile
 		if tile.Type == "Disabled" then
 			tile:SetEnabled(false)
+			tile:SetVisible(false)
 		end
 		if startRow then
-			tile:SetMargins(box(0, 20, 0, 0))
+			tile:SetMargins(box(0, 10, 0, 0))
 		end
 	end
 end

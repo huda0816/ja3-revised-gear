@@ -1,7 +1,7 @@
 local REV_Original_GetAPCostAndUnit = GetAPCostAndUnit
 
 function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_container, dest_container_slot_name,
-						  item_at_dest, is_reload)
+						  item_at_dest, is_reload, dest_x, dest_y)
 	if is_reload then
 		return REV_Original_GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_container,
 			dest_container_slot_name, item_at_dest, is_reload)
@@ -26,7 +26,7 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 	local src_context          = is_src_unit and item and REV_IsMerc(src_container) and
 	REV_GetItemSlotContext(src_container, item)
 	local dest_context         = is_dest_unit and item and REV_IsMerc(dest_container) and
-	REV_GetItemSlotContext(dest_container, item_at_dest)
+	REV_GetItemSlotContext(dest_container, item_at_dest, dest_x, dest_y)
 	local is_src_Backpack      = src_context == "Backpack"
 	local is_dest_Backpack     = dest_context == "Backpack"
 	local is_src_LBE           = src_context == "LBE"
@@ -95,7 +95,7 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 		action_name = T(160472488023, "Reload")
 	elseif IsEquipSlot(dest_container_slot_name) then
 		-- does not charge if move between equip slots of the same unit but charge if between weapon sets
-		if not (src_container == dest_container and IsEquipSlot(src_container_slot_name) and src_container_slot_name == dest_container_slot_name) then
+		if (IsEquipSlot(src_container_slot_name) and src_container_slot_name == dest_container_slot_name) or not IsEquipSlot(src_container_slot_name) or src_container ~= dest_container then
 			local extraAP = item:GetEquipCost()
 			if is_src_LBE then
 				extraAP = MulDivRound(extraAP, 33, 100)
@@ -130,7 +130,7 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 		action_name = T(778324934848, "Drop")
 	end
 
-	unit = unit or GetInventoryUnit()
+	unit = is_src_unit and src_container or unit
 
 	return ap, unit, action_name
 end

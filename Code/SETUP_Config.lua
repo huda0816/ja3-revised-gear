@@ -5,7 +5,7 @@ Personal_Vicki_CustomTools.locked = false
 
 
 RevisedLBEConfig = {
-	LBEDropChance = 10,
+	LBEDropChance = 5,
 	SquadBagHasWeight = true,
 	TannedGoogleSightModifier = 105,
 	MilitiaUsesLBE = true
@@ -87,7 +87,7 @@ g_REV_SlotTypes = {
 g_REV_InventoryEquipSlots = {
 	{
 		id = "BaseInventory",
-		color = RGB(88, 92, 68),
+		color = RGBA(88, 92, 68, 130),
 		displayName = "Base",
 		baseSlot = true,
 		fallBack = {
@@ -101,7 +101,7 @@ g_REV_InventoryEquipSlots = {
 	},
 	{
 		id = "LHolster",
-		color = RGB(84, 74, 72),
+		color = RGBA(84, 74, 72, 130),
 		displayName = "Right Leg",
 		type = "Holster",
 		-- fallBack = {
@@ -111,7 +111,7 @@ g_REV_InventoryEquipSlots = {
 	},
 	{
 		id = "RHolster",
-		color = RGB(52, 45, 41),
+		color = RGBA(78, 72, 72, 130),
 		displayName = "Left Leg",
 		type = "Holster",
 		-- fallBack = {
@@ -121,12 +121,12 @@ g_REV_InventoryEquipSlots = {
 	},
 	{
 		id = "LBE",
-		color = RGB(20, 30, 40),
+		color = RGBA(20, 30, 40, 130),
 		displayName = "LBE"
 	},
 	{
 		id = "Backpack",
-		color = RGB(30, 40, 50),
+		color = RGBA(30, 40, 50, 130),
 		displayName = "Backpack"
 	}
 }

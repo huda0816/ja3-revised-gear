@@ -121,12 +121,13 @@ function PersonalStorage:GetRolloverHint()
 	g_StoredItemIdToItem = g_StoredItemIdToItem or {}
 
 	for i, itemId in ipairs(items) do
-
 		local item = g_ItemIdToItem[itemId] or g_StoredItemIdToItem[itemId]
 
-		local amount = item.Amount and T{3785082730500819, " (" .. item.Amount .. ")"} or ""
+		if item then
+			local amount = item.Amount and T { 3785082730500819, " (" .. item.Amount .. ")" } or ""
 
-		hint[#hint + 1] = T { 3785082730500817, "<bullet_point> " }  .. item.DisplayName .. amount
+			hint[#hint + 1] = T { 3785082730500817, "<bullet_point> " } .. item.DisplayName .. amount
+		end
 	end
 
 	return table.concat(hint, "\n")
@@ -160,3 +161,11 @@ AppendClass.InventoryItemProperties = {
 		}
 	}
 }
+
+function OnMsg.DataLoaded()
+	
+	local armorTab = Presets.InventoryTab.Default.equipment
+
+	armorTab.item_classes[#armorTab.item_classes + 1] = "PersonalStorage"
+
+end
