@@ -1,5 +1,5 @@
 -- Original author: Tobias from abandoned "Custom Settings" mod. 
-
+UndefineClass("REV_CustomSettingsUtils")
 DefineClass.REV_CustomSettingsUtils = {}
 
 -- create a new table from multiple tables or values in args

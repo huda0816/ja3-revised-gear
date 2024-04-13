@@ -1,8 +1,8 @@
 return PlaceObj('ModDef', {
 	'title', "Revised Tactical Gear II",
-	'description', "This is a reworked and enhanced rerelease of [b]Ablomis'[/b] Revised Tactical Gear mod with a new Inventory layout which was designed by [b]Lucjan[/b].\n\nThis mod adds more inventory slots to the game (Backpack, LBE, Leg items, Face items, NVG slot) and introduces weight.\n\n[b]New Shortcuts for Sector Inventory View[/b]\n[list]\n[*]Ctrl-Shift-U: Unload all weapons (and Mags)\n[*]Ctrl-Shift-D: Move all inventory items of the selected merc to the sector inventory\n[*]Ctrl-Shift-E: Move all items from equip-slots of the selected merc to the sector inventory\n[*]Ctrl-Shift-B: Move all items from squad bag to the sector inventory\n[/list]\n\n[b]Important[/b]\n[list]\n[*]Restart the game after activating the mod\n[*]It is not 100% save-game compatible and it may happen, that you will loose some items. I recommend using Ctrl-Shift-D in sector inventory view to drop all items.\n[*]Mod compatibility is very low\n[*]If you are a mod creator and want to increase compatibility, please contact me\n[*]Revised Mags II Mod is a dependency of this mod. \n[*]There was decent amount of playtesting but there can still be bugs.\n[*]If you find bugs, please send me your bug reports.\n[/list]\n\n[b]Copyright[/b]\nLBE and some holster images are from AdobeStock\nBackpacks, the goggle and the rest of the holsters are created with ChatGPT and Bing image creation",
+	'description', "This is a reworked and enhanced rerelease of [b]Ablomis'[/b] Revised Tactical Gear mod with a new Inventory layout which was designed by [b]Lucjan[/b].\n\nThis mod adds more inventory slots to the game (Backpack, LBE, Leg items, Face items, NVG slot) and introduces weight.\n\n[b]New Shortcuts for Sector Inventory View[/b]\n[list]\n[*]Ctrl-Shift-U: Unload all weapons (and Mags)\n[*]Ctrl-Shift-D: Move all inventory items of the selected merc to the sector inventory\n[*]Ctrl-Shift-E: Move all items from equip-slots of the selected merc to the sector inventory\n[*]Ctrl-Shift-B: Move all items from squad bag to the sector inventory\n[*]Ctrl-Shift-C: Remove all items from LBEs, backpacks and holsters in sector inventory\n[*]Ctrl-Shift-S: Sort all items in sector inventory\n[*]Ctrl-Shift-M: Merge items in sector inventory\n[/list]\n\nI also added a shortcut which will activate and deactivate rollovers in inventory view (sector and exploration): Ctrl-Shift-N\n\n[b]Important[/b]\n[list]\n[*]Restart the game after activating the mod\n[*]It is not 100% save-game compatible and it may happen, that you will loose some items. I recommend using Ctrl-Shift-D in sector inventory view to drop all items.\n[*]Mod compatibility is very low\n[*]If you are a mod creator and want to increase compatibility, please contact me\n[*]Revised Mags II Mod is a dependency of this mod. \n[*]There was decent amount of playtesting but there can still be bugs.\n[*]If you find bugs, please send me your bug reports.\n[/list]\n\n[b]Copyright[/b]\nLBE and some holster images are from AdobeStock\nBackpacks, the goggle and the rest of the holsters are created with ChatGPT and Bing image creation",
 	'image', "Mod/ii6mKUf/Images/JA3Revised-title.png",
-	'last_changes', "Reworked inventory layout and design\nAdded subicon to storage items which contain items\nAdded shortcuts for sector inventory management",
+	'last_changes', "Fixed problem with militia mod and missing militia squad icons in inventory\nAdded shortcut to activate and deactivate rollovers inside inventory",
 	'dependencies', {
 		PlaceObj('ModDependency', {
 			'id', "URkxyfE",
@@ -11,11 +11,12 @@ return PlaceObj('ModDef', {
 	},
 	'id', "ii6mKUf",
 	'author', "permanent666",
-	'version_minor', 11,
-	'version', 287,
+	'version_minor', 15,
+	'version', 399,
 	'lua_revision', 233360,
 	'saved_with_revision', 350233,
 	'code', {
+		"Code/CODE_CustomSettingSort.lua",
 		"Code/CODE_WeightCalc.lua",
 		"Code/CODE_Inventory.lua",
 		"Code/CODE_LBEBuilder.lua",
@@ -37,6 +38,7 @@ return PlaceObj('ModDef', {
 		"InventoryItem/Backpack_Retro.lua",
 		"InventoryItem/Backpack_Retro_Large.lua",
 		"InventoryItem/FaceItem_Combat_Goggles.lua",
+		"Code/X_XRollover.lua",
 		"Code/X_Inventory_full.lua",
 		"Code/X_SquadsAndMercs.lua",
 		"Code/X_InventoryContextMenu.lua",
@@ -62,8 +64,8 @@ return PlaceObj('ModDef', {
 		RevisedSquadBagHasWeight = true,
 	},
 	'has_data', true,
-	'saved', 1712448384,
-	'code_hash', -8788257196533658932,
+	'saved', 1713020556,
+	'code_hash', 3726904467791149497,
 	'screenshot1', "Mod/ii6mKUf/Images/Screenshot 2024-04-07 020350 2.png",
 	'affected_resources', {
 		PlaceObj('ModResourcePreset', {

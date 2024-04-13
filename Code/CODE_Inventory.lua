@@ -18,11 +18,6 @@ function OnMsg.ItemRemoved(obj, item, slot, pos)
 	end
 end
 
-function REV_SortSectorInventory(items)
-	--TODO: Make a sort function
-	return items
-end
-
 function REV_GetEquippedItemContainer(unit, item, pos, slotName)
 	local slotX, slotY = point_unpack(pos)
 

@@ -32,12 +32,18 @@ function AddItemsToInventory(inventoryObj, items, bLog)
 				end
 				table.remove(items, i)
 			else
-				local container = GetDropContainer(inventoryObj)
-				if not container:AddItem("Inventory", item) then
-					container = PlaceObject("ItemDropContainer")
-					local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
-					container:SetPos(drop_pos or inventoryObj:GetPos())
-					container:SetAngle(container:Random(21600))
+				local container = inventoryObj
+
+				if not inventoryObj or not inventoryObj:AddItem("Inventory", item) then
+					if gv_SatelliteView and gv_SectorInventory then
+						container = gv_SectorInventory
+					else
+						container = PlaceObject("ItemDropContainer")
+						local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
+						container:SetPos(drop_pos or inventoryObj and inventoryObj:GetPos())
+						container:SetAngle(container:Random(21600))
+					end
+
 					container:AddItem("Inventory", item)
 				end
 			end
@@ -52,7 +58,7 @@ end
 function UnitInventory:AddItem(slot_name, item, left, top, local_execution)
 	local pos, reason = Inventory.AddItem(self, slot_name, item, left, top)
 	if not pos then return pos, reason end
-	
+
 	item.owner = REV_IsMerc(self) and self.session_id or false -- Dont bloat save with non-merc owners.
 	if not local_execution then
 		Msg("ItemAdded", self, item, slot_name, pos)

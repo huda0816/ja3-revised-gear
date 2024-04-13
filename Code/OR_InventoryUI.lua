@@ -381,7 +381,6 @@ function BrowseInventorySlot:GetPrevEquipItem(item, B_slot_first)
 	end
 end
 
-
 local InventoryUIRespawn_shield
 function InventoryUIRespawn()
 	if InventoryUIRespawn_shield then return end
@@ -401,7 +400,7 @@ function _InventoryUIRespawn()
 		if drag_item then
 			CancelDrag(dlg)
 		end
-		
+
 		local saveScroll = dlg.idScrollbar.Scroll
 		local saveScrollCenter = dlg.idScrollbarCenter.Scroll
 		local saveScrollLeft = dlg.idScrollbarLeft.Scroll
@@ -411,22 +410,40 @@ function _InventoryUIRespawn()
 		dlg.idRight:RespawnContent()
 		dlg.idCenter:RespawnContent()
 		dlg.idLeft:RespawnContent()
-		
-		dlg.idRight:OnContextUpdate(context)	
+
+		dlg.idRight:OnContextUpdate(context)
 		dlg.idCenter:OnContextUpdate(context)
 		dlg.idLeft:OnContextUpdate(context)
-		
+
 		dlg.idCenter:RespawnContent()
 		dlg:OnContextUpdate(context)
 		dlg.idScrollbar:ScrollTo(saveScroll)
 		dlg.idScrollbarCenter:ScrollTo(saveScrollCenter)
 		dlg.idScrollbarLeft:ScrollTo(saveScrollLeft)
 		Msg("RespawnedInventory")
-		
+
 		if drag_item then
 			Sleep(0) --rebuild ui
 			RestartDrag(dlg, drag_item)
 		end
 	end
 	InventoryUIRespawn_shield = nil
+end
+
+local REV_Original_GetSectorInventory = GetSectorInventory
+
+function GetSectorInventory(sector_id, filter, sort)
+	if not gv_SatelliteView or not gv_Sectors[sector_id] then return end
+
+	if not gv_SectorInventory then
+		gv_SectorInventory = PlaceObject("SectorStash")
+	end
+
+	REV_Original_GetSectorInventory(sector_id, filter)
+
+	if sort then
+		CS_Sort(gv_SectorInventory)
+	end
+
+	return gv_SectorInventory
 end

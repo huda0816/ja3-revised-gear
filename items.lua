@@ -1,5 +1,9 @@
 return {
 	PlaceObj('ModItemCode', {
+		'name', "CODE_CustomSettingSort",
+		'CodeFileName', "Code/CODE_CustomSettingSort.lua",
+	}),
+	PlaceObj('ModItemCode', {
 		'name', "CODE_WeightCalc",
 		'CodeFileName', "Code/CODE_WeightCalc.lua",
 	}),
@@ -425,6 +429,10 @@ return {
 		'name', "XTemplateMods",
 	}, {
 		PlaceObj('ModItemCode', {
+			'name', "X_XRollover",
+			'CodeFileName', "Code/X_XRollover.lua",
+		}),
+		PlaceObj('ModItemCode', {
 			'name', "X_Inventory_full",
 			'CodeFileName', "Code/X_Inventory_full.lua",
 		}),
@@ -549,7 +557,4 @@ return {
 			'ShownSatelliteView', true,
 		}),
 		}),
-	PlaceObj('ModItemFolder', {
-		'name', "New folder",
-	}),
 }

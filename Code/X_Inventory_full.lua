@@ -1131,7 +1131,7 @@ function OnMsg.DataLoaded()
 				PlaceObj('XTemplateTemplate', {
 					'__context', function(parent, context)
 					return SortSquads(gv_SatelliteView and
-						GetSquadsInSector(false, false, false) or GetSquadsOnMap("reference"))
+						GetSquadsInSector(false, false, nil) or GetSquadsOnMap("reference"))
 				end,
 					'__template', "SquadsAndMercs",
 					'Margins', box(25, 25, 10, 0),
@@ -1897,7 +1897,7 @@ function OnMsg.DataLoaded()
 								gv_SectorInventory:Clear()
 								local preset = InventoryTabs[tab]
 								local context = GetSectorInventory(sector_id,
-									function(item) return preset:FilterItem(item) end)
+									function(item) return preset:FilterItem(item) end, 'sort')
 								dlg.context.container = context
 								return context
 							end,
@@ -2134,10 +2134,7 @@ function OnMsg.DataLoaded()
 													local sector_id = gv_SectorInventory.sector_id
 													gv_SectorInventory:Clear()
 													dlg.context.container = GetSectorInventory(sector_id,
-														function(item) return self.context:FilterItem(item) end)
-													dlg.context.container.Inventory = REV_SortSectorInventory(dlg
-														.context
-														.container.Inventory)
+														function(item) return self.context:FilterItem(item) end, 'sort')
 													dlg.idCenter:RespawnContent()
 													local selected = dlg.selected_items
 													dlg:DeselectMultiItems()
@@ -2407,6 +2404,108 @@ function OnMsg.DataLoaded()
 								end,
 								}),
 								PlaceObj('XTemplateAction', {
+									'ActionId', "ToggleRollover",
+									'ActionName', T(7560737941490820, --[[XTemplate Inventory ActionName]]
+									"TOGGLE ROLLOVER"),
+									'ActionShortcut', "Ctrl-Shift-N",
+									'ActionState', function(self, host)
+									return "enabled"
+								end,
+									'OnAction', function(self, host, source, ...)
+									gv_REV_ShowRollover = not gv_REV_ShowRollover
+									CombatLog("important",
+										T { 290809809081789, "Rollover is now <abled>", abled = gv_REV_ShowRollover and T(2987978918, "enabled") or T(2987978919, "disabled") })
+								end,
+								}),
+								PlaceObj('XTemplateAction', {
+									'ActionId', "MergeAll",
+									'ActionName', T(7560737941490820, --[[XTemplate Inventory ActionName]] "MERGE ALL"),
+									'ActionShortcut', "Ctrl-Shift-M",
+									'ActionState', function(self, host)
+									return gv_SatelliteView and
+										not IsSquadTravelling(gv_Squads[host.selected_unit.Squad]) and
+										not InventoryIsCombatMode(host.selected_unit) and
+										"enabled" or "disabled"
+								end,
+									'OnAction', function(self, host, source, ...)
+									CS_Merge()
+								end,
+								}),
+								PlaceObj('XTemplateAction', {
+									'ActionId', "SortAll",
+									'ActionName', T(7560737941490820, --[[XTemplate Inventory ActionName]] "SORT ALL"),
+									'ActionShortcut', "Ctrl-Shift-S",
+									'ActionState', function(self, host)
+									return gv_SatelliteView and
+										not IsSquadTravelling(gv_Squads[host.selected_unit.Squad]) and
+										not InventoryIsCombatMode(host.selected_unit) and
+										"enabled" or "disabled"
+								end,
+									'OnAction', function(self, host, source, ...)
+									CS_Sort()
+								end,
+								}),
+								PlaceObj('XTemplateAction', {
+									'ActionId', "UnloadEquipment",
+									'ActionName', T(7560737941490821, --[[XTemplate Inventory ActionName]]
+									"UNLOAD EQUIPMENT"),
+									'ActionShortcut', "Ctrl-Shift-C",
+									'ActionState', function(self, host)
+									return gv_SatelliteView and
+										not IsSquadTravelling(gv_Squads[host.selected_unit.Squad]) and
+										not InventoryIsCombatMode(host.selected_unit) and
+										"enabled" or "disabled"
+								end,
+									'OnAction', function(self, host, source, ...)
+									local container = gv_SectorInventory
+
+									g_StoredItemIdToItem = g_StoredItemIdToItem or {}
+
+									local sectorItems = container:GetItems()
+
+									for _, litem in ipairs(sectorItems) do
+										if IsKindOf(litem, "PersonalStorage") and litem.items and #litem.items > 0 then
+											for i, itemId in ipairs(litem.items) do
+												local item = g_ItemIdToItem[itemId] or g_StoredItemIdToItem[itemId]
+
+												if not item then
+													goto continue
+												end
+
+												container:AddItem("Inventory", item)
+
+												item.lastSlot = nil
+												item.lastSlotPos = nil
+												item.inventorySlot = nil
+												item.container = nil
+
+												if g_StoredItemIdToItem[itemId] then
+													g_StoredItemIdToItem[item.id] = nil
+												end
+
+												if not g_ItemIdToItem[item.id] then
+													g_ItemIdToItem[item.id] = item
+												else
+													local oldItem = g_ItemIdToItem[item.id]
+
+													if oldItem.class ~= item.class then
+														item:Setid(GenerateItemId(), true)
+													end
+												end
+
+												::continue::
+											end
+
+											litem.items = {}
+
+											litem:SetProperty("SubIcon", nil)
+										end
+									end
+
+									InventoryUIRespawn()
+								end,
+								}),
+								PlaceObj('XTemplateAction', {
 									'ActionId', "MoveAllToSectorStash",
 									'ActionName', T(7560737941490818, --[[XTemplate Inventory ActionName]]
 									"MOVE ALL TO SECTOR STASH"),
@@ -2465,15 +2564,25 @@ function OnMsg.DataLoaded()
 											local items = unit[slot]
 
 											for i, item in ipairs(items) do
-												if type(item) == "table" then
+												if type(item) == "table" and not item.locked then
 													table.insert(movers, item.id)
 												end
 											end
 
-											NetSyncEvent("MoveItemsToStash", movers, gv_SectorInventory.sector_id, slot,
-												unit.session_id)
+											local items = GetItemsFromItemsNetId(movers)
+											local stash = gv_SectorInventory
+											local container = GetContainerFromContainerNetId(unit.session_id)
+											if stash then
+												for i = 1, #items do
+													container:RemoveItem(slot, items[i])
+												end
+												AddItemsToInventory(stash, items, true)
+											end
 										end
 									end
+
+									InventoryUIRespawn()
+									InventoryDeselectMultiItems()
 								end,
 								}),
 								PlaceObj('XTemplateAction', {
@@ -2500,6 +2609,17 @@ function OnMsg.DataLoaded()
 
 									NetSyncEvent("MoveItemsToStash", movers, gv_SectorInventory.sector_id, "Inventory",
 										GetContainerNetId(gv_SquadBag))
+
+									-- local bag = gv_SquadBag and GetSquadBag(gv_SquadBag.squad_id)
+									-- if not bag then return end
+									-- -- move to sector stash
+
+									-- Inspect(bag)
+
+									-- AddToSectorInventory(gv_SectorInventory.sector_id, bag)
+									-- InventoryUIResetSectorStash(gv_SectorInventory.sector_id)
+									-- InventoryUIResetSquadBag()
+									-- InventoryUIRespawn()
 								end,
 								}),
 								PlaceObj('XTemplateAction', {
