@@ -53,7 +53,7 @@ function OnMsg.ClassesGenerate()
 
     MoneyBag.Weight = 1000
 
-    Valuables.Weight = 1000
+    Valuables.Weight = 300
     GoldBar.Weight = 340         -- 274.5 USD for 0.0311034768kg in 2000
     TinyDiamonds.Weight = 1      -- 500 USD 0.25 carats
     ChippedSapphire.Weight = 1   -- 350 USD 0.7 carats
@@ -124,7 +124,7 @@ function OnMsg.ClassesGenerate()
     CrowbarBase.Weight = 3000
 
     -- crafting
-    ExplosiveSubstance.Weight = 165
+    ExplosiveSubstance.Weight = 330
     TrapDetonator.Weight = 100
     Detonator.Weight = 100
     PETN.Weight = 330        -- 200 cm^3
@@ -144,8 +144,8 @@ function OnMsg.ClassesGenerate()
     Microchip.Weight = 1
 
     -- Armor
-    Armor.Weight = 2300           -- 6900 for 3 pieces
-    TransmutedArmor.Weight = 5300 -- Armor + CeramicPlates
+    Armor.Weight = 3300           -- 9900 for 3 pieces
+    TransmutedArmor.Weight = 6300 -- Armor + CeramicPlates
 
     GasMaskBase.Weight = 500
     Gasmaskenhelm.Weight = 1500
@@ -161,18 +161,18 @@ function OnMsg.ClassesGenerate()
     LightHelmet_Kompositum.Weight = 1200
     LightHelmet_WeavePadding.Weight = 1500
 
-    FlakVest.Weight = 3500
-    FlakVest_Kompositum.Weight = 4000
-    FlakVest_WeavePadding.Weight = 4500
-    FlakVest_CeramicPlates.Weight = 6500
+    FlakVest.Weight = 4000
+    FlakVest_Kompositum.Weight = 4500
+    FlakVest_WeavePadding.Weight = 5000
+    FlakVest_CeramicPlates.Weight = 7000
 
-    FlakArmor.Weight = 4000
-    FlakArmor_Kompositum.Weight = 4500
-    FlakArmor_WeavePadding.Weight = 5000
-    FlakArmor_CeramicPlates.Weight = 7000
+    FlakArmor.Weight = 4500
+    FlakArmor_Kompositum.Weight = 5000
+    FlakArmor_WeavePadding.Weight = 5500
+    FlakArmor_CeramicPlates.Weight = 7500
 
-    CamoArmor_Light.Weight = 3500
-    CamoArmor_Light_Kompositum.Weight = 4000
+    CamoArmor_Light.Weight = 4000
+    CamoArmor_Light_Kompositum.Weight = 4500
 
     FlakLeggings.Weight = 1800
     FlakLeggings_Kompositum.Weight = 2000
@@ -182,15 +182,15 @@ function OnMsg.ClassesGenerate()
     HeavyArmorHelmet_Kompositum.Weight = 2000
     HeavyArmorHelmet_WeavePadding.Weight = 2300
 
-    HeavyArmorChestplate.Weight = 4500
-    HeavyArmorChestplate_Kompositum.Weight = 5000
-    HeavyArmorChestplate_WeavePadding.Weight = 5500
-    HeavyArmorChestplate_CeramicPlates.Weight = 7500
+    HeavyArmorChestplate.Weight = 6000
+    HeavyArmorChestplate_Kompositum.Weight = 6500
+    HeavyArmorChestplate_WeavePadding.Weight = 7000
+    HeavyArmorChestplate_CeramicPlates.Weight = 9000
 
-    HeavyArmorTorso.Weight = 5500
-    HeavyArmorTorso_Kompositum.Weight = 6000
-    HeavyArmorTorso_WeavePadding.Weight = 6500
-    HeavyArmorTorso_CeramicPlates.Weight = 8500
+    HeavyArmorTorso.Weight = 7000
+    HeavyArmorTorso_Kompositum.Weight = 7500
+    HeavyArmorTorso_WeavePadding.Weight = 8000
+    HeavyArmorTorso_CeramicPlates.Weight = 10000
 
     HeavyArmorLeggings.Weight = 2300
     HeavyArmorLeggings_Kompositum.Weight = 2500
@@ -200,18 +200,18 @@ function OnMsg.ClassesGenerate()
     KevlarHelmet_Kompositum.Weight = 1200
     KevlarHelmet_WeavePadding.Weight = 1500
 
-    KevlarChestplate.Weight = 2500
-    KevlarChestplate_Kompositum.Weight = 3000
-    KevlarChestplate_WeavePadding.Weight = 3500
-    KevlarChestplate_CeramicPlates.Weight = 5500
+    KevlarChestplate.Weight = 3500
+    KevlarChestplate_Kompositum.Weight = 4000
+    KevlarChestplate_WeavePadding.Weight = 4500
+    KevlarChestplate_CeramicPlates.Weight = 6500
 
-    KevlarVest.Weight = 3000
-    KevlarVest_Kompositum.Weight = 3500
-    KevlarVest_WeavePadding.Weight = 4000
-    KevlarVest_CeramicPlates.Weight = 6000
+    KevlarVest.Weight = 4000
+    KevlarVest_Kompositum.Weight = 4500
+    KevlarVest_WeavePadding.Weight = 5000
+    KevlarVest_CeramicPlates.Weight = 7000
 
-    CamoArmor_Medium.Weight = 2000
-    CamoArmor_Medium_Kompositum.Weight = 2500
+    CamoArmor_Medium.Weight = 2500
+    CamoArmor_Medium_Kompositum.Weight = 3000
 
     KevlarLeggings.Weight = 1500
     KevlarLeggings_Kompositum.Weight = 1700
@@ -222,7 +222,7 @@ function OnMsg.ClassesGenerate()
     ShamanLeggings.Weight = 1500
 
     --MeleeWeapon
-    MeleeWeapon.Weight = 250
+    MeleeWeapon.Weight = 300
     -- Knife
     -- Knife_Balanced
     -- Knife_Sharpened
