@@ -17,6 +17,7 @@ DefineClass.Backpack_Combat = {
 	Tier = 2,
 	RestockWeight = 70,
 	CategoryPair = "Backpack",
+	Weight = 1000,
 	PocketU = 1,
 	PocketL = 1,
 	PocketML = 2,

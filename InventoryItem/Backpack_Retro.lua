@@ -15,7 +15,6 @@ DefineClass.Backpack_Retro = {
 	Cost = 899,
 	CanAppearInShop = true,
 	CategoryPair = "Backpack",
-	Weight = 2000,
 	PocketU = 2,
 	PocketL = 1,
 	PocketML = 2,

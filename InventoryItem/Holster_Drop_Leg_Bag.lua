@@ -17,7 +17,6 @@ DefineClass.Holster_Drop_Leg_Bag = {
 	RestockWeight = 70,
 	CanBeConsumed = false,
 	CategoryPair = "Holster",
-	Weight = 500,
 	PocketL = 1,
 	PocketM = 2,
 	PocketS = 2,

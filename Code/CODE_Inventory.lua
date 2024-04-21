@@ -681,3 +681,11 @@ function REV_IsMerc(o)
 	end
 	return id and UnitDataDefs[id].IsMercenary
 end
+
+function REV_GenerateDropContainer(inventoryObj)
+	local container = PlaceObject("ItemDropContainer")
+	local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
+	container:SetPos(drop_pos or inventoryObj and inventoryObj:GetPos())
+	container:SetAngle(container:Random(21600))
+	return container
+end

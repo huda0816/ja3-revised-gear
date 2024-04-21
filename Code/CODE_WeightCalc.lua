@@ -14,19 +14,19 @@ function Unit:GetMaxWeight()
 end
 
 function Unit:GetCurrentWeightInKg()
-	return round(self:GetCurrentWeight() / 1000, 1)
+  return DivRound(self:GetCurrentWeight(), 10) / 100.00
 end
 
 function Unit:GetMaxWeightInKg()
-	return round(self:GetMaxWeight() / 1000, 1)
+	return DivRound(self:GetMaxWeight(), 10) / 100.00
 end
 
 function UnitData:GetMaxWeightInKg()
-	return round(self:GetMaxWeight() / 1000, 1)
+	return DivRound(self:GetMaxWeight(), 10) / 100.00
 end
 
 function UnitData:GetCurrentWeightInKg()
-	return round(self:GetCurrentWeight() / 1000, 1)
+	return DivRound(self:GetCurrentWeight(), 10) / 100.00
 end
 
 function Unit:GetCurrentWeight()
@@ -47,7 +47,7 @@ function Unit:GetCurrentWeight()
 		end
 		total_weight.weight = total_weight.weight + item_amount * item_weight
 	end, total_weight)
-	return round((total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight() / #squad.units)) or 0), 1)
+	return total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight() / #squad.units)) or 0
 end
 
 function UnitData:GetCurrentWeight()
@@ -65,7 +65,7 @@ function UnitData:GetCurrentWeight()
 		end
 		total_weight.weight = total_weight.weight + item_amount * item_weight
 	end, total_weight)
-	return round((total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight() / #squad.units)) or 0), 1)
+	return total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight() / #squad.units)) or 0
 end
 
 function REV_ApplyWeightEffects(unit)
@@ -96,11 +96,11 @@ function SquadBag:GetSquadBagWeight()
 		end
 		total_weight.weight = total_weight.weight + item_amount * item_weight
 	end, total_weight)
-	return round(total_weight.weight, 1)
+	return total_weight.weight
 end
 
 function SquadBag:GetSquadBagWeightInKg()
-	return round(self:GetSquadBagWeight() / 1000, 1)
+	return DivRound(self:GetSquadBagWeight(), 10) / 100.00
 end
 
 function REV_GetSquadBagWeightInKg()

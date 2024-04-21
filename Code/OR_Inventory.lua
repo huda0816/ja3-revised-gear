@@ -179,3 +179,12 @@ function UnitAddAndStackItem(ammo, squadBag, owner)
 		DoneObject(ammo)
 	end
 end
+
+local REV_OriginalGetDropContainer = GetDropContainer
+
+function GetDropContainer(unit, pos, item_to_add)
+
+	unit = unit or SelectedObj
+
+	return REV_OriginalGetDropContainer(unit, pos, item_to_add)
+end
