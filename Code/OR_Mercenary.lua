@@ -1,5 +1,5 @@
 function AddItemsToInventory(inventoryObj, items, bLog)
-	local pos, reason
+	local pos, reason, dropcontainer, container
 	for i = #items, 1, -1 do
 		local item = items[i]
 		if IsKindOf(item, "InventoryStack") then
@@ -32,20 +32,35 @@ function AddItemsToInventory(inventoryObj, items, bLog)
 				end
 				table.remove(items, i)
 			else
-				local container = inventoryObj
+				if gv_SatelliteView and gv_SectorInventory then
+					pos, reason = container:AddItem("Inventory", item)
+					if pos then
+						if bLog then
+							Msg("InventoryAddItem", inventoryObj, item,
+								IsKindOf(item, "InventoryStack") and item.Amount or 1)
+						end
+						table.remove(items, i)
+					end
+				end
+				local container = dropcontainer or REV_GenerateDropContainer(inventoryObj)
 
-				if not inventoryObj or not inventoryObj:AddItem("Inventory", item) then
-					if gv_SatelliteView and gv_SectorInventory then
-						container = gv_SectorInventory
-					else
-						container = PlaceObject("ItemDropContainer")
-						local drop_pos = terrain.FindPassable(container, 0, const.SlabSizeX / 2)
-						container:SetPos(drop_pos or inventoryObj and inventoryObj:GetPos())
-						container:SetAngle(container:Random(21600))
+				pos, reason = container:AddItem("Inventory", item)
+
+				if not pos then
+					container = REV_GenerateDropContainer(inventoryObj)
+
+					pos, reason = container:AddItem("Inventory", item)
+				end
+
+				if pos then
+					if bLog then
+						Msg("InventoryAddItem", inventoryObj, item, IsKindOf(item, "InventoryStack") and item.Amount or 1)
 					end
 
-					container:AddItem("Inventory", item)
+					table.remove(items, i)
 				end
+
+				dropcontainer = container
 			end
 		else
 			pos = true

@@ -32,18 +32,6 @@ DefineClass.PersonalStorage = {
 	},
 	properties = {
 		{
-			category = "General",
-			id = "Weight",
-			name = "Empty Item weight",
-			help = "Weight of the Item in grams",
-			editor = "number",
-			default = 1000,
-			template = true,
-			min = 0,
-			max = 500000,
-			modifiable = true,
-		},
-		{
 			id = "items",
 			name = "Items",
 			editor = "table",

@@ -17,6 +17,7 @@ DefineClass.FaceItem_Combat_Goggles = {
 	CanBeConsumed = false,
 	PocketL_amount = 1,
 	PocketML_amount = 1,
+	Weight = 200,
 	Slot = "FaceItem",
 	DamageReduction = 1,
 	AdditionalReduction = 1,
