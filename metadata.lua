@@ -2,7 +2,7 @@ return PlaceObj('ModDef', {
 	'title', "Revised Tactical Gear II",
 	'description', "This is a reworked and enhanced rerelease of [b]Ablomis'[/b] Revised Tactical Gear mod with a new Inventory layout which was designed by [b]Lucjan[/b] who is also helping me with improving this mod.\n\nThis mod adds more inventory slots to the game (Backpack, LBE, Leg items, Face items, NVG slot) and introduces weight.\n\n[b]New Mod Options[/b]\nTo activate the options you have to restart Jagged Alliance 3\n[list]\n[*]Option to put bullets in mag pouches\n[*]Option to make items like meds and parts lighter to be able to carry everything around with your squad\n[/list]\n\n[b]New Shortcuts for Sector Inventory View[/b]\n[list]\n[*]Ctrl-Shift-U: Unload all weapons (and Mags)\n[*]Ctrl-Shift-D: Move all inventory items of the selected merc to the sector inventory\n[*]Ctrl-Shift-E: Move all items from equip-slots of the selected merc to the sector inventory\n[*]Ctrl-Shift-B: Move all items from squad bag to the sector inventory\n[*]Ctrl-Shift-C: Remove all items from LBEs, backpacks and holsters in sector inventory\n[*]Ctrl-Shift-S: Sort all items in sector inventory\n[*]Ctrl-Shift-M: Merge items in sector inventory\n[/list]\n\nI also added a shortcut which will activate and deactivate rollovers in inventory view (the toggle does only work in satellite view at the moment but rollovers are also deactivated in exploration): Ctrl-Shift-N\n\n[b]Important[/b]\n[list]\n[*]Restart the game after activating the mod\n[*]It is not 100% save-game compatible and it may happen, that you will loose some items. I recommend using Ctrl-Shift-D in sector inventory view to drop all items.\n[*]Mod compatibility is very low\n[*]If you are a mod creator and want to increase compatibility, please contact me\n[*]Revised Mags II Mod is a dependency of this mod. \n[*]There was decent amount of playtesting but there can still be bugs.\n[*]If you find bugs, please send me your bug reports.\n[/list]\n\n[b]Copyright[/b]\nLBE and some holster images are from AdobeStock\nBackpacks, the goggle and the rest of the holsters are created with ChatGPT and Bing image creation",
 	'image', "Mod/ii6mKUf/Images/JA3Revised-title.png",
-	'last_changes', "Reevaluation of all weights\nAdded mod option to allow bullets inside magazine pouches\nAdded mod option to make some items lighter\nAdded missing slot definitions for some items\nReadded decimal in Inventory screen to weights\nFixed problem when items were granted by NPCs",
+	'last_changes', "Added more checks if unit is player controlled\nFixed various warnings\nFixed Doubletoss - now grenades from different slots can be used\nFixed drag and drop behaviour between mercs to work like vanilla again",
 	'dependencies', {
 		PlaceObj('ModDependency', {
 			'id', "URkxyfE",
@@ -11,8 +11,8 @@ return PlaceObj('ModDef', {
 	},
 	'id', "ii6mKUf",
 	'author', "permanent666",
-	'version_minor', 16,
-	'version', 686,
+	'version_minor', 17,
+	'version', 687,
 	'lua_revision', 233360,
 	'saved_with_revision', 350233,
 	'code', {
@@ -66,8 +66,8 @@ return PlaceObj('ModDef', {
 		RevisedSquadBagHasWeight = true,
 	},
 	'has_data', true,
-	'saved', 1715288313,
-	'code_hash', -8312456509792853500,
+	'saved', 1715289702,
+	'code_hash', 7428385936788779915,
 	'screenshot1', "Mod/ii6mKUf/Images/Screenshot 2024-04-07 020350 2.png",
 	'affected_resources', {
 		PlaceObj('ModResourcePreset', {
