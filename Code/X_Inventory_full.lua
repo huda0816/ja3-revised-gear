@@ -13,6 +13,7 @@ function OnMsg.DataLoaded()
 			self.selected_unit = context.unit
 			self.idRight:SetContext(context, true)
 			self.idLeft:SetContext(context, true)
+			REV_RespawnLeftRight()
 			if self.selected_unit then
 				self.idUnitInfo:SetContext(self.selected_unit, true)
 				local left = self:ResolveId("idPartyContainer")
@@ -24,7 +25,7 @@ function OnMsg.DataLoaded()
 				end
 			end
 			self:CompareWeaponSetUI()
-			InventoryUIRespawn()
+			-- InventoryUIRespawn()
 			--self.idCenter:SetContext(context.container,true)
 		end,
 			'InitialMode', "ammo",

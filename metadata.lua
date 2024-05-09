@@ -12,7 +12,7 @@ return PlaceObj('ModDef', {
 	'id', "ii6mKUf",
 	'author', "permanent666",
 	'version_minor', 16,
-	'version', 487,
+	'version', 686,
 	'lua_revision', 233360,
 	'saved_with_revision', 350233,
 	'code', {
@@ -66,8 +66,8 @@ return PlaceObj('ModDef', {
 		RevisedSquadBagHasWeight = true,
 	},
 	'has_data', true,
-	'saved', 1713743014,
-	'code_hash', -9122465868298641459,
+	'saved', 1715288313,
+	'code_hash', -8312456509792853500,
 	'screenshot1', "Mod/ii6mKUf/Images/Screenshot 2024-04-07 020350 2.png",
 	'affected_resources', {
 		PlaceObj('ModResourcePreset', {
