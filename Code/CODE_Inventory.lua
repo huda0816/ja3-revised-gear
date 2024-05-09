@@ -23,6 +23,10 @@ function REV_GetEquippedItemContainer(unit, item, pos, slotName)
 
 	local allSlots, allTypes = REV_GetInventorySlots(unit)
 
+	if not allTypes then
+		return
+	end
+
 	local slotName = allTypes[slotX][slotY]
 
 	local slotRows = {}
@@ -135,6 +139,10 @@ function REV_OnItemAdded(obj, item, slot, pos)
 
 	if slot == "Inventory" then
 		local container, slotName, slotRows = REV_GetEquippedItemContainer(obj, item, pos, slot)
+
+		if not container then
+			return
+		end
 
 		local x, y = point_unpack(pos)
 
@@ -660,6 +668,8 @@ function REV_UnloadItems(context)
 end
 
 function REV_IsMerc(o)
+	if not o then return false end
+
 	local id
 	if IsKindOf(o, "Unit") then
 		id = o.unitdatadef_id

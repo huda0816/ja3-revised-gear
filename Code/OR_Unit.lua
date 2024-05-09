@@ -41,7 +41,14 @@ function Unit:GetSightRadius(other, base_sight, step_pos)
 	return sightAmount, hidden, night_time
 end
 
+local REV_OriginalUnitPropertiesEquipStartingGear = UnitProperties.EquipStartingGear
+
 function UnitProperties:EquipStartingGear(items)
+
+	if not REV_IsMerc(self) then
+		return REV_OriginalUnitPropertiesEquipStartingGear(self, items)
+	end
+
 	local func = empty_func
 	if IsKindOf(self, "UnitData") then
 		local template = UnitDataDefs[self.class]

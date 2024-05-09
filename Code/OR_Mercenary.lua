@@ -1,4 +1,11 @@
+local REV_OriginalAddItemsToInventory = AddItemsToInventory
+
 function AddItemsToInventory(inventoryObj, items, bLog)
+
+	if not REV_IsMerc(inventoryObj) then
+		return REV_OriginalAddItemsToInventory(inventoryObj, items, bLog)
+	end
+
 	local pos, reason, dropcontainer, container
 	for i = #items, 1, -1 do
 		local item = items[i]
@@ -70,7 +77,14 @@ function AddItemsToInventory(inventoryObj, items, bLog)
 	return pos, reason
 end
 
+local REV_OriginalUnitInventoryAddItem = UnitInventory.AddItem
+
 function UnitInventory:AddItem(slot_name, item, left, top, local_execution)
+
+	if not REV_IsMerc(self) then
+		return REV_OriginalUnitInventoryAddItem(self, slot_name, item, left, top, local_execution)
+	end
+
 	local pos, reason = Inventory.AddItem(self, slot_name, item, left, top)
 	if not pos then return pos, reason end
 

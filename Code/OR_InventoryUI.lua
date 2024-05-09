@@ -9,6 +9,11 @@ TileConfig = {
 local REV_Original_XInventoryTileInit = XInventoryTile.Init
 
 function XInventoryTile:Init()
+	if not REV_IsMerc(self.parent.context) then
+		REV_Original_XInventoryTileInit(self)
+		return
+	end
+
 	local k = 1
 	local emptyImage = "UI/Inventory/T_Backpack_Slot_Small_Empty.tga"
 	local hoverImage = "UI/Inventory/T_Backpack_Slot_Small_Hover.tga"
@@ -93,10 +98,11 @@ end
 local REV_Original_XInventoryTileOnDropEnter = XInventoryTile.OnDropEnter
 
 function XInventoryTile:OnDropEnter(drag_win, pt, drag_source_win)
+	local slot = self:GetInventorySlotCtrl()
+
 	InventoryOnDragEnterStash()
 	local drag_item = InventoryDragItem
 	local mouse_text
-	local slot = self:GetInventorySlotCtrl()
 	local _, dx, dy = slot:FindTile(pt)
 
 	local ssx, ssy, sdx = point_unpack(InventoryDragItemPos)
@@ -279,6 +285,8 @@ function XInventorySlot:DragDrop_MoveItem(pt, target, check_only)
 	return REV_Original_XInventorySlotDragDropMoveItem(self, pt, target, check_only)
 end
 
+local REV_OriginalXInventorySlotSpawnItemUI = XInventorySlot.SpawnItemUI
+
 function XInventorySlot:SpawnItemUI(item, left, top)
 	local image = self.tiles[left][top]
 	if not image then
@@ -428,6 +436,60 @@ function _InventoryUIRespawn()
 		end
 	end
 	InventoryUIRespawn_shield = nil
+end
+
+function REV_RespawnLeftRight()
+	-- if InventoryUIRespawn_shield then return end
+	DelayedCall(0, _REV_RespawnLeftRight)
+end
+
+function _REV_RespawnLeftRight()
+	InventoryUIRespawn_shield = true
+	local dlg = GetMercInventoryDlg()
+	if dlg then
+
+		local drag_item = InventoryDragItem
+		if drag_item and not IsEquipSlot(InventoryStartDragSlotName) then
+			CancelDrag(dlg)
+		end
+
+		local saveScroll = dlg.idScrollbar.Scroll
+		local saveScrollCenter = dlg.idScrollbarCenter.Scroll
+		local saveScrollLeft = dlg.idScrollbarLeft.Scroll
+		local context = dlg:GetContext()
+		dlg.idRight:RespawnContent()
+		dlg.idCenter:RespawnContent()
+		dlg.idLeft:RespawnContent()
+
+		dlg.idRight:OnContextUpdate(context)
+		dlg.idCenter:OnContextUpdate(context)
+		dlg.idLeft:OnContextUpdate(context)
+
+		dlg.idScrollbar:ScrollTo(saveScroll)
+		dlg.idScrollbarCenter:ScrollTo(saveScrollCenter)
+		dlg.idScrollbarLeft:ScrollTo(saveScrollLeft)
+
+		if drag_item and not IsEquipSlot(InventoryStartDragSlotName) then
+			Sleep(5) --rebuild ui
+			RestartDrag(dlg, drag_item)
+		end
+	end
+	InventoryUIRespawn_shield = nil
+end
+
+function RestartDrag(dlg, item)
+	--FindItemWnd
+	local slots = dlg:GetSlotsArray()
+	for slot_ctrl in pairs(slots) do
+		local wnd = slot_ctrl:FindItemWnd(item)
+		if wnd and (wnd.interaction_box or wnd.box) then
+			slot_ctrl:OnMouseButtonDown((wnd.interaction_box or wnd.box):Center(), "L")
+			HighlightDropSlot(nil, false)
+			--slot_ctrl:InternalDragStart( (wnd.interaction_box or wnd.box):Center() )
+			--slot_ctrl:OnDragStart(item)
+			return
+		end
+	end
 end
 
 local REV_Original_GetSectorInventory = GetSectorInventory

@@ -1,4 +1,11 @@
+local REV_OriginalInventoryFindEmptyPosition = Inventory.FindEmptyPosition
+
 function Inventory:FindEmptyPosition(slot_name, item, local_changes)
+
+	if not REV_IsMerc(self) or not self.session_id or slot_name ~= "Inventory" then
+		return REV_OriginalInventoryFindEmptyPosition(self, slot_name, item, local_changes)
+	end
+
 	local slot_data = self:GetSlotData(slot_name)
 	local space = {}
 	--local rects = {}
@@ -96,7 +103,14 @@ function Inventory:GetSlotDataDim(slot_name)
 	return width, height, last_row_width
 end
 
+local REV_InventoryStackGetItemSlotUI = InventoryStack.GetItemSlotUI
+
 function InventoryStack:GetItemSlotUI()
+
+	if not REV_IsMerc(self.owner) then
+		return REV_InventoryStackGetItemSlotUI(self)
+	end
+
 	local max = REV_GetMaxStackInSlot(self)
 
 	local maxMax = g_Classes[self.class].MaxStacks
@@ -114,7 +128,8 @@ end
 local REV_OriginaGetItemInSlot = Inventory.GetItemInSlot
 
 function Inventory:GetItemInSlot(slot_name, base_class, left, top)
-	if base_class and base_class == "GasMaskBase" then
+
+    if base_class and base_class == "GasMaskBase" and REV_IsMerc(self) then
 		slot_name = "FaceItem"
 	end
 
@@ -142,7 +157,14 @@ function InvContextMenuEquippable(context)
 	return equippable or not not_equippable
 end
 
+local REV_OriginalUnloadWeapon = UnloadWeapon
+
 function UnloadWeapon(item, squadBag)
+
+	if not REV_IsMerc(item.owner) then
+		return REV_OriginalUnloadWeapon(item, squadBag)
+	end
+
 	local ammo = item.ammo
 	item.ammo = false
 	local owner = item.owner and (g_Units[item.owner] or gv_UnitData[item.owner]) or false
@@ -155,6 +177,7 @@ function UnloadWeapon(item, squadBag)
 end
 
 function UnitAddAndStackItem(ammo, squadBag, owner)
+
 	if not owner and squadBag then
 		squadBag:AddAndStackItem(ammo, squadBag, owner)
 		return

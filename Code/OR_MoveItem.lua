@@ -2,6 +2,10 @@ local REV_Original_GetAPCostAndUnit = GetAPCostAndUnit
 
 function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_container, dest_container_slot_name,
 						  item_at_dest, is_reload, dest_x, dest_y)
+	if not REV_IsMerc(src_container) and not REV_IsMerc(dest_container) then
+		return REV_Original_GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_container,
+			dest_container_slot_name, item_at_dest, is_reload)
+	end
 	if is_reload then
 		return REV_Original_GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_container,
 			dest_container_slot_name, item_at_dest, is_reload)
@@ -24,9 +28,9 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 	local is_dest_dead         = is_dest_unit and dest_container:IsDead()
 	-- custom code
 	local src_context          = is_src_unit and item and REV_IsMerc(src_container) and
-	REV_GetItemSlotContext(src_container, item)
+		REV_GetItemSlotContext(src_container, item)
 	local dest_context         = is_dest_unit and item and REV_IsMerc(dest_container) and
-	REV_GetItemSlotContext(dest_container, item_at_dest, dest_x, dest_y)
+		REV_GetItemSlotContext(dest_container, item_at_dest, dest_x, dest_y)
 	local is_src_Backpack      = src_context == "Backpack"
 	local is_dest_Backpack     = dest_context == "Backpack"
 	local is_src_LBE           = src_context == "LBE"

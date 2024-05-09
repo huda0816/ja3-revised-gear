@@ -5,67 +5,66 @@ function OnMsg.BeginTurn(unit)
 	end
 end
 
+function REV_GetMaxWeight(unit)
+	return unit.Strength * 500
+end
+
 function UnitData:GetMaxWeight()
-	return self.Strength * 500
+	return REV_GetMaxWeight(self)
 end
 
 function Unit:GetMaxWeight()
-	return self.Strength * 500
+	return REV_GetMaxWeight(self)
+end
+
+function REV_GetCurrentWeightInKg(unit)
+	return DivRound(unit:GetCurrentWeight(), 10) / 100.00
 end
 
 function Unit:GetCurrentWeightInKg()
-  return DivRound(self:GetCurrentWeight(), 10) / 100.00
-end
-
-function Unit:GetMaxWeightInKg()
-	return DivRound(self:GetMaxWeight(), 10) / 100.00
-end
-
-function UnitData:GetMaxWeightInKg()
-	return DivRound(self:GetMaxWeight(), 10) / 100.00
+  return REV_GetCurrentWeightInKg(self)
 end
 
 function UnitData:GetCurrentWeightInKg()
-	return DivRound(self:GetCurrentWeight(), 10) / 100.00
+	return REV_GetCurrentWeightInKg(self)
+end
+
+function REV_GetMaxWeightInKg(unit)
+	return DivRound(REV_GetMaxWeight(unit), 10) / 100.00
+end
+
+function Unit:GetMaxWeightInKg()
+	return REV_GetMaxWeightInKg(self)
+end
+
+function UnitData:GetMaxWeightInKg()
+	return REV_GetMaxWeightInKg(self)
+end
+
+function REV_GetCurrentWeight(unit)
+	local squad = gv_Squads[unit.Squad]
+	if not squad then return 0 end
+	local total_weight = { weight = 0.0 }
+	unit:ForEachItem(function(slot_item, slot_name, left, top, total_weight)
+		local item_amount = slot_item.Amount or 1
+		local item_weight = slot_item.Weight or 100
+		if IsKindOf(slot_item, "Ammo") then
+			item_weight = REV_BulletWeight(slot_item)
+		elseif IsKindOf(slot_item, "Mag") and slot_item.ammo then
+			item_amount = slot_item.ammo.Amount
+			item_weight = REV_BulletWeight(slot_item.ammo)
+		end
+		total_weight.weight = total_weight.weight + item_amount * item_weight
+	end, total_weight)
+	return total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight() / #squad.units) or 0)
 end
 
 function Unit:GetCurrentWeight()
-	local squad = gv_Squads[self.Squad]
-	if not squad then return 0 end
-	local total_weight = { weight = 0.0 }
-	self:ForEachItem(function(slot_item, slot_name, left, top, total_weight)
-		local item_amount = slot_item.Amount or 1
-		local item_weight = slot_item.Weight or 100
-		if IsKindOf(slot_item, "Ammo") then
-			item_weight = REV_BulletWeight(slot_item)
-		elseif IsKindOf(slot_item, "Armor") then
-			if slot_item.FrontPlate then item_weight = item_weight + slot_item.FrontPlate.Weight end
-			if slot_item.BackPlate then item_weight = item_weight + slot_item.BackPlate.Weight end
-		elseif IsKindOf(slot_item, "Mag") and slot_item.ammo then
-			item_amount = slot_item.ammo.Amount
-			item_weight = REV_BulletWeight(slot_item.ammo)
-		end
-		total_weight.weight = total_weight.weight + item_amount * item_weight
-	end, total_weight)
-	return total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight() / #squad.units)) or 0
+	return REV_GetCurrentWeight(self)
 end
 
 function UnitData:GetCurrentWeight()
-	local squad = gv_Squads[self.Squad]
-	if not squad then return 0 end
-	local total_weight = { weight = 0.0 }
-	self:ForEachItem(function(slot_item, slot_name, left, top, total_weight)
-		local item_amount = slot_item.Amount or 1
-		local item_weight = slot_item.Weight or 100
-		if IsKindOf(slot_item, "Ammo") then
-			item_weight = REV_BulletWeight(slot_item)
-		elseif IsKindOf(slot_item, "Mag") and slot_item.ammo then
-			item_amount = slot_item.ammo.Amount
-			item_weight = REV_BulletWeight(slot_item.ammo)
-		end
-		total_weight.weight = total_weight.weight + item_amount * item_weight
-	end, total_weight)
-	return total_weight.weight + (gv_SquadBag and (gv_SquadBag:GetSquadBagWeight() / #squad.units)) or 0
+	return REV_GetCurrentWeight(self)
 end
 
 function REV_ApplyWeightEffects(unit)
