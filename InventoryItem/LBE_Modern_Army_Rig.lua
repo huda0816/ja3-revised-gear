@@ -13,7 +13,6 @@ DefineClass.LBE_Modern_Army_Rig = {
 	Description = T(429822648029, --[[ModItemInventoryItemCompositeDef LBE_Modern_Army_Rig Description]] "Modern lightweight rig"),
 	AdditionalHint = "",
 	Cost = 1299,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CanBeConsumed = false,

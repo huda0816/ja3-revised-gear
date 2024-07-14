@@ -13,7 +13,6 @@ DefineClass.LBE_Combat_Vest = {
 	Description = T(111358326729, --[[ModItemInventoryItemCompositeDef LBE_Combat_Vest Description]] "Army vest with a large variety of pockets"),
 	AdditionalHint = "",
 	Cost = 1199,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CanBeConsumed = false,

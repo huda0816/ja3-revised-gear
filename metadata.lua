@@ -2,7 +2,7 @@ return PlaceObj('ModDef', {
 	'title', "Revised Tactical Gear II",
 	'description', "This is a reworked and enhanced rerelease of [b]Ablomis'[/b] Revised Tactical Gear mod with a new Inventory layout which was designed by [b]Lucjan[/b] who is also helping me with improving this mod.\n\nThis mod adds more inventory slots to the game (Backpack, LBE, Leg items, Face items, NVG slot) and introduces weight.\n\n[b]New Mod Options[/b]\nTo activate the options you have to restart Jagged Alliance 3\n[list]\n[*]Option to put bullets in mag pouches\n[*]Option to make items like meds and parts lighter to be able to carry everything around with your squad\n[/list]\n\n[b]New Shortcuts for Sector Inventory View[/b]\n[list]\n[*]Ctrl-Shift-U: Unload all weapons (and Mags)\n[*]Ctrl-Shift-D: Move all inventory items of the selected merc to the sector inventory\n[*]Ctrl-Shift-E: Move all items from equip-slots of the selected merc to the sector inventory\n[*]Ctrl-Shift-B: Move all items from squad bag to the sector inventory\n[*]Ctrl-Shift-C: Remove all items from LBEs, backpacks and holsters in sector inventory\n[*]Ctrl-Shift-S: Sort all items in sector inventory\n[*]Ctrl-Shift-M: Merge items in sector inventory\n[/list]\n\nI also added a shortcut which will activate and deactivate rollovers in inventory view (the toggle does only work in satellite view at the moment but rollovers are also deactivated in exploration): Ctrl-Shift-N\n\n[b]Important[/b]\n[list]\n[*]Restart the game after activating the mod\n[*]It is not 100% save-game compatible and it may happen, that you will loose some items. I recommend using Ctrl-Shift-D in sector inventory view to drop all items.\n[*]Mod compatibility is very low\n[*]If you are a mod creator and want to increase compatibility, please contact me\n[*]Revised Mags II Mod is a dependency of this mod. \n[*]There was decent amount of playtesting but there can still be bugs.\n[*]If you find bugs, please send me your bug reports.\n[/list]\n\n[b]Copyright[/b]\nLBE and some holster images are from AdobeStock\nBackpacks, the goggle and the rest of the holsters are created with ChatGPT and Bing image creation",
 	'image', "Mod/ii6mKUf/Images/JA3Revised-title.png",
-	'last_changes', "Added more checks if unit is player controlled\nFixed various warnings\nFixed Doubletoss - now grenades from different slots can be used\nFixed drag and drop behaviour between mercs to work like vanilla again",
+	'last_changes', "Fixed beasts dropping lbes\nChanged and added some slot configs\nReworked LBEs to make them more flexible\nAdded knive leg holster",
 	'dependencies', {
 		PlaceObj('ModDependency', {
 			'id', "URkxyfE",
@@ -11,8 +11,8 @@ return PlaceObj('ModDef', {
 	},
 	'id', "ii6mKUf",
 	'author', "permanent666",
-	'version_minor', 17,
-	'version', 687,
+	'version_minor', 18,
+	'version', 733,
 	'lua_revision', 233360,
 	'saved_with_revision', 350233,
 	'code', {
@@ -22,15 +22,23 @@ return PlaceObj('ModDef', {
 		"Code/CODE_LBEBuilder.lua",
 		"Code/CODE_LootDrop.lua",
 		"InventoryItem/Holster_Drop_Leg_Bag.lua",
+		"InventoryItem/Holster_Knives.lua",
 		"InventoryItem/Holster_Extended.lua",
 		"InventoryItem/Holster_Basic.lua",
 		"InventoryItem/LBE_Heavy_Duty_Vest.lua",
+		"InventoryItem/LBE_Heavy_Duty_Vest_new.lua",
 		"InventoryItem/LBE_Cheap_Vest.lua",
+		"InventoryItem/LBE_Cheap_Vest_new.lua",
 		"InventoryItem/LBE_Combat_Vest.lua",
+		"InventoryItem/LBE_Combat_Vest_new.lua",
 		"InventoryItem/LBE_Modern_Army_Rig.lua",
+		"InventoryItem/LBE_Modern_Army_Rig_new.lua",
 		"InventoryItem/LBE_Basic_Army_Rig.lua",
+		"InventoryItem/LBE_Basic_Army_Rig_new.lua",
 		"InventoryItem/LBE_Basic_Rig.lua",
+		"InventoryItem/LBE_Basic_Rig_new.lua",
 		"InventoryItem/LBE_SWAT_Vest.lua",
+		"InventoryItem/LBE_SWAT_Vest_new.lua",
 		"InventoryItem/Backpack_Blackhawk.lua",
 		"InventoryItem/Backpack_Modern.lua",
 		"InventoryItem/Backpack_Combat.lua",
@@ -66,13 +74,18 @@ return PlaceObj('ModDef', {
 		RevisedSquadBagHasWeight = true,
 	},
 	'has_data', true,
-	'saved', 1715289702,
-	'code_hash', 7428385936788779915,
+	'saved', 1720992092,
+	'code_hash', 6466011161117329433,
 	'screenshot1', "Mod/ii6mKUf/Images/Screenshot 2024-04-07 020350 2.png",
 	'affected_resources', {
 		PlaceObj('ModResourcePreset', {
 			'Class', "InventoryItemCompositeDef",
 			'Id', "Holster_Drop_Leg_Bag",
+			'ClassDisplayName', "Inventory item",
+		}),
+		PlaceObj('ModResourcePreset', {
+			'Class', "InventoryItemCompositeDef",
+			'Id', "Holster_Knives",
 			'ClassDisplayName', "Inventory item",
 		}),
 		PlaceObj('ModResourcePreset', {
@@ -92,7 +105,17 @@ return PlaceObj('ModDef', {
 		}),
 		PlaceObj('ModResourcePreset', {
 			'Class', "InventoryItemCompositeDef",
+			'Id', "LBE_Heavy_Duty_Vest_new",
+			'ClassDisplayName', "Inventory item",
+		}),
+		PlaceObj('ModResourcePreset', {
+			'Class', "InventoryItemCompositeDef",
 			'Id', "LBE_Cheap_Vest",
+			'ClassDisplayName', "Inventory item",
+		}),
+		PlaceObj('ModResourcePreset', {
+			'Class', "InventoryItemCompositeDef",
+			'Id', "LBE_Cheap_Vest_new",
 			'ClassDisplayName', "Inventory item",
 		}),
 		PlaceObj('ModResourcePreset', {
@@ -102,7 +125,17 @@ return PlaceObj('ModDef', {
 		}),
 		PlaceObj('ModResourcePreset', {
 			'Class', "InventoryItemCompositeDef",
+			'Id', "LBE_Combat_Vest_new",
+			'ClassDisplayName', "Inventory item",
+		}),
+		PlaceObj('ModResourcePreset', {
+			'Class', "InventoryItemCompositeDef",
 			'Id', "LBE_Modern_Army_Rig",
+			'ClassDisplayName', "Inventory item",
+		}),
+		PlaceObj('ModResourcePreset', {
+			'Class', "InventoryItemCompositeDef",
+			'Id', "LBE_Modern_Army_Rig_new",
 			'ClassDisplayName', "Inventory item",
 		}),
 		PlaceObj('ModResourcePreset', {
@@ -112,12 +145,27 @@ return PlaceObj('ModDef', {
 		}),
 		PlaceObj('ModResourcePreset', {
 			'Class', "InventoryItemCompositeDef",
+			'Id', "LBE_Basic_Army_Rig_new",
+			'ClassDisplayName', "Inventory item",
+		}),
+		PlaceObj('ModResourcePreset', {
+			'Class', "InventoryItemCompositeDef",
 			'Id', "LBE_Basic_Rig",
 			'ClassDisplayName', "Inventory item",
 		}),
 		PlaceObj('ModResourcePreset', {
 			'Class', "InventoryItemCompositeDef",
+			'Id', "LBE_Basic_Rig_new",
+			'ClassDisplayName', "Inventory item",
+		}),
+		PlaceObj('ModResourcePreset', {
+			'Class', "InventoryItemCompositeDef",
 			'Id', "LBE_SWAT_Vest",
+			'ClassDisplayName', "Inventory item",
+		}),
+		PlaceObj('ModResourcePreset', {
+			'Class', "InventoryItemCompositeDef",
+			'Id', "LBE_SWAT_Vest_new",
 			'ClassDisplayName', "Inventory item",
 		}),
 		PlaceObj('ModResourcePreset', {

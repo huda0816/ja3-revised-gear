@@ -13,7 +13,6 @@ DefineClass.LBE_Heavy_Duty_Vest = {
 	Description = T(757384009884, --[[ModItemInventoryItemCompositeDef LBE_Heavy_Duty_Vest Description]] "Heavy Duty Combat Vest with a lot of storage"),
 	AdditionalHint = T(262290543820, --[[ModItemInventoryItemCompositeDef LBE_Heavy_Duty_Vest AdditionalHint]] "2 large pouches"),
 	Cost = 1099,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CanBeConsumed = false,

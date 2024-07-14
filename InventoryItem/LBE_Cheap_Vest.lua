@@ -13,7 +13,6 @@ DefineClass.LBE_Cheap_Vest = {
 	Description = T(636857624212, --[[ModItemInventoryItemCompositeDef LBE_Cheap_Vest Description]] "Cheap and lightweight vest."),
 	AdditionalHint = "",
 	Cost = 499,
-	CanAppearInShop = true,
 	RestockWeight = 70,
 	CanBeConsumed = false,
 	CategoryPair = "LBE",

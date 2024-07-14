@@ -53,6 +53,7 @@ function OnMsg.ClassesGenerate()
 
 	FragGrenade.PocketL_amount = 3
 	FragGrenade.PocketML_amount = 1
+	FragGrenade.PocketM_amount = 1
 
 	Molotov.PocketL_amount = 3
 	Molotov.PocketML_amount = 1
@@ -109,6 +110,11 @@ function OnMsg.ClassesGenerate()
 
 	_40mmFlashbangGrenade.PocketL_amount = 3
 	_40mmFlashbangGrenade.PocketML_amount = 1
+
+	FlareAmmo.PocketS_amount = 5
+	FlareAmmo.PocketM_amount = 10
+	FlareAmmo.PocketML_amount = 20
+	FlareAmmo.PocketL_amount = 50	
 
 	Ammo.PocketL_amount = 200
 	Ammo.PocketML_amount = 60
