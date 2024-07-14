@@ -13,7 +13,6 @@ DefineClass.LBE_Basic_Army_Rig = {
 	Description = T(325745705536, --[[ModItemInventoryItemCompositeDef LBE_Basic_Army_Rig Description]] "Basic rig"),
 	AdditionalHint = "",
 	Cost = 999,
-	CanAppearInShop = true,
 	RestockWeight = 50,
 	CanBeConsumed = false,
 	CategoryPair = "LBE",

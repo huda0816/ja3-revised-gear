@@ -12,7 +12,6 @@ DefineClass.LBE_SWAT_Vest = {
 	DisplayNamePlural = T(879443032243, --[[ModItemInventoryItemCompositeDef LBE_SWAT_Vest DisplayNamePlural]] "SWAT Tactical Vests"),
 	Description = T(924404892763, --[[ModItemInventoryItemCompositeDef LBE_SWAT_Vest Description]] "Tactical Vest with holster"),
 	Cost = 1199,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 60,
 	CanBeConsumed = false,

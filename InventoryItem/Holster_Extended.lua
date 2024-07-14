@@ -12,7 +12,6 @@ DefineClass.Holster_Extended = {
 	DisplayNamePlural = T(602862639026, --[[ModItemInventoryItemCompositeDef Holster_Extended DisplayNamePlural]] "Extended Pistol Holsters"),
 	Description = T(173070161578, --[[ModItemInventoryItemCompositeDef Holster_Extended Description]] "Holster for a pistol, 2 pistol mags and extra storage"),
 	Cost = 799,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CanBeConsumed = false,
