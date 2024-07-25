@@ -37,12 +37,24 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 	local is_dest_LBE          = dest_context == "LBE"
 	local is_src_Inventory     = src_context == "Inventory"
 	local is_dest_Inventory    = dest_context == "Inventory"
+	local src_slot_type        = REV_GetItemSlotType(item)
+	local dest_slot_type       = item_at_dest and REV_GetItemSlotType(item_at_dest)
+	local is_src_Holster       = src_slot_type == "PistolHolster" or src_slot_type == "SmgHolster"
+	local is_dest_Holster 	   = dest_slot_type == "PistolHolster" or dest_slot_type == "SmgHolster"
 	-- end custom code
 	local between_bag_and_unit = (is_src_bag and is_dest_unit and not is_src_dead or is_dest_bag and is_src_unit and not is_src_dead)
 	local is_refill, is_combine
 	is_refill                  = IsMedicineRefill(item, item_at_dest)
 	is_combine                 = not (is_dest_dead or IsKindOf(dest_container, "ItemContainer")) and
 		InventoryIsCombineTarget(item, item_at_dest)
+
+	if is_src_Holster and not are_diff_containers and IsEquipSlot(dest_container_slot_name) then
+		return 1000, src_container, FormatGiveActionText(T(2656223142290918, "Draw from holster"), dest_container)
+	end
+
+	if item_at_dest and not are_diff_containers and IsEquipSlot(src_container_slot_name) and is_dest_Holster then
+		return 1000, src_container, FormatGiveActionText(T(2656223142290920, "Swap weapon in holster"), dest_container)
+	end
 
 	if is_src_Backpack and not is_dest_Backpack then
 		-- from backpack to container
