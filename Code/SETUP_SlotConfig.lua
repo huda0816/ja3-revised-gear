@@ -321,6 +321,23 @@ function OnMsg.ClassesGenerate()
 
 	ShamanHelmet.Carabiner_amount = 1
 
+	BlackPowder.PocketL_amount = 10
+	BlackPowder.PocketML_amount = 10
+	BlackPowder.PocketM_amount = 10
+	BlackPowder.PocketS_amount = 5
+
+	Microchip.PocketL_amount = 10
+	Microchip.PocketML_amount = 10
+	Microchip.PocketM_amount = 5
+	Microchip.PocketS_amount = 2
+
+	OpticalLens.PocketL_amount = 10
+	OpticalLens.PocketML_amount = 8
+	OpticalLens.PocketM_amount = 5
+	OpticalLens.PocketS_amount = 2
+
+	FineSteelPipe.PocketL_amount = 5
+
 	if CurrentModOptions['RevisedPouchesHoldBullets'] then
 		Ammo.RifleMag_amount = 30
 		Ammo.PistolMag_amount = 15
