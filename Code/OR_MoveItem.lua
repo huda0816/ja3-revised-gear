@@ -41,6 +41,8 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 	local dest_slot_type       = item_at_dest and REV_GetItemSlotType(item_at_dest)
 	local is_src_Holster       = src_slot_type == "PistolHolster" or src_slot_type == "SmgHolster"
 	local is_dest_Holster 	   = dest_slot_type == "PistolHolster" or dest_slot_type == "SmgHolster"
+	local is_src_KnifeSheath   = src_slot_type == "KnifeSheath"
+	local is_dest_KnifeSheath  = dest_slot_type == "KnifeSheath"
 	-- end custom code
 	local between_bag_and_unit = (is_src_bag and is_dest_unit and not is_src_dead or is_dest_bag and is_src_unit and not is_src_dead)
 	local is_refill, is_combine
@@ -48,12 +50,20 @@ function GetAPCostAndUnit(item, src_container, src_container_slot_name, dest_con
 	is_combine                 = not (is_dest_dead or IsKindOf(dest_container, "ItemContainer")) and
 		InventoryIsCombineTarget(item, item_at_dest)
 
+	if is_src_KnifeSheath and not are_diff_containers and IsEquipSlot(dest_container_slot_name) then
+		return 0, src_container, FormatGiveActionText(T(2656223142290919, "Draw from sheath"), dest_container)
+	end
+
+	if item_at_dest and is_dest_KnifeSheath and not are_diff_containers and IsEquipSlot(src_container_slot_name) then
+		return 0, src_container, FormatGiveActionText(T(2656223142290921, "Sheath knife"), dest_container)
+	end
+
 	if is_src_Holster and not are_diff_containers and IsEquipSlot(dest_container_slot_name) then
-		return 1000, src_container, FormatGiveActionText(T(2656223142290918, "Draw from holster"), dest_container)
+		return 0, src_container, FormatGiveActionText(T(2656223142290918, "Draw from holster"), dest_container)
 	end
 
 	if item_at_dest and not are_diff_containers and IsEquipSlot(src_container_slot_name) and is_dest_Holster then
-		return 1000, src_container, FormatGiveActionText(T(2656223142290920, "Swap weapon in holster"), dest_container)
+		return 0, src_container, FormatGiveActionText(T(2656223142290920, "Swap weapon in holster"), dest_container)
 	end
 
 	if is_src_Backpack and not is_dest_Backpack then
