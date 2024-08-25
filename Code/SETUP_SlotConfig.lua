@@ -30,6 +30,8 @@ function OnMsg.ClassesGenerate()
 
 	HE_Grenade.PocketL_amount = 4
 
+	ToolItem.PocketL_amount = 1
+
 	Crowbar.PocketL_amount = 1
 
 	Lockpick.PocketL_amount = 1
@@ -51,15 +53,26 @@ function OnMsg.ClassesGenerate()
 	FlareHandgun.PocketL_amount = 1
 	FlareHandgun.PistolHolster_amount = 1
 
+	Grenade.PocketL_amount = 3
+	Grenade.PocketML_amount = 1
+	Grenade.PocketM_amount = 1
+
 	FragGrenade.PocketL_amount = 3
 	FragGrenade.PocketML_amount = 1
 	FragGrenade.PocketM_amount = 1
 
 	Molotov.PocketL_amount = 3
 	Molotov.PocketML_amount = 1
+	
+	GasMaskBase.Carabiner_amount = 1
 
 	GasMask.PocketL_amount = 1
 	GasMask.Carabiner_amount = 1
+
+	Flare.PocketL_amount = 6
+	Flare.PocketML_amount = 4
+	Flare.PocketM_amount = 3
+	Flare.PocketS_amount = 2
 
 	GlowStick.PocketL_amount = 6
 	GlowStick.PocketML_amount = 4
