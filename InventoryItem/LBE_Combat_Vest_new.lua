@@ -13,7 +13,6 @@ DefineClass.LBE_Combat_Vest_new = {
 	Description = T(509323632376, --[[ModItemInventoryItemCompositeDef LBE_Combat_Vest_new Description]] "Army vest with holster suited for close assault or sniper roles."),
 	AdditionalHint = "",
 	Cost = 999,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CanBeConsumed = false,

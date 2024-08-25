@@ -13,7 +13,6 @@ DefineClass.LBE_Modern_Army_Rig_new = {
 	Description = T(102726765269, --[[ModItemInventoryItemCompositeDef LBE_Modern_Army_Rig_new Description]] "Extended Rig with large Pocket suitable for all roles."),
 	AdditionalHint = "",
 	Cost = 1199,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CanBeConsumed = false,

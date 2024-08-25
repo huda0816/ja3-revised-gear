@@ -13,7 +13,6 @@ DefineClass.LBE_Basic_Rig_new = {
 	Description = T(239140764561, --[[ModItemInventoryItemCompositeDef LBE_Basic_Rig_new Description]] "Basic lightweight rig best suited for riflemen role."),
 	AdditionalHint = "",
 	Cost = 699,
-	CanAppearInShop = true,
 	RestockWeight = 70,
 	CanBeConsumed = false,
 	CategoryPair = "LBE",

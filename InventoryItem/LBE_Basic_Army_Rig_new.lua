@@ -13,7 +13,6 @@ DefineClass.LBE_Basic_Army_Rig_new = {
 	Description = T(670662953163, --[[ModItemInventoryItemCompositeDef LBE_Basic_Army_Rig_new Description]] "Rig with large pocket best suited for medics or machine gunner roles."),
 	AdditionalHint = "",
 	Cost = 999,
-	CanAppearInShop = true,
 	RestockWeight = 50,
 	CanBeConsumed = false,
 	CategoryPair = "LBE",
