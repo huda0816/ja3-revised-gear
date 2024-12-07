@@ -5,7 +5,7 @@ DefineClass.LBE_Basic_Rig_new = {
 
 
 	object_class = "LBE",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/LBE/LBE_Basic_Rig.png",
 	DisplayName = T(992520313857, --[[ModItemInventoryItemCompositeDef LBE_Basic_Rig_new DisplayName]] "Basic Rig"),
@@ -13,7 +13,6 @@ DefineClass.LBE_Basic_Rig_new = {
 	Description = T(239140764561, --[[ModItemInventoryItemCompositeDef LBE_Basic_Rig_new Description]] "Basic lightweight rig best suited for riflemen role."),
 	AdditionalHint = "",
 	Cost = 699,
-	CanAppearInShop = true,
 	RestockWeight = 70,
 	CanBeConsumed = false,
 	CategoryPair = "LBE",

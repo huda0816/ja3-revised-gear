@@ -5,7 +5,7 @@ DefineClass.LBE_Combat_Vest = {
 
 
 	object_class = "LBE",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/LBE/LBE_Combat_Vest.png",
 	DisplayName = T(932789580806, --[[ModItemInventoryItemCompositeDef LBE_Combat_Vest DisplayName]] "Combat Vest"),

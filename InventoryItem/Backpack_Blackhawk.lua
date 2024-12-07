@@ -5,7 +5,7 @@ DefineClass.Backpack_Blackhawk = {
 
 
 	object_class = "Backpack",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/Backpacks/Backpack_Black.png",
 	DisplayName = T(417316122517, --[[ModItemInventoryItemCompositeDef Backpack_Blackhawk DisplayName]] "Blackhawk Backpack"),
@@ -13,7 +13,6 @@ DefineClass.Backpack_Blackhawk = {
 	Description = T(588305884029, --[[ModItemInventoryItemCompositeDef Backpack_Blackhawk Description]] "Black modern backpack"),
 	AdditionalHint = "",
 	Cost = 1599,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CategoryPair = "Backpack",

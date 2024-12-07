@@ -5,7 +5,7 @@ DefineClass.Backpack_Retro_Large = {
 
 
 	object_class = "Backpack",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/Backpacks/Backpack_Large_Old.png",
 	DisplayName = T(237924317237, --[[ModItemInventoryItemCompositeDef Backpack_Retro_Large DisplayName]] "Large Retro Backpack"),
@@ -13,7 +13,6 @@ DefineClass.Backpack_Retro_Large = {
 	Description = T(413714257542, --[[ModItemInventoryItemCompositeDef Backpack_Retro_Large Description]] "This backpack was introduced in WWII"),
 	AdditionalHint = "",
 	Cost = 999,
-	CanAppearInShop = true,
 	RestockWeight = 70,
 	CategoryPair = "Backpack",
 	Weight = 3000,

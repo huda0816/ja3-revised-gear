@@ -5,7 +5,7 @@ DefineClass.LBE_Modern_Army_Rig = {
 
 
 	object_class = "LBE",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/LBE/Light_Army_Vest.png",
 	DisplayName = T(844649076034, --[[ModItemInventoryItemCompositeDef LBE_Modern_Army_Rig DisplayName]] "Modern Army Rig"),

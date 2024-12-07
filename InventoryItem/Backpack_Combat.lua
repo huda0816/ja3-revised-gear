@@ -5,7 +5,7 @@ DefineClass.Backpack_Combat = {
 
 
 	object_class = "Backpack",
-	ScrapParts = 2,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/Backpacks/Backpack_Compact.png",
 	DisplayName = T(119232818951, --[[ModItemInventoryItemCompositeDef Backpack_Combat DisplayName]] "Combat Bag"),
@@ -13,7 +13,6 @@ DefineClass.Backpack_Combat = {
 	Description = T(548949425173, --[[ModItemInventoryItemCompositeDef Backpack_Combat Description]] "Smaller lighter backpack"),
 	AdditionalHint = "",
 	Cost = 1399,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CategoryPair = "Backpack",

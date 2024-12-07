@@ -5,7 +5,7 @@ DefineClass.Backpack_Retro = {
 
 
 	object_class = "Backpack",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/Backpacks/Backpack_Old.png",
 	DisplayName = T(892926173749, --[[ModItemInventoryItemCompositeDef Backpack_Retro DisplayName]] "Army Backpack"),
@@ -13,7 +13,6 @@ DefineClass.Backpack_Retro = {
 	Description = T(642420161429, --[[ModItemInventoryItemCompositeDef Backpack_Retro Description]] "Older design but reliable"),
 	AdditionalHint = "",
 	Cost = 899,
-	CanAppearInShop = true,
 	CategoryPair = "Backpack",
 	PocketU = 2,
 	PocketL = 1,

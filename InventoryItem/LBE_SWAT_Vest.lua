@@ -5,7 +5,7 @@ DefineClass.LBE_SWAT_Vest = {
 
 
 	object_class = "LBE",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/LBE/LBE_SWAT_Vest.png",
 	DisplayName = T(326349535131, --[[ModItemInventoryItemCompositeDef LBE_SWAT_Vest DisplayName]] "SWAT Tactical Vest"),

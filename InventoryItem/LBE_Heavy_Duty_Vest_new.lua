@@ -5,7 +5,7 @@ DefineClass.LBE_Heavy_Duty_Vest_new = {
 
 
 	object_class = "LBE",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/LBE/LBE_Heavy_Duty.png",
 	DisplayName = T(733987000537, --[[ModItemInventoryItemCompositeDef LBE_Heavy_Duty_Vest_new DisplayName]] "Heavy Duty Vest"),
@@ -13,7 +13,6 @@ DefineClass.LBE_Heavy_Duty_Vest_new = {
 	Description = T(870106250438, --[[ModItemInventoryItemCompositeDef LBE_Heavy_Duty_Vest_new Description]] "Best suited for grenadier role."),
 	AdditionalHint = "",
 	Cost = 899,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CanBeConsumed = false,

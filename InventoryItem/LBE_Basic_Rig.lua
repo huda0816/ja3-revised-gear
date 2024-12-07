@@ -5,7 +5,7 @@ DefineClass.LBE_Basic_Rig = {
 
 
 	object_class = "LBE",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/LBE/LBE_Basic_Rig.png",
 	DisplayName = T(737987985840, --[[ModItemInventoryItemCompositeDef LBE_Basic_Rig DisplayName]] "Basic Rig"),

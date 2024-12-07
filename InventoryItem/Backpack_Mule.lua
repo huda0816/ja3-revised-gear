@@ -5,7 +5,7 @@ DefineClass.Backpack_Mule = {
 
 
 	object_class = "Backpack",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/Backpacks/Backpack_Flecktarn.png",
 	DisplayName = T(958570756965, --[[ModItemInventoryItemCompositeDef Backpack_Mule DisplayName]] "Large backpack"),
@@ -13,7 +13,6 @@ DefineClass.Backpack_Mule = {
 	Description = T(446908399915, --[[ModItemInventoryItemCompositeDef Backpack_Mule Description]] "Best used to carry a lot of stuff"),
 	AdditionalHint = "",
 	Cost = 1299,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CategoryPair = "Backpack",

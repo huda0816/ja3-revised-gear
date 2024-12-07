@@ -5,7 +5,7 @@ DefineClass.Backpack_Modern = {
 
 
 	object_class = "Backpack",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/Backpacks/Backpack_Combat_Large.png",
 	DisplayName = T(631902319328, --[[ModItemInventoryItemCompositeDef Backpack_Modern DisplayName]] "Medium Backpack"),
@@ -13,7 +13,6 @@ DefineClass.Backpack_Modern = {
 	Description = T(477334984053, --[[ModItemInventoryItemCompositeDef Backpack_Modern Description]] "Modern backpack with a lot of space"),
 	AdditionalHint = "",
 	Cost = 1499,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CategoryPair = "Backpack",

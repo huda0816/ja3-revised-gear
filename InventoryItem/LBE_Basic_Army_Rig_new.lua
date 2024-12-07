@@ -5,7 +5,7 @@ DefineClass.LBE_Basic_Army_Rig_new = {
 
 
 	object_class = "LBE",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/LBE/LBE_Basic_Army_Rig.png",
 	DisplayName = T(395502842619, --[[ModItemInventoryItemCompositeDef LBE_Basic_Army_Rig_new DisplayName]] "Basic Rig"),
@@ -13,7 +13,6 @@ DefineClass.LBE_Basic_Army_Rig_new = {
 	Description = T(670662953163, --[[ModItemInventoryItemCompositeDef LBE_Basic_Army_Rig_new Description]] "Rig with large pocket best suited for medics or machine gunner roles."),
 	AdditionalHint = "",
 	Cost = 999,
-	CanAppearInShop = true,
 	RestockWeight = 50,
 	CanBeConsumed = false,
 	CategoryPair = "LBE",

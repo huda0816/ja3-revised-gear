@@ -5,7 +5,7 @@ DefineClass.LBE_Modern_Army_Rig_new = {
 
 
 	object_class = "LBE",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/LBE/Light_Army_Vest.png",
 	DisplayName = T(438009467903, --[[ModItemInventoryItemCompositeDef LBE_Modern_Army_Rig_new DisplayName]] "Extended Army Rig"),
@@ -13,7 +13,6 @@ DefineClass.LBE_Modern_Army_Rig_new = {
 	Description = T(102726765269, --[[ModItemInventoryItemCompositeDef LBE_Modern_Army_Rig_new Description]] "Extended Rig with large Pocket suitable for all roles."),
 	AdditionalHint = "",
 	Cost = 1199,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CanBeConsumed = false,

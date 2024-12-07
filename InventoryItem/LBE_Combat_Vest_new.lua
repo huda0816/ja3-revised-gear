@@ -5,7 +5,7 @@ DefineClass.LBE_Combat_Vest_new = {
 
 
 	object_class = "LBE",
-	ScrapParts = 3,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/LBE/LBE_Combat_Vest.png",
 	DisplayName = T(468017447109, --[[ModItemInventoryItemCompositeDef LBE_Combat_Vest_new DisplayName]] "Combat Vest"),
@@ -13,7 +13,6 @@ DefineClass.LBE_Combat_Vest_new = {
 	Description = T(509323632376, --[[ModItemInventoryItemCompositeDef LBE_Combat_Vest_new Description]] "Army vest with holster suited for close assault or sniper roles."),
 	AdditionalHint = "",
 	Cost = 999,
-	CanAppearInShop = true,
 	Tier = 2,
 	RestockWeight = 70,
 	CanBeConsumed = false,

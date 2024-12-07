@@ -5,7 +5,7 @@ DefineClass.Holster_Extended = {
 
 
 	object_class = "Holster",
-	ScrapParts = 2,
+	ScrapParts = 1,
 	Repairable = false,
 	Icon = "Mod/ii6mKUf/Items/Holster/Extended_Holster.png",
 	DisplayName = T(100365052679, --[[ModItemInventoryItemCompositeDef Holster_Extended DisplayName]] "Extended Pistol Holster"),
